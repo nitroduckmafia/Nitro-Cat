@@ -5,6 +5,7 @@ import {
   ArrowLeft, ShoppingCart, Dna, Wrench,
   ExternalLink, Plus, HelpCircle, Share2,
   ChevronDown, ChevronUp, BookOpen, CheckCircle2, Clock, FlaskConical,
+  Loader2, Search,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -14,6 +15,30 @@ import { MoleculeViewer } from '@/components/molecule/MoleculeViewer';
 import type { ReactionNodeData } from '@/types/reaction';
 import type { Enzyme, GroupStats } from '@/types/enzyme';
 import { YieldCard } from '@/components/reaction/YieldCard';
+
+// ── Similar Transformations ───────────────────────────────────────────────────
+
+type SimiPublication = {
+  pmid: string;
+  title: string;
+  authors: string;
+  journal: string;
+  year: string;
+};
+
+type SimiResult = {
+  rank: number;
+  rhea_id: string;
+  reaction: string;
+  score: number;
+  score_morgan: number;
+  score_drfp: number;
+  ec: string[];
+  confidence: number;
+  url: string;
+  publications: SimiPublication[];
+};
+
 
 // ── Group stats panel ─────────────────────────────────────────────────────────
 
@@ -643,6 +668,9 @@ export const TestReactionPage = () => {
   const [pubchemLoading, setPubchemLoading] = useState(false);
   const [substrateInfo, setSubstrateInfo]   = useState<PubChemInfo>(null);
   const [productInfo, setProductInfo]       = useState<PubChemInfo>(null);
+  const [simiLoading, setSimiLoading]       = useState(false);
+  const [simiResult, setSimiResult]         = useState<SimiResult | null>(null);
+  const [simiError, setSimiError]           = useState<string | null>(null);
 
   const state      = location.state as { reaction: ReactionNodeData; candidates?: Enzyme[]; groupStats?: GroupStats; comments?: string[] } | null;
   const reaction   = state?.reaction;
@@ -687,6 +715,32 @@ export const TestReactionPage = () => {
     el.addEventListener('scroll', onScroll, { passive: true });
     return () => el.removeEventListener('scroll', onScroll);
   }, []);
+
+  const fetchSimi = async () => {
+    if (simiLoading) return;
+    setSimiLoading(true);
+    setSimiError(null);
+    try {
+      const res = await fetch('https://nitrocat-backend-production.up.railway.app/reaction', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          substrate_smiles: substrateSmiles,
+          product_smiles:   productSmiles,
+          top_k: 5,
+          pub_fetch: true,
+        }),
+      });
+      if (!res.ok) throw new Error(`Server error (${res.status})`);
+      const data = await res.json();
+      const results = Array.isArray(data) ? data : [];
+      setSimiResult(results[0] ?? null);
+    } catch (e) {
+      setSimiError(e instanceof Error ? e.message : 'Failed to fetch similar reactions');
+    } finally {
+      setSimiLoading(false);
+    }
+  };
 
   if (!enzyme || !reaction) {
     return (
@@ -1007,7 +1061,7 @@ export const TestReactionPage = () => {
           Explore reaction details
         </button>
 
-        {/* Yield card — reaction conditions, predicted yield, references */}
+        {/* Yield card — reaction conditions, predicted yield, similar transformations, references */}
         <div ref={yieldCardRef}>
           <YieldCard
             enzyme={enzyme}
@@ -1019,6 +1073,10 @@ export const TestReactionPage = () => {
             onExploreBiocatalysts={() =>
               candidatesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
             }
+            simiResult={simiResult}
+            simiLoading={simiLoading}
+            simiError={simiError}
+            onLoadSimi={fetchSimi}
           />
         </div>
 

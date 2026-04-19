@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { FlaskConical, Beaker, BookOpen, ExternalLink, Dna, HelpCircle, Shuffle, GitCompareArrows } from 'lucide-react';
+import { FlaskConical, Beaker, BookOpen, ExternalLink, Dna, HelpCircle, GitCompareArrows, Loader2, Search } from 'lucide-react';
 import type { Enzyme, GroupStats } from '@/types/enzyme';
+import { MoleculeViewer } from '@/components/molecule/MoleculeViewer';
 import {
   fetchPubChemMolecularWeight,
   fetchUniProtMolecularWeight,
@@ -16,6 +17,50 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
+// ── Simi types ────────────────────────────────────────────────────────────────
+
+export type SimiPublication = {
+  pmid: string;
+  title: string;
+  authors: string;
+  journal: string;
+  year: string;
+};
+
+export type SimiResult = {
+  rank: number;
+  rhea_id: string;
+  reaction: string;
+  score: number;
+  score_morgan: number;
+  score_drfp: number;
+  ec: string[];
+  confidence: number;
+  url: string;
+  publications: SimiPublication[];
+};
+
+function parseReactionSmiles(rxn: string): { reactants: string[]; products: string[] } {
+  const parts = rxn.split('>>');
+  return {
+    reactants: (parts[0] ?? '').split('.').filter(Boolean),
+    products:  (parts[1] ?? '').split('.').filter(Boolean),
+  };
+}
+
+function primaryOrganic(frags: string[]): string {
+  const organic = frags.filter(f => /[CNOS]/.test(f) && f.length > 2);
+  if (!organic.length) return frags[0] ?? '';
+  return organic.reduce((a, b) => b.length > a.length ? b : a);
+}
+
+function simiScoreColor(score: number): string {
+  if (score >= 0.9) return '#25512B';
+  if (score >= 0.8) return '#6CA033';
+  if (score >= 0.5) return '#F69B05';
+  return '#C00000';
+}
+
 // ── Constants ─────────────────────────────────────────────────────────────────
 const SUBSTRATE_MASS_UG = 10;        // µg   — m_S
 const REACTION_VOLUME_L = 20e-6;     // L    — V  (20 µL)
@@ -30,63 +75,12 @@ export interface YieldCardProps {
   accentColor: string;
   onExploreBiocatalysts: () => void;
   groupStats?: GroupStats | null;
+  simiResult?: SimiResult | null;
+  simiLoading?: boolean;
+  simiError?: string | null;
+  onLoadSimi?: () => void;
 }
 
-type ReferenceCategory =
-  | 'same-substrate'
-  | 'similar-substrate'
-  | 'different-substrate'
-  | 'no-transformation';
-
-interface MockReference {
-  title: string;
-  firstAuthor: string;
-  year: number;
-  journal: string;
-  doi: string;
-  category: ReferenceCategory;
-}
-
-const CATEGORY_LABELS: Record<ReferenceCategory, string> = {
-  'same-substrate':       'Biocatalytic transformation found on the same substrate',
-  'similar-substrate':    'Biocatalytic transformation found on a similar substrate',
-  'different-substrate':  'Biocatalytic transformation found on different substrates',
-  'no-transformation':    'No biocatalytic transformation found',
-};
-
-const CATEGORY_ORDER: ReferenceCategory[] = [
-  'same-substrate',
-  'similar-substrate',
-  'different-substrate',
-  'no-transformation',
-];
-
-const MOCK_REFERENCES: MockReference[] = [
-  {
-    title: 'Is it time for biocatalysis in fragment-based drug discovery?',
-    firstAuthor: 'Ramsden',
-    year: 2020,
-    journal: 'Chemical Science',
-    doi: 'https://doi.org/10.1039/d0sc04103c',
-    category: 'same-substrate',
-  },
-  {
-    title: 'Microbial dl-peptidases enable predator defense and interkingdom competition in Streptomyces',
-    firstAuthor: 'Hermenau',
-    year: 2024,
-    journal: 'Angewandte Chemie International Edition',
-    doi: 'https://doi.org/10.1002/anie.202309284',
-    category: 'similar-substrate',
-  },
-  {
-    title: 'Biocatalysis in medicinal chemistry: Challenges to access and drivers for adoption',
-    firstAuthor: 'Goodwin',
-    year: 2019,
-    journal: 'ACS Medicinal Chemistry Letters',
-    doi: 'https://doi.org/10.1021/acsmedchemlett.9b00410',
-    category: 'different-substrate',
-  },
-];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -114,6 +108,10 @@ export const YieldCard = ({
   accentColor,
   onExploreBiocatalysts,
   groupStats,
+  simiResult = null,
+  simiLoading = false,
+  simiError = null,
+  onLoadSimi,
 }: YieldCardProps) => {
   const [mwE, setMwE] = useState<number | null>(null);
   const [mwS, setMwS] = useState<number | null>(null);
@@ -281,6 +279,59 @@ export const YieldCard = ({
               Similar transformations
             </h3>
           </header>
+          {!simiResult && !simiLoading && !simiError && (
+            <div className="flex-1 flex items-center justify-center">
+              <button
+                type="button"
+                onClick={onLoadSimi}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border transition-colors"
+                style={{ borderColor: accentColor, color: accentColor, background: 'transparent' }}
+              >
+                <Search className="w-3.5 h-3.5" /> Load
+              </button>
+            </div>
+          )}
+          {simiLoading && (
+            <div className="flex-1 flex items-center justify-center">
+              <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+            </div>
+          )}
+          {simiError && !simiLoading && (
+            <p className="text-xs text-destructive">{simiError}</p>
+          )}
+          {simiResult && (() => {
+            const { reactants, products } = parseReactionSmiles(simiResult.reaction);
+            const mainReactant = primaryOrganic(reactants);
+            const mainProduct  = primaryOrganic(products);
+            return (
+              <div className="space-y-2">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-xs font-semibold font-mono text-foreground">RHEA:{simiResult.rhea_id}</span>
+                  {simiResult.ec.slice(0, 2).map(ec => (
+                    <span key={ec} className="text-[10px] bg-muted border border-border rounded-full px-1.5 py-0.5 font-mono text-muted-foreground">
+                      EC {ec}
+                    </span>
+                  ))}
+                  <span className="ml-auto text-xs font-mono font-bold" style={{ color: simiScoreColor(simiResult.score) }}>
+                    {Math.round(simiResult.score * 100)}%
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 overflow-x-auto py-1">
+                  {mainReactant && <MoleculeViewer smiles={mainReactant} width={130} height={95} />}
+                  <span className="text-xl leading-none shrink-0 opacity-60">⟶</span>
+                  {mainProduct && <MoleculeViewer smiles={mainProduct} width={130} height={95} />}
+                </div>
+                <a
+                  href={simiResult.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full border transition-colors text-sky-500 border-sky-400/40 bg-sky-500/5 hover:bg-sky-500/15"
+                >
+                  View on RHEA <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            );
+          })()}
         </section>
 
         {/* ── 4. REFERENCES ─────────────────────────────────────────────── */}
@@ -291,36 +342,53 @@ export const YieldCard = ({
               References
             </h3>
           </header>
-          <p className="text-sm font-semibold leading-snug" style={{ color: accentColor }}>
-            {CATEGORY_LABELS['same-substrate']}
-          </p>
-          <ul
-            className={[
-              'space-y-3 pr-1',
-              MOCK_REFERENCES.length > 5 ? 'overflow-y-auto max-h-[280px]' : '',
-            ].join(' ')}
-          >
-            {MOCK_REFERENCES.map((ref, i) => (
-              <li key={i}>
-                <a
-                  href={ref.doi}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-2 group"
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm text-foreground leading-snug group-hover:text-primary transition-colors">
-                      "{ref.title}"
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      {ref.firstAuthor} et al. ({ref.year}) · {ref.journal}
-                    </p>
-                  </div>
-                  <ExternalLink className="w-3.5 h-3.5 mt-0.5 shrink-0 text-muted-foreground/60 group-hover:text-primary transition-colors" />
-                </a>
-              </li>
-            ))}
-          </ul>
+          {!simiResult && !simiLoading && !simiError && (
+            <div className="flex-1 flex items-center justify-center">
+              <button
+                type="button"
+                onClick={onLoadSimi}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border transition-colors"
+                style={{ borderColor: accentColor, color: accentColor, background: 'transparent' }}
+              >
+                <BookOpen className="w-3.5 h-3.5" /> Load
+              </button>
+            </div>
+          )}
+          {simiLoading && (
+            <div className="flex-1 flex items-center justify-center">
+              <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+            </div>
+          )}
+          {simiError && !simiLoading && (
+            <p className="text-xs text-destructive">{simiError}</p>
+          )}
+          {simiResult && (
+            <ul className="space-y-2.5 pr-1 overflow-y-auto max-h-[260px]">
+              {simiResult.publications.length === 0 && (
+                <li className="text-sm text-muted-foreground">No publications found.</li>
+              )}
+              {simiResult.publications.map(pub => (
+                <li key={pub.pmid}>
+                  <a
+                    href={`https://pubmed.ncbi.nlm.nih.gov/${pub.pmid}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-start gap-2 group"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs text-foreground leading-snug group-hover:text-primary transition-colors">
+                        "{pub.title}"
+                      </p>
+                      <p className="text-[11px] text-muted-foreground mt-0.5">
+                        {pub.authors} · <em>{pub.journal}</em> ({pub.year})
+                      </p>
+                    </div>
+                    <ExternalLink className="w-3 h-3 mt-0.5 shrink-0 text-muted-foreground/60 group-hover:text-primary transition-colors" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
 
       </div>

@@ -871,45 +871,6 @@ export const NewReactionPage = () => {
         candidates = (Array.isArray(data?.enzymes) ? data.enzymes : [])
           .map((r: Record<string, unknown>, idx: number) => toEnzyme(r, idx, baseScore));
 
-        // Fallback: fetch missing name/EC from UniProt for any 'Unavailable' entries
-        const needsEnrich = candidates
-          .map((c, i) => ({ c, i }))
-          .filter(({ c }) => (c.name === 'Unavailable' || c.ecNumber === 'Unavailable') && c.id && c.id !== 'unknown');
-
-        if (needsEnrich.length > 0) {
-          const fetched = await Promise.all(
-            needsEnrich.map(({ c }) => {
-              const cleanId = c.id.includes('|') ? c.id.split('|')[1] : c.id;
-              return fetch(`https://rest.uniprot.org/uniprotkb/${cleanId}.json`)
-                .then(r => r.ok ? r.json() : null)
-                .then((data): { name: string | null; ecNumber: string | null } => {
-                  if (!data) return { name: null, ecNumber: null };
-                  const pd = data?.proteinDescription;
-                  const recommended = pd?.recommendedName;
-                  const submitted   = pd?.submissionNames?.[0];
-                  const name =
-                    recommended?.fullName?.value ??
-                    submitted?.fullName?.value ??
-                    null;
-                  const ecNumber =
-                    recommended?.ecNumbers?.[0]?.value ??
-                    submitted?.ecNumbers?.[0]?.value ??
-                    null;
-                  return { name: name ? lowerName(name) : null, ecNumber };
-                })
-                .catch(() => ({ name: null, ecNumber: null }));
-            })
-          );
-          fetched.forEach(({ name, ecNumber }, fi) => {
-            const idx = needsEnrich[fi].i;
-            candidates[idx] = {
-              ...candidates[idx],
-              ...(name     && { name }),
-              ...(ecNumber && { ecNumber }),
-            };
-          });
-        }
-
         if (candidates.length > 0) enzyme = candidates[0];
 
       } catch {
