@@ -385,7 +385,7 @@ const FindEnzymesButton = ({ active, loading, onClick }: { active: boolean; load
     </button>
     {loading && (
       <p className="text-sm text-muted-foreground text-center whitespace-nowrap">
-        This may take 1 – 4 minutes.. Grab a coffee ☕
+        This may take a few minutes - we're searching through over 250 000 biocatalysts to find the best matches for you. ☕
       </p>
     )}
   </div>
@@ -1109,7 +1109,7 @@ export const NewReactionPage = () => {
               {/* Coffee message — shown below all buttons while loading */}
               {apiLoading && (
                 <p className="hidden sm:block text-sm text-muted-foreground text-center mt-2 whitespace-nowrap">
-                  This may take a few moments - we're searching through over 250 000 biocatalysts to find the best matches for you. ☕
+                  This may take a few minutes - we're searching through over 250 000 biocatalysts to find the best matches for you. ☕
                 </p>
               )}
             </div>
