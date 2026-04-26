@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { searchEnzymes, getEnzyme } from '@/lib/api/enzymes';
-import type { PathwayStep } from '@/types/pathway';
+import type { ReactionStep } from '@/types/reaction';
 
-export function useEnzymeSearch(step: Pick<PathwayStep, 'reactionType'> | null) {
+export function useEnzymeSearch(step: Pick<ReactionStep, 'reactionType'> | null) {
   return useQuery({
     queryKey: ['enzymes', 'search', step?.reactionType],
     queryFn: () => searchEnzymes(step!),

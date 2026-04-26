@@ -13,9 +13,6 @@ export const LandingPage = () => {
           <img src="/images/nitroduck-logo.png" className="h-8" alt="Nitroduck" />
           <span className="text-sm font-bold tracking-widest uppercase text-foreground">Nitroduck</span>
         </div>
-        <Button variant="outline" onClick={() => navigate('/login')}>
-          Sign In
-        </Button>
       </header>
 
       {/* Hero */}
@@ -25,7 +22,7 @@ export const LandingPage = () => {
           <Button
             variant="outline"
             className="group w-72 h-36 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 hover:text-primary transition-all flex flex-col gap-1"
-            onClick={() => navigate('/pathways/new')}
+            onClick={() => navigate('/reactions/new')}
           >
             <Upload className="w-7 h-7" />
             <span className="text-lg font-semibold">Find Biocatalyst</span>

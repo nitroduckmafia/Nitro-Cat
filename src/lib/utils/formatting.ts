@@ -14,9 +14,10 @@ export function formatScore(score: number): string {
   return `${Math.round(score * 100)}%`;
 }
 
-export function formatConfidenceLabel(score: number): 'high' | 'medium' | 'low' {
-  if (score >= 0.9) return 'high';
-  if (score >= 0.75) return 'medium';
+export function formatConfidenceLabel(score: number): 'high' | 'good' | 'medium' | 'low' {
+  if (score >= 0.9)  return 'high';
+  if (score >= 0.8)  return 'good'; // 0.8–0.899 (< 0.9 already guaranteed by prior check)
+  if (score >= 0.5)  return 'medium';
   return 'low';
 }
 

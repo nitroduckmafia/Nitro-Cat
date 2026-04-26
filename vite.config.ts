@@ -11,6 +11,10 @@ export default defineConfig(() => ({
     headers: {},
   },
   plugins: [react()],
+  define: {
+    'process.env': JSON.stringify({ NODE_ENV: 'development' }),
+    global: 'globalThis',
+  },
   resolve: {
     alias: { "@": path.resolve(__dirname, "./src") },
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],

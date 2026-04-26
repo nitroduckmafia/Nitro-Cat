@@ -1,6 +1,6 @@
 /* 1. Font imports FIRST */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600&display=swap');
 
 /* 2. Theme imports */
 @import './themes/light.css';
@@ -33,7 +33,7 @@
   /* Primary GREEN (main action color) */
   --primary-50: #ECFDF5;
   --primary-100: #D1FAE5;
-  --primary-500: #10B981;
+  --primary-500: #538b5e;
   --primary-600: #059669;
   --primary-700: #047857;
   --primary-800: #065F46;
@@ -41,7 +41,7 @@
   /* Success GREEN (high confidence 90%+) */
   --success-50: #ECFDF5;
   --success-100: #D1FAE5;
-  --success-500: #10B981;
+  --success-500: #538b5e;
   --success-600: #059669;
   --success-700: #047857;
 
@@ -67,12 +67,12 @@
   --danger-700: #B91C1C;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(5, 150, 105, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(5, 150, 105, 0.1), 0 2px 4px -1px rgba(5, 150, 105, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(5, 150, 105, 0.1), 0 4px 6px -2px rgba(5, 150, 105, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(5, 150, 105, 0.1), 0 10px 10px -5px rgba(5, 150, 105, 0.04);
+  --shadow-sm: 0 1px 2px 0 rgba(68, 115, 81, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(68, 115, 81, 0.1), 0 2px 4px -1px rgba(68, 115, 81, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(68, 115, 81, 0.1), 0 4px 6px -2px rgba(68, 115, 81, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(68, 115, 81, 0.1), 0 10px 10px -5px rgba(68, 115, 81, 0.04);
 
-  --glow-primary: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  --glow-primary: 0 0 0 3px rgba(83, 139, 94, 0.1);
 }
 
   .dark {
@@ -96,7 +96,7 @@
   /* Primary GREEN */
   --primary-50: #0D2B1C;
   --primary-100: #0F4429;
-  --primary-500: #10B981;
+  --primary-500: #538b5e;
   --primary-600: #34D399;
   --primary-700: #6EE7B7;
   --primary-800: #A7F3D0;
@@ -130,12 +130,12 @@
   --danger-700: #FECACA;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(16, 185, 129, 0.2);
-  --shadow-md: 0 4px 6px -1px rgba(16, 185, 129, 0.3), 0 2px 4px -1px rgba(16, 185, 129, 0.2);
-  --shadow-lg: 0 10px 15px -3px rgba(16, 185, 129, 0.3), 0 4px 6px -2px rgba(16, 185, 129, 0.2);
-  --shadow-xl: 0 20px 25px -5px rgba(16, 185, 129, 0.4), 0 10px 10px -5px rgba(16, 185, 129, 0.3);
+  --shadow-sm: 0 1px 2px 0 rgba(83, 139, 94, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(83, 139, 94, 0.3), 0 2px 4px -1px rgba(83, 139, 94, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(83, 139, 94, 0.3), 0 4px 6px -2px rgba(83, 139, 94, 0.2);
+  --shadow-xl: 0 20px 25px -5px rgba(83, 139, 94, 0.4), 0 10px 10px -5px rgba(83, 139, 94, 0.3);
 
-  --glow-primary: 0 0 0 3px rgba(16, 185, 129, 0.15);
+  --glow-primary: 0 0 0 3px rgba(83, 139, 94, 0.15);
   --glow-success: 0 0 12px rgba(63, 185, 80, 0.3);
 }
 }
@@ -202,7 +202,7 @@
 
 .dark .react-flow__controls-button:hover {
   background: #1A2420;
-  color: #10B981;
+  color: #538b5e;
 }
 
 /* Active / pressed state (lock button when interaction is disabled) */
@@ -221,17 +221,17 @@
 @layer utilities {
   /* Green glow utilities */
   .glow-green {
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3), 0 0 30px rgba(16, 185, 129, 0.1);
+    box-shadow: 0 0 15px rgba(83, 139, 94, 0.3), 0 0 30px rgba(83, 139, 94, 0.1);
   }
   .glow-green-sm {
-    box-shadow: 0 0 8px rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 8px rgba(83, 139, 94, 0.2);
   }
   .text-glow {
-    text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    text-shadow: 0 0 10px rgba(83, 139, 94, 0.5);
   }
   /* Success glow — used on enzyme cards hover and high-confidence elements */
   .glow-success {
-    box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+    box-shadow: 0 0 12px rgba(83, 139, 94, 0.25);
   }
   .dark .glow-success {
     box-shadow: 0 0 12px rgba(63, 185, 80, 0.3);

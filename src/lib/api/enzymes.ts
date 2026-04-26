@@ -1,7 +1,7 @@
 import type { Enzyme } from '@/types/enzyme';
-import type { PathwayStep } from '@/types/pathway';
+import type { ReactionStep } from '@/types/reaction';
 
-export async function searchEnzymes(_step: Pick<PathwayStep, 'reactionType'>): Promise<Enzyme[]> {
+export async function searchEnzymes(_step: Pick<ReactionStep, 'reactionType'>): Promise<Enzyme[]> {
   return Promise.resolve([]);
 }
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GitBranch, FlaskConical, History } from "lucide-react";
+import { FlaskConical, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getHistory, clearHistory } from "@/lib/history";
 import type { HistoryEntry } from "@/lib/history";
@@ -26,16 +26,8 @@ export const HistoryPage = () => {
     setEntries([]);
   };
 
-  const handleClick = (entry: HistoryEntry) => {
-    if (entry.type === 'pathway') {
-      navigate(`/pathways/${entry.id}`);
-    } else if (entry.reactionState) {
-      navigate('/pathways/import/biocatalyst/result', {
-        state: { reaction: entry.reactionState },
-      });
-    } else {
-      navigate('/pathways/new');
-    }
+  const handleClick = (_entry: HistoryEntry) => {
+    navigate('/reactions/new');
   };
 
   return (
@@ -71,9 +63,7 @@ export const HistoryPage = () => {
               )}
             >
               <span className="shrink-0">
-                {entry.type === 'pathway'
-                  ? <GitBranch className="w-4 h-4 text-primary" />
-                  : <FlaskConical className="w-4 h-4 text-primary" />}
+                <FlaskConical className="w-4 h-4 text-primary" />
               </span>
               <div className="flex-1 min-w-0">
                 <p className="text-base font-semibold text-foreground truncate">{entry.name}</p>

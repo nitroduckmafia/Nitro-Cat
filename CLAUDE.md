@@ -1,104 +1,108 @@
 # CLAUDE.md
-
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Commands
+## Core Commands
 
 ```bash
-npm run dev          # Start dev server (Vite)
-npm run build        # Production build
-npm run build:dev    # Development build
-npm run lint         # ESLint
-npm run test         # Run tests once (Vitest)
-npm run test:watch   # Run tests in watch mode
-npm run preview      # Preview production build
+bun dev              # Start dev server
+bun build            # Production build
+bun build:dev        # Development build
+bun lint             # Run ESLint
+bun run test         # Run Vitest
+bun run test:watch   # Tests in watch mode
+bun preview          # Preview production build
+
+# Run a single test file:
+# npx vitest run src/test/example.test.ts
 ```
 
-Run a single test file:
-```bash
-npx vitest run src/test/example.test.ts
-```
+## Important Rules
 
-Note: Vite 8 and Vitest 3 require Node 20.19+.
+- **90% Confidence Rule**: When executing new features or significant refactors, never make changes until you have ≥ 90% confidence in what needs to be built. Ask follow-up questions until you reach that level, but do not ask more than 3 questions.
+- **Protect core libraries**: Do not replace Ketcher, XYFlow, or smiles-drawer with simpler alternatives unless explicitly asked — they are architectural decisions.
+- **No raw fetch in components**: Always go through `src/lib/api/` modules.
+- **No inline domain types**: Always import from `src/types/`.
 
-## Architecture
+## Tech Stack
 
-This is a **Vite + React + TypeScript SPA** (not Next.js). It's **EnzymAI** — a biochemical pathway analysis tool for discovering optimal enzyme sequences for biosynthesis pathways, with an AI chat assistant for analysis.
+- **Framework**: React 18.3 + React Router v6 (SPA, not Next.js)
+- **Build Tool**: Vite 8 + TypeScript 5
+- **Styling & UI**: Tailwind CSS + shadcn/ui (Radix primitives) + next-themes
+- **Data Fetching**: TanStack React Query
+- **Specialized Libraries**:
+  - Ketcher 3.12 (latest stable molecule structure editor)
+  - smiles-drawer (SMILES rendering)
+- **Testing**: Vitest + Playwright
+- **Package Manager**: Bun (preferred) / npm
 
-### Routing
+## Project Overview
 
-React Router v6. Dashboard routes share `DashboardLayout` (sidebar + header):
+**Nitro-Cat** is a user-friendly web platform that helps medicinal and synthetic chemists quickly discover the optimal enzymes for their desired chemical reactions or biosynthesis pathways. The core goal is **simplicity and accessibility** — users do not need deep biology knowledge. The interface prioritizes clean design, excellent UX, and making enzyme selection as straightforward as possible. After analysis, users should be able to easily order the recommended enzymes.
 
-| Path | Page |
-|------|------|
-| `/` | LandingPage |
-| `/login` | LoginPage |
-| `/auth/callback` | CallbackPage |
-| `/pathways` | PathwaysPage |
-| `/pathways/new` | NewPathwayPage |
-| `/pathways/:id` | PathwayDetailPage ← main view |
-| `/pathways/:id/results` | PathwayResultsPage |
-| `/history` | HistoryPage |
-| `/settings` | SettingsPage |
-| `/profile` | ProfilePage |
+## Architecture & Data Flow
 
-### Main view (`PathwayDetailPage`)
+**User flow**: `LandingPage` → `NewReactionPage` (draw substrate + product in Ketcher) → `TestReactionPage` (ranked enzyme candidates) → `GetEnzymeDialog` (order enzyme / DNA / design — defined inline in `TestReactionPage`).
 
-`DashboardLayout` → `PathwayDetailPage` → `ResizablePanelGroup`:
-- Left panel: `PathwayBuilder` — vertical graph of pathway steps. Each step shows clickable `EnzymeCard`s with confidence scores. Clicking opens `EnzymeModal`. Steps without enzymes offer "Brute force search".
-- Right panel: `ChatPanel` — AI chat UI with model selector, web search toggle, file attachment.
+**API layer** (`src/lib/api/`): All server calls go through `client.ts` (fetch wrapper). `enzymes.ts` and `reactions.ts` are currently stubs. Never call `fetch` directly in components — use the api modules.
 
-### Domain types (`src/types/`)
+**Data fetching**: React Query hooks live in `src/lib/hooks/` (`useReaction`, `useEnzymes`). Components consume hooks only — no raw Query calls in JSX.
 
-- `enzyme.ts` — `Enzyme` (kinetic params, score 0–1, vendor/pricing)
-- `pathway.ts` — `PathwayStep`, `Pathway` (id, steps, status: draft/analyzing/complete)
-- `user.ts` — `User`, `UserSettings` (theme, defaultModel, displayDensity)
+**Types**: Shared types in `src/types/` (`enzyme.ts`, `reaction.ts`, `user.ts`). Always import from there; don't inline local types for domain objects.
 
-Static sample data lives in `src/data/pathwayData.ts` (`samplePathway` — Shikimic Acid Biosynthesis). No real backend yet.
+**Session history**: `src/lib/history.ts` is in-memory only — data does not persist across page refreshes. Don't treat it as a cache or persistent store.
 
-### Component folders
 
-- `src/components/layout/` — `DashboardLayout`, `Header`, `Sidebar`, `ThemeProvider`, `ThemeToggle`, `NavLink`
-- `src/components/pathway/` — `PathwayBuilder`, `PathwayStep`, `MoleculeInput`, `ReactionSelector`
-- `src/components/enzyme/` — `EnzymeCard`, `EnzymeModal`, `ConfidenceScore`, `EnzymeTable`
-- `src/components/chat/` — `ChatPanel`, `ChatMessage`
-- `src/components/ui/` — shadcn/ui primitives (Radix-based, do not edit)
+## Routing
 
-### Auth scaffolding (`src/lib/auth/`)
+| Path                     | Page                 | Layout            |
+|--------------------------|----------------------|-------------------|
+| `/`                      | `LandingPage`        | none              |
+| `/reactions/new`         | `NewReactionPage`    | `DashboardLayout` |
+| `/reactions/test/result` | `TestReactionPage`   | `DashboardLayout` |
+| `/history`               | `HistoryPage`        | `DashboardLayout` |
+| `/settings`              | `SettingsPage`       | `DashboardLayout` |
 
-`AuthProvider` in `context.tsx` wraps the whole app (in `App.tsx`) with a **mock user** (`useAuth` hook). Auth is not real — stubs only, ready for OAuth integration.
+## Component Structure
 
-### Backend API scaffolding (`src/lib/api/`)
+- `src/components/layout/`   — DashboardLayout, Sidebar, Header, ThemeProvider, ThemeToggle
+- `src/components/reaction/` — KetcherEditor (chemical structure drawing)
+- `src/components/molecule/` — MoleculeViewer (SMILES renderer via smiles-drawer)
+- `src/components/enzyme/`   — EnzymeCard, EnzymeModal, EnzymeTable, ConfidenceScore
+- `src/components/ui/`       — shadcn/ui primitives (do not edit)
 
-- `client.ts` — fetch wrapper reading `VITE_API_URL` env var, attaches auth token from localStorage
-- `pathways.ts`, `enzymes.ts` — typed stub functions; return sample data for now
-- `src/lib/hooks/usePathway.ts`, `useEnzymes.ts` — react-query wrappers over the API stubs
+## Styling Guidelines
 
-### Styling
+- Tailwind CSS with CSS custom properties
+- Dark/light mode via `next-themes` (`attribute="class"`)
+- Design tokens defined in `src/styles/globals.css`, split into `light.css` and `dark.css`
+- Primary color: `#538b5e` (green)
+- Dark backgrounds: `#0A0F0D`, `#0F1612`, `#1A2420`
+- Light backgrounds: `#FFFFFF`, `#F7FBF9`, `#EFF6F3`
+- Shadows use green-tinted rgba values (`--shadow-sm/md/lg`)
+- Enzyme cards: `bg-secondary`, 1px `border-default`, 3px left success border, hover `bg-tertiary` + `glow-success`
+- Confidence colors: `#25512B` (≥ 0.9), `#6CA033` (0.8–0.89), `#F69B05` (0.5–0.79), `#C00000` (< 0.5)
+- Use `formatConfidenceLabel()` from `src/lib/utils/formatting.ts`
+- Custom utilities: `.glow-green`, `.glow-green-sm`, `.glow-success`, `.text-glow`
+- Fonts: Space Grotesk (body) + Urbanist (mono), loaded from Google Fonts
+- Path alias: `@/` → `src/`
 
-- Tailwind with CSS custom properties; dark/light via `next-themes` (`attribute="class"`).
-- Design tokens defined in `src/styles/globals.css`, split into `src/styles/themes/light.css` and `dark.css`.
-- Primary green: `#10B981`. Dark backgrounds: `#0A0F0D` / `#0F1612` / `#1A2420`. Light backgrounds: `#FFFFFF` / `#F7FBF9` / `#EFF6F3`.
-- Shadows use green-tinted rgba values (see `--shadow-sm/md/lg` in themes).
-- Enzyme cards: `bg-secondary`, 1px `border-default`, 3px left border in success color, hover `bg-tertiary` + `glow-success`.
-- Confidence color scale: green ≥0.9, yellow 0.6–0.89, red <0.6. Use `formatConfidenceLabel()` from `src/lib/utils/formatting.ts`.
-- Custom utilities: `.glow-green`, `.glow-green-sm`, `.glow-success`, `.text-glow`.
-- Fonts: IBM Plex Sans (sans) + JetBrains Mono (mono), loaded from Google Fonts.
-- Path alias `@/` → `src/`.
+## Adding New shadcn/ui Components
 
-### Functional pages
-
-- **SettingsPage** — theme (via `useTheme` from next-themes), default AI model, display density (stored in localStorage, sets `data-density` on `<html>`).
-- **ProfilePage** — shows mock user from `useAuth`, edit form stub, account info, danger zone (AlertDialog).
-
-### Adding new shadcn/ui components
 ```bash
 npx shadcn@latest add <component>
 ```
+
 Config in `components.json`.
 
-### Environment variables
-Copy `.env.example` to `.env.local`. Key var: `VITE_API_URL` (defaults to `http://localhost:8000/api`).
+## Environment Variables
 
-### Tests
-Vitest + jsdom. Test files: `src/**/*.{test,spec}.{ts,tsx}`. Setup: `src/test/setup.ts`.
+- Copy `.env.example` → `.env.local`
+- `VITE_API_URL` — base URL for the backend API (`http://localhost:8000` for local dev)
+  - All requests go through `src/lib/api/client.ts` — never hardcode this URL
+  - In production, points to the deployed backend service
+
+## Testing
+
+- Vitest (unit tests) + Playwright (E2E tests)
+- Test files: `src/**/*.{test,spec}.{ts,tsx}`
+- Setup file: `src/test/setup.ts`

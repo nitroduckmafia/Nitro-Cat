@@ -1,13 +1,9 @@
-import type { ReactionNodeData } from '@/types/pathway';
-
 export interface HistoryEntry {
   id: string;
-  type: 'pathway' | 'reaction';
-  name: string;       // pathway name or "Substrate → Product"
-  subtitle: string;   // enzyme name or pathway citation
+  type: 'reaction';
+  name: string;       // "Substrate → Product"
+  subtitle: string;   // enzyme name or citation
   visitedAt: number;
-  // for reaction entries — used to reopen BiocatalystFoundPage
-  reactionState?: ReactionNodeData;
 }
 
 const MAX = 50;

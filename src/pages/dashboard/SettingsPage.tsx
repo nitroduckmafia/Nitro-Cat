@@ -1,29 +1,7 @@
-import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
 import { Sun, Moon, Monitor } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-const AI_MODELS = [
-  { id: 'nitroai-4', label: 'NitroAI-4', desc: 'Most capable' },
-  { id: 'nitroai-4-mini', label: 'NitroAI-4 Mini', desc: 'Fast & efficient' },
-  { id: 'nitroai-3.5', label: 'NitroAI-3.5', desc: 'Balanced' },
-];
-
-const DENSITY_OPTIONS = [
-  { id: 'comfortable', label: 'Comfortable' },
-  { id: 'compact', label: 'Compact' },
-];
 
 const THEME_OPTIONS: Array<{ id: 'light' | 'dark' | 'system'; label: string; icon: React.ReactNode }> = [
   { id: 'light', label: 'Light', icon: <Sun className="w-4 h-4" /> },
@@ -33,32 +11,10 @@ const THEME_OPTIONS: Array<{ id: 'light' | 'dark' | 'system'; label: string; ico
 
 export const SettingsPage = () => {
   const { theme, setTheme } = useTheme();
-  const [defaultModel, setDefaultModel] = useState(() => localStorage.getItem('default_model') ?? 'nitroai-4');
-  const [density, setDensity] = useState<'compact' | 'comfortable'>(() => {
-    return (localStorage.getItem('display_density') as 'compact' | 'comfortable') ?? 'comfortable';
-  });
-
-  // Apply density attribute to document
-  useEffect(() => {
-    document.documentElement.setAttribute('data-density', density);
-  }, [density]);
 
   const handleThemeChange = (newTheme: 'light' | 'dark' | 'system') => {
     setTheme(newTheme);
     toast({ title: 'Theme updated', description: `Theme set to ${newTheme}.` });
-  };
-
-  const handleModelChange = (model: string) => {
-    setDefaultModel(model);
-    localStorage.setItem('default_model', model);
-    toast({ title: 'Model updated', description: `Default model set to ${AI_MODELS.find((m) => m.id === model)?.label}.` });
-  };
-
-  const handleDensityChange = (newDensity: 'compact' | 'comfortable') => {
-    setDensity(newDensity);
-    localStorage.setItem('display_density', newDensity);
-    document.documentElement.setAttribute('data-density', newDensity);
-    toast({ title: 'Display updated', description: `Density set to ${newDensity}.` });
   };
 
   return (
@@ -66,7 +22,7 @@ export const SettingsPage = () => {
       <div className="max-w-lg mx-auto space-y-8">
         <div>
           <h1 className="text-xl font-bold text-foreground">Settings</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Configure your NitroAI experience</p>
+          <p className="text-sm text-muted-foreground mt-0.5">Configure your NitroCat experience</p>
         </div>
 
         {/* Appearance */}
@@ -89,60 +45,6 @@ export const SettingsPage = () => {
               >
                 {opt.icon}
                 <span className="text-xs font-medium">{opt.label}</span>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        <Separator />
-
-        {/* AI Model */}
-        <section className="space-y-4">
-          <div>
-            <h2 className="text-base font-semibold text-foreground">AI Model</h2>
-            <p className="text-xs text-muted-foreground">Default model for pathway analysis</p>
-          </div>
-          <div className="space-y-1.5">
-            <Label>Default Model</Label>
-            <Select value={defaultModel} onValueChange={handleModelChange}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border-emphasis)' }}>
-                {AI_MODELS.map((m) => (
-                  <SelectItem key={m.id} value={m.id}>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium">{m.label}</span>
-                      <span className="text-xs text-muted-foreground">{m.desc}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </section>
-
-        <Separator />
-
-        {/* Display Density */}
-        <section className="space-y-4">
-          <div>
-            <h2 className="text-base font-semibold text-foreground">Display</h2>
-            <p className="text-xs text-muted-foreground">Adjust information density</p>
-          </div>
-          <div className="flex gap-3">
-            {DENSITY_OPTIONS.map((opt) => (
-              <button
-                key={opt.id}
-                onClick={() => handleDensityChange(opt.id as 'compact' | 'comfortable')}
-                className={cn(
-                  "flex-1 py-2.5 rounded-lg border text-sm font-medium transition-all",
-                  density === opt.id
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-border bg-secondary text-muted-foreground hover:border-primary/50 hover:text-foreground"
-                )}
-              >
-                {opt.label}
               </button>
             ))}
           </div>

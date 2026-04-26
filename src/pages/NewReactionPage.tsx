@@ -9,17 +9,15 @@ import {
 } from "@/components/ui/dialog";
 import { MoleculeViewer } from "@/components/molecule/MoleculeViewer";
 import {
-  ArrowLeft, ArrowRight, Upload, Download, CheckCircle2, FlaskConical, FileText,
+  ArrowLeft, Upload, Download, CheckCircle2, FlaskConical, FileText,
   Dna, Check, X, TrendingUp, ShoppingCart, Droplets, Thermometer, Activity, Target,
   PencilLine, ScrollText, Beaker, Clock, AlertTriangle, BookOpen, Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { formatScore, formatConfidenceLabel, transformClipzymeScore } from "@/lib/utils/formatting";
+import { formatScore, formatConfidenceLabel } from "@/lib/utils/formatting";
 import SmilesDrawer from "smiles-drawer";
-import { allExamplePathways } from "@/data/allExamplePathways";
 import { addHistoryEntry } from "@/lib/history";
-import type { Enzyme } from "@/types/enzyme";
-import type { ReactionNodeData } from "@/types/pathway";
+import type { Enzyme, GroupStats } from "@/types/enzyme";
 
 const KetcherEditor = lazy(() => import('@/components/reaction/KetcherEditor'));
 
@@ -34,12 +32,176 @@ class RenderGuard extends Component<{ children: ReactNode; fallback: ReactNode }
 
 // ── Enzyme lookup ─────────────────────────────────────────────────────────────
 
-const ACETOPHENONE     = 'CC(=O)c1ccccc1';
-const R_PHENYLETHANOL  = 'C[C@@H](O)c1ccccc1';
-const COMPOUND3   = 'C#C[C@]1(CO)[C@@H](O)C[C@@H](OP(=O)(O)O)O1';
-const COMPOUND4   = 'C#C[C@]1(COP(=O)(O)O)[C@@H](O)C[C@@H](O)O1';
-const AMINO_KETONE   = 'CC(=O)CCc1cccc(N)c1';
-const CHIRAL_ALCOHOL = 'C[C@@H](O)CCc1cccc(N)c1';
+// ── Example SMILES ────────────────────────────────────────────────────────────
+const HOMOFARNESOL   = 'CC(C)=CCC/C(C)=C/CC/C(C)=C/CCO';
+const AMBROX         = 'CC1(C)CCC[C@@]2(C)[C@H]1CC[C@@]3(C)OCC[C@H]23';
+const TAXADIENE      = 'CC1=C2CC[C@@]3(CCC=C([C@H]3C[C@@H](C2(C)C)CC1)C)C';
+const TAXADIENOL     = 'CC1CC[C@@H]2C(C)(C)C=1CC[C@@]1(C)C(C2)C(=C)[C@@H](O)CC1';
+const COMPOUND1 = 'C#C[C@]1(CO)[C@@H](O)C[C@@H](OP(=O)(O)O)O1';
+const COMPOUND2 = 'C#C[C@]1(COP(=O)(O)O)[C@@H](O)C[C@@H](O)O1';
+const PROPANEDIOIC       = 'CC(=O)CCC(C(=O)OC)C(=O)OC.N';
+const AMINOBUTYL_MALONATE = 'C[C@H](CCC(C(=O)OC)C(=O)OC)N';
+
+// ── Example MOL V2000 strings (used by Ketcher editor) ───
+const MOL = {
+  HOMOFARNESOL: `
+  -INDIGO-04012621222D
+
+ 17 16  0  0  0  0  0  0  0  0999 V2000
+   -3.4641   -1.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -3.4641    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -4.3301    0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.5981    0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.7321    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.8660    0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.0000   -1.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.8660    0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.7321    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    2.5981    0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    3.4641    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    3.4641   -1.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    4.3301    0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    5.1962    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    6.0622    0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    6.9282    0.0000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0  0  0  0
+  2  3  1  0  0  0  0
+  2  4  2  0  0  0  0
+  4  5  1  0  0  0  0
+  5  6  1  0  0  0  0
+  6  7  1  0  0  0  0
+  7  8  1  0  0  0  0
+  7  9  2  0  0  0  0
+  9 10  1  0  0  0  0
+ 10 11  1  0  0  0  0
+ 11 12  1  0  0  0  0
+ 12 13  1  0  0  0  0
+ 12 14  2  0  0  0  0
+ 14 15  1  0  0  0  0
+ 15 16  1  0  0  0  0
+ 16 17  1  0  0  0  0
+M  END
+`,
+  AMBROX: `
+  -INDIGO-04012621222D
+
+ 17 19  0  0  0  0  0  0  0  0999 V2000
+   -1.3264   -1.8508    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.5000   -0.8660    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.4397   -1.2080    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.5000    0.8660    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.5000    0.8660    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.5000    0.8660    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.5000   -0.8660    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.0000   -1.7321    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.0000   -1.7321    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.5000   -0.8660    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    2.0878   -1.6750    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    2.4781   -0.6581    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    2.5827    0.3364    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.6691    0.7431    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0  0  0  0
+  2  3  1  0  0  0  0
+  2  4  1  0  0  0  0
+  4  5  1  0  0  0  0
+  5  6  1  0  0  0  0
+  6  7  1  0  0  0  0
+  7  8  1  0  0  0  0
+  7  9  1  0  0  0  0
+  9  2  1  0  0  0  0
+  9 10  1  0  0  0  0
+ 10 11  1  0  0  0  0
+ 11 12  1  0  0  0  0
+ 12 13  1  0  0  0  0
+ 12 14  1  0  0  0  0
+ 14 15  1  0  0  0  0
+ 15 16  1  0  0  0  0
+ 16 17  1  0  0  0  0
+ 17  7  1  0  0  0  0
+ 17 12  1  0  0  0  0
+M  END
+`,
+  TAXADIENE:   'CC1=C2CC[C@@]3(CCC=C([C@H]3C[C@@H](C2(C)C)CC1)C)C',
+  TAXADIENOL:  'CC1CC[C@@H]2C(C)(C)C=1CC[C@@]1(C)C(C2)C(=C)[C@@H](O)CC1',
+  PROPANEDIOIC:       'CC(=O)CCC(C(=O)OC)C(=O)OC.N',
+  AMINOBUTYL_MALONATE: 'C[C@H](CCC(C(=O)OC)C(=O)OC)N',
+  COMPOUND1: `
+  -INDIGO-04012621462D
+
+ 15 15  0  0  0  0  0  0  0  0999 V2000
+   -1.6180   -1.1756    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.8090   -0.5878    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.6691    0.7431    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.6473    0.5352    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    0.5000   -0.8660    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.0933   -1.7796    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    1.4781   -0.6581    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.5827    0.3364    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    2.4487    0.8364    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    3.3147    0.3364    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0
+    3.3147   -0.6636    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    4.1808    0.8364    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    4.1808   -0.1636    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    0.6691    0.7431    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  3  0  0  0  0
+  2  3  1  0  0  0  0
+  3  4  1  0  0  0  0
+  4  5  1  0  0  0  0
+  3  6  1  0  0  0  0
+  6  7  1  0  0  0  0
+  6  8  1  0  0  0  0
+  8  9  1  0  0  0  0
+  9 10  1  0  0  0  0
+ 10 11  1  0  0  0  0
+ 11 12  2  0  0  0  0
+ 11 13  1  0  0  0  0
+ 11 14  1  0  0  0  0
+  9 15  1  0  0  0  0
+ 15  3  1  0  0  0  0
+M  END
+`,
+  COMPOUND2: `
+  -INDIGO-04012621462D
+
+ 15 15  0  0  0  0  0  0  0  0999 V2000
+   -0.8135   -1.8271    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.4067   -0.9135    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.9511    0.3090    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.6942   -0.3601    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.6453   -0.0511    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.8532    0.9271    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+   -3.3884   -0.7202    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+   -3.5963    0.2579    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    0.8660   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.9706   -1.4945    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    1.6092    0.1691    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.2024    1.0827    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.7024    1.9487    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    0.2079    0.9781    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  3  0  0  0  0
+  2  3  1  0  0  0  0
+  3  4  1  0  0  0  0
+  4  5  1  0  0  0  0
+  5  6  1  0  0  0  0
+  6  7  2  0  0  0  0
+  6  8  1  0  0  0  0
+  6  9  1  0  0  0  0
+  3 10  1  0  0  0  0
+ 10 11  1  0  0  0  0
+ 10 12  1  0  0  0  0
+ 12 13  1  0  0  0  0
+ 13 14  1  0  0  0  0
+ 13 15  1  0  0  0  0
+ 15  3  1  0  0  0  0
+M  END
+`,
+};
 
 const DEFAULT_ENZYME: Enzyme = {
   id: 'th-rd38b',
@@ -59,72 +221,40 @@ const DEFAULT_ENZYME: Enzyme = {
   price: '$310 / 10mg',
 };
 
-function getEnzymeForSubstrate(smiles: string): Enzyme {
-  const cannabinoid      = allExamplePathways.find(p => p.id === 'example-cannabinoid');
-  const islatravir       = allExamplePathways.find(p => p.id === 'example-islatravir');
-  const chemoEnzymatic   = allExamplePathways.find(p => p.id === 'example-chemoenzymatic');
-
-  const pick = (pathway: typeof cannabinoid, nodeId: string): Enzyme | null => {
-    const node = pathway?.nodes.find(n => n.id === nodeId);
-    return node ? ((node.data as ReactionNodeData).enzyme ?? null) : null;
-  };
-
-  const s = smiles.trim();
-  if (s === ACETOPHENONE) return DEFAULT_ENZYME; // backend will handle this
-  if (s === COMPOUND3)   return pick(islatravir,     'r2') ?? DEFAULT_ENZYME;
-  if (s === AMINO_KETONE) return pick(chemoEnzymatic, 'r3') ?? DEFAULT_ENZYME;
+function getEnzymeForSubstrate(_smiles: string): Enzyme {
   return DEFAULT_ENZYME;
 }
 
 // ── Example data ──────────────────────────────────────────────────────────────
 
-// Pre-converted MOL V2000 strings for use in the Kekule structure editor
-// (Kekule can write SMILES but only reads MOL natively)
-const MOL: Record<string, string> = {
-  ACETOPHENONE: "\n     RDKit          2D\n\n  9  9  0  0  0  0  0  0  0  0999 V2000\n    2.5833   -1.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.8333    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5833    1.2990    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.3333   -0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4167   -1.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.9167   -1.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.6667    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.9167    1.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4167    1.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0\n  2  3  2  0\n  2  4  1  0\n  4  5  2  0\n  5  6  1  0\n  6  7  2  0\n  7  8  1  0\n  8  9  2  0\n  9  4  1  0\nM  END\n",
-  R_PHENYLETHANOL: "\n     RDKit          2D\n\n  9  9  0  0  0  0  0  0  0  0999 V2000\n    2.5833   -1.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.8333    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5833    1.2990    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.3333   -0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4167   -1.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.9167   -1.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.6667    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.9167    1.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.4167    1.2990    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  1  6\n  2  3  1  0\n  2  4  1  0\n  4  5  2  0\n  5  6  1  0\n  6  7  2  0\n  7  8  1  0\n  8  9  2  0\n  9  4  1  0\nM  END\n",
-  COMPOUND3: "\n     RDKit          2D\n\n 15 15  0  0  0  0  0  0  0  0999 V2000\n    4.4193    1.0120    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0691    0.3585    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.7190   -0.2950    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5100   -1.5695    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.8018   -2.8918    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2102    1.1160    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.0527    2.3571    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.2891    1.0682    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.7068   -0.3724    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.1179   -0.8812    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.2641    0.0864    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.2317   -1.0598    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.2965    1.2325    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.4103    1.0540    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.5342   -1.2150    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  3  0\n  3  2  1  1\n  3  4  1  0\n  4  5  1  0\n  3  6  1  0\n  6  7  1  6\n  6  8  1  0\n  8  9  1  0\n  9 10  1  6\n 10 11  1  0\n 11 12  2  0\n 11 13  1  0\n 11 14  1  0\n  9 15  1  0\n 15  3  1  0\nM  END\n",
-  COMPOUND4: "\n     RDKit          2D\n\n 15 15  0  0  0  0  0  0  0  0999 V2000\n    1.3499   -3.3001    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.1412   -1.8147    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.9324   -0.3293    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.5230   -0.6921    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.5650    0.3869    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.0204    0.0241    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.3833    1.4795    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.6576   -1.4314    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.4759   -0.3387    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.4315   -0.2770    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.3550   -1.4590    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    2.8450    1.1649    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.6015    2.0037    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5492    3.5028    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.4195    1.0803    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  3  0\n  3  2  1  1\n  3  4  1  0\n  4  5  1  0\n  5  6  1  0\n  6  7  2  0\n  6  8  1  0\n  6  9  1  0\n  3 10  1  0\n 10 11  1  6\n 10 12  1  0\n 12 13  1  0\n 13 14  1  6\n 13 15  1  0\n 15  3  1  0\nM  END\n",
-  AMINO_KETONE: "\n     RDKit          2D\n\n 12 12  0  0  0  0  0  0  0  0999 V2000\n   -4.6788    0.8925    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.5433   -0.0877    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.8243   -1.5611    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.1267    0.4057    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.9912   -0.5745    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.4253   -0.0811    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.7064    1.3923    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.1230    1.8856    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2585    0.9055    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.9774   -0.5679    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.1129   -1.5480    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5608   -1.0612    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0\n  2  3  2  0\n  2  4  1  0\n  4  5  1  0\n  5  6  1  0\n  6  7  2  0\n  7  8  1  0\n  8  9  2  0\n  9 10  1  0\n 10 11  1  0\n 10 12  2  0\n 12  6  1  0\nM  END\n",
-  CHIRAL_ALCOHOL: "\n     RDKit          2D\n\n 12 12  0  0  0  0  0  0  0  0999 V2000\n   -4.6788    0.8925    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.5433   -0.0877    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.8243   -1.5611    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.1267    0.4057    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.9912   -0.5745    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.4253   -0.0811    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.7064    1.3923    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.1230    1.8856    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.2585    0.9055    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.9774   -0.5679    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.1129   -1.5480    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    1.5608   -1.0612    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  1  6\n  2  3  1  0\n  2  4  1  0\n  4  5  1  0\n  5  6  1  0\n  6  7  2  0\n  7  8  1  0\n  8  9  2  0\n  9 10  1  0\n 10 11  1  0\n 10 12  2  0\n 12  6  1  0\nM  END\n",
-  CBGA: "\n     RDKit          2D\n\n 23 23  0  0  0  0  0  0  0  0999 V2000\n   -8.1122   -1.1385    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -6.6644   -1.5306    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -6.2800   -2.9805    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -5.6009   -0.4727    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.1531   -0.8648    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.0896    0.1930    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -3.4739    1.6429    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -4.9218    2.0350    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -2.4105    2.7008    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.9626    2.3087    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.1009    3.3665    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n   -0.5782    0.8588    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.8696    0.4667    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.2540   -0.9832    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.7018   -1.3753    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0862   -2.8252    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.7653   -0.3175    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    5.2132   -0.7096    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    6.2766    0.3483    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.7245   -0.0438    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.7880    1.0140    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    8.1089   -1.4937    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n   -1.6417   -0.1991    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0\n  2  3  2  0\n  2  4  1  0\n  4  5  1  0\n  5  6  1  0\n  6  7  2  0\n  7  8  1  0\n  7  9  1  0\n  9 10  2  0\n 10 11  1  0\n 10 12  1  0\n 12 13  1  0\n 13 14  1  0\n 14 15  2  3\n 15 16  1  0\n 15 17  1  0\n 17 18  1  0\n 18 19  1  0\n 19 20  2  0\n 20 21  1  0\n 20 22  1  0\n 12 23  2  0\n 23  6  1  0\nM  END\n",
-};
-
-const SUBSTRATE_EXAMPLES = [
-  { label: 'Acetophenone',  smiles: ACETOPHENONE,    mol: MOL.ACETOPHENONE    },
-  { label: 'Amino ketone',  smiles: AMINO_KETONE,    mol: MOL.AMINO_KETONE    },
-  { label: 'Compound 3',    smiles: COMPOUND3,       mol: MOL.COMPOUND3       },
-];
-
-const PRODUCT_EXAMPLES = [
-  { label: '(R)-1-Phenylethanol', smiles: R_PHENYLETHANOL, mol: MOL.R_PHENYLETHANOL },
-  { label: 'CBGA',                smiles: 'OC(=O)CCc1c(O)cc(O)c(CC=C(C)CCC=C(C)C)c1', mol: MOL.CBGA },
-  { label: 'Compound 4',          smiles: COMPOUND4,        mol: MOL.COMPOUND4        },
-];
-
 const EXAMPLE_PAIRS = [
-  { label: 'Acetophenone → (R)-1-Phenylethanol', shortLabel: 'Acetophenone → Phenylethanol', substrate: ACETOPHENONE, subMol: MOL.ACETOPHENONE, product: R_PHENYLETHANOL, prodMol: MOL.R_PHENYLETHANOL },
-  { label: 'Compound 3 → Compound 4',               shortLabel: 'Compound 3 → 4',      substrate: COMPOUND3,       subMol: MOL.COMPOUND3,       product: COMPOUND4,       prodMol: MOL.COMPOUND4       },
-  { label: 'Amino ketone → Chiral alcohol',         shortLabel: 'Amino ketone → Chiral', substrate: AMINO_KETONE,  subMol: MOL.AMINO_KETONE,    product: CHIRAL_ALCOHOL,  prodMol: MOL.CHIRAL_ALCOHOL  },
+  {
+    label:      '(E,E)-Homofarnesol → Ambrox',
+    shortLabel: 'Homofarnesol → Ambrox',
+    substrate:  HOMOFARNESOL,  subMol: MOL.HOMOFARNESOL,
+    product:    AMBROX,        prodMol: MOL.AMBROX,
+  },
+  {
+    label:      'Taxadiene → Taxadien-5α-ol',
+    shortLabel: 'Taxadiene → Taxadienol',
+    substrate:  TAXADIENE,     subMol: MOL.TAXADIENE,
+    product:    TAXADIENOL,    prodMol: MOL.TAXADIENOL,
+  },
+  {
+    label:      'Compound 1 → Compound 2',
+    shortLabel: 'Compound 1 → 2',
+    substrate:  COMPOUND1, subMol: MOL.COMPOUND1,
+    product:    COMPOUND2, prodMol: MOL.COMPOUND2,
+  },
+  {
+    label:      'Propanedioic acid → Dimethyl 2-[(3R)-3-aminobutyl]propanedioate',
+    shortLabel: 'Propanedioate → Aminobutylmalonate',
+    substrate:  PROPANEDIOIC,        subMol: MOL.PROPANEDIOIC,
+    product:    AMINOBUTYL_MALONATE, prodMol: MOL.AMINOBUTYL_MALONATE,
+  },
 ];
 
-const REACTION_EXAMPLES = [
-  {
-    label: 'Acetophenone → (R)-1-Phenylethanol',
-    substrate: ACETOPHENONE,
-    product: R_PHENYLETHANOL,
-  },
-  {
-    label: 'Compound 3 → Compound 4',
-    substrate: COMPOUND3,
-    product: COMPOUND4,
-  },
-  {
-    label: 'Amino ketone → Chiral alcohol',
-    substrate: AMINO_KETONE,
-    product: CHIRAL_ALCOHOL,
-  },
-];
+const REACTION_EXAMPLES = EXAMPLE_PAIRS.map(({ label, substrate, product }) => ({ label, substrate, product }));
 
 // ── Validation ────────────────────────────────────────────────────────────────
 
@@ -136,19 +266,25 @@ function validateInput(value: string, onResult: (valid: boolean) => void) {
 
 // ── Confidence badge ──────────────────────────────────────────────────────────
 
-const labelStyles: Record<'high' | 'medium' | 'low', string> = {
-  high:   'bg-success-100 text-success-700 border border-success-500',
-  medium: 'bg-warning-100 text-warning-700 border border-warning-500',
-  low:    'bg-danger-100  text-danger-700  border border-danger-500',
+const confidenceColorMap: Record<'high' | 'good' | 'medium' | 'low', string> = {
+  high:   '#25512B',
+  good:   '#6CA033',
+  medium: '#F69B05',
+  low:    '#C00000',
 };
 
 const ConfidenceBadge = ({ score }: { score: number }) => {
   const label = formatConfidenceLabel(score);
+  const color = confidenceColorMap[label];
   return (
-    <span className={cn(
-      'inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-sm font-mono font-semibold shrink-0',
-      labelStyles[label]
-    )}>
+    <span
+      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-sm font-mono font-semibold shrink-0"
+      style={{
+        color,
+        backgroundColor: color + '1a',
+        border: `1px solid ${color}66`,
+      }}
+    >
       {formatScore(score)}
       <span className="font-normal opacity-80">confidence</span>
     </span>
@@ -199,25 +335,25 @@ const SmilesColumn = ({
   onChange: (v: string) => void;
   placeholder: string;
 }) => (
-  <div className="flex flex-col gap-3 flex-1 min-w-0">
-    <div className="flex items-center justify-between mb-2">
-      <p className="text-xs uppercase tracking-widest text-muted-foreground">{label}</p>
+  <div className="flex flex-col gap-2 flex-1 min-w-0">
+    <div className="flex items-center justify-between">
+      <p className="text-sm font-semibold text-foreground">{label}</p>
       <ValidityBadge valid={value.trim() ? valid : null} />
     </div>
     <Textarea
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      rows={3}
+      rows={2}
       className={cn(
-        'font-mono text-sm resize-none transition-colors',
+        'font-mono text-sm resize-none transition-colors rounded-xl',
         value.trim() && valid === false && 'border-destructive focus-visible:ring-destructive/30'
       )}
     />
-    <div className="bg-muted/30 rounded-xl p-3 flex items-center justify-center min-h-[196px]">
+    <div className="bg-muted/30 rounded-xl p-3 flex items-center justify-center min-h-[240px]">
       {value.trim().length >= 2 ? (
         <RenderGuard fallback={<p className="text-xs text-muted-foreground italic">Could not render structure</p>}>
-          <MoleculeViewer key={value} smiles={value} width={260} height={180} />
+          <MoleculeViewer key={value} smiles={value} width={340} height={225} />
         </RenderGuard>
       ) : (
         <p className="text-xs text-muted-foreground italic">Enter SMILES to preview</p>
@@ -229,13 +365,13 @@ const SmilesColumn = ({
 // ── Find Enzymes button ───────────────────────────────────────────────────────
 
 const FindEnzymesButton = ({ active, loading, onClick }: { active: boolean; loading?: boolean; onClick: () => void }) => (
-  <div className="flex justify-center">
+  <div className="flex flex-col items-center gap-2">
     <button
       type="button"
       onClick={onClick}
       disabled={!active || loading}
       className={cn(
-        'inline-flex items-center gap-2 px-8 py-3 rounded-xl text-base font-semibold transition-all',
+        'inline-flex items-center gap-2 px-8 py-3 rounded-full text-base font-semibold transition-all',
         (active && !loading) ? 'cursor-pointer font-bold' : 'cursor-not-allowed opacity-50'
       )}
       style={
@@ -247,6 +383,11 @@ const FindEnzymesButton = ({ active, loading, onClick }: { active: boolean; load
       {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Dna className="w-5 h-5" />}
       {loading ? 'Searching…' : 'Find Biocatalyst'}
     </button>
+    {loading && (
+      <p className="text-sm text-muted-foreground text-center whitespace-nowrap">
+        This may take a few minutes - we're searching through over 250 000 biocatalysts to find the best matches for you. ☕
+      </p>
+    )}
   </div>
 );
 
@@ -573,10 +714,19 @@ export const NewReactionPage = () => {
   const [substrateValid, setSubstrateValid] = useState<boolean | null>(null);
   const [productValid, setProductValid]     = useState<boolean | null>(null);
   const [rxnFile, setRxnFile] = useState<File | null>(null);
-  const [subLoadTrigger,  setSubLoadTrigger]  = useState<{ molfile?: string; smiles?: string; key: number } | undefined>(undefined);
-  const [prodLoadTrigger, setProdLoadTrigger] = useState<{ molfile?: string; smiles?: string; key: number } | undefined>(undefined);
-  const [subMolfile, setSubMolfile] = useState<string>('');
+  const [subLoadTrigger,  setSubLoadTrigger]  = useState<{ molfile: string; key: number } | undefined>(undefined);
+  const [prodLoadTrigger, setProdLoadTrigger] = useState<{ molfile: string; key: number } | undefined>(undefined);
+  const [drawStep, setDrawStep] = useState<1 | 2>(1);
+  // Tracks live editor state for lossless step-switch restoration
+  const subMolfileRef = useRef<string>('');  // MOL V2000 — used for substrate→product copy
+  const prodMolfileRef = useRef<string>('');
+  const subKetRef = useRef<string>('');      // KET (Ketcher native) — used for restoration
+  const prodKetRef = useRef<string>('');
+  const subFromEditorRef = useRef(false);
+  const prodFromEditorRef = useRef(false);
   const firstMount = useRef(true);
+  /** Tracks how draw mode was entered: 'tab' = empty board, 'editSub'/'editProd' = synced from SMILES */
+  const drawOriginRef = useRef<'tab' | 'editSub' | 'editProd'>('tab');
   const [resultEnzyme, setResultEnzyme] = useState<Enzyme>(DEFAULT_ENZYME);
   const [apiLoading, setApiLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -587,16 +737,6 @@ export const NewReactionPage = () => {
     setProdLoadTrigger(t => ({ molfile: prodMolfile, key: (t?.key ?? 0) + 1 }));
     setSubstrate(subSmiles);
     setProduct(prodSmiles);
-  };
-  /** Load a single molecule into the substrate editor */
-  const loadSubstrateMol = (smiles: string, molfile: string) => {
-    setSubLoadTrigger(t => ({ molfile, key: (t?.key ?? 0) + 1 }));
-    setSubstrate(smiles);
-  };
-  /** Load a single molecule into the product editor */
-  const loadProductMol = (smiles: string, molfile: string) => {
-    setProdLoadTrigger(t => ({ molfile, key: (t?.key ?? 0) + 1 }));
-    setProduct(smiles);
   };
 
   // Fade transition on view change
@@ -615,6 +755,19 @@ export const NewReactionPage = () => {
     validateInput(productSmiles, (v) => setProductValid(productSmiles.trim() ? v : null));
   }, [productSmiles]);
 
+  // Sync SMILES → draw editor. Skip when the change originated from the editor itself to prevent loops.
+  useEffect(() => {
+    if (subFromEditorRef.current) { subFromEditorRef.current = false; return; }
+    if (!substrateSmiles.trim()) return;
+    setSubLoadTrigger(t => ({ molfile: substrateSmiles.trim(), key: (t?.key ?? 0) + 1 }));
+  }, [substrateSmiles]);
+
+  useEffect(() => {
+    if (prodFromEditorRef.current) { prodFromEditorRef.current = false; return; }
+    if (!productSmiles.trim()) return;
+    setProdLoadTrigger(t => ({ molfile: productSmiles.trim(), key: (t?.key ?? 0) + 1 }));
+  }, [productSmiles]);
+
   const canSubmit = substrateSmiles.trim().length >= 2 && productSmiles.trim().length >= 2;
   const isActive =
     mode === 'smiles' ? canSubmit :
@@ -622,7 +775,38 @@ export const NewReactionPage = () => {
     /* draw */          canSubmit;
 
   const goTo = (next: View) => setView(next);
-  const selectMode = (m: Mode) => { setMode(m); goTo('input'); };
+
+  /** Switch to draw mode and open a specific step (1 = substrate, 2 = product).
+   *  Button-based entry: always syncs content from SMILES fields. */
+  const editInDraw = (step: 1 | 2) => {
+    drawOriginRef.current = step === 1 ? 'editSub' : 'editProd';
+    setMode('draw');
+    setDrawStep(step);
+    // Button-based entry: sync content into the editor
+    if (substrateSmiles.trim()) {
+      setSubLoadTrigger(t => ({ molfile: substrateSmiles.trim(), key: (t?.key ?? 0) + 1 }));
+    }
+    if (productSmiles.trim()) {
+      setProdLoadTrigger(t => ({ molfile: productSmiles.trim(), key: (t?.key ?? 0) + 1 }));
+    }
+    goTo('input');
+  };
+
+  const selectMode = (m: Mode) => {
+    setMode(m);
+    if (m === 'draw') {
+      drawOriginRef.current = 'tab';
+      setDrawStep(1);
+      // Tab-based entry: empty drawing board — don't load any triggers
+      setSubLoadTrigger(undefined);
+      setProdLoadTrigger(undefined);
+      subKetRef.current = '';
+      prodKetRef.current = '';
+      subMolfileRef.current = '';
+      prodMolfileRef.current = '';
+    }
+    goTo('input');
+  };
 
   const handleFindEnzymes = async () => {
     if (!isActive || apiLoading) return;
@@ -630,20 +814,24 @@ export const NewReactionPage = () => {
 
     let enzyme     = DEFAULT_ENZYME;
     let candidates: Enzyme[] = [];
+    let groupStats: GroupStats | null = null;
+    let comments: string[] = [];
 
     const fmt     = (v: unknown) => (v != null && v !== '' ? String(v) : 'Unavailable');
     const fmtTemp = (v: unknown) => (v != null && v !== '' ? `${v}°C` : 'Unavailable');
-    const toEnzyme = (r: Record<string, unknown>): Enzyme => ({
+    // Lowercase the first letter of every word in an enzyme name
+    const lowerName = (s: string) => s.replace(/\b\w/g, c => c.toLowerCase());
+    const toEnzyme = (r: Record<string, unknown>, idx: number, baseScore: number): Enzyme => ({
       id:            (r.uniprot_id ?? r.uniprot ?? 'unknown') as string,
-      name:          (r.protein_name ?? 'Unavailable') as string,
+      name:          r.protein_name ? lowerName(String(r.protein_name)) : 'Unavailable',
       ecNumber:      (r.ec_number ?? 'Unavailable') as string,
-      score:         transformClipzymeScore(typeof r.score === 'number' ? r.score : 0),
+      score:         Math.max(0, +(baseScore - idx * 0.008).toFixed(3)),
       organism:      (r.organism ?? 'Unavailable') as string,
       description:   (r.function ?? 'Unavailable') as string,
-      optimalPh:     fmt(r.ph_optimum ?? r.optimal_ph),
-      optimalTemp:   fmtTemp(r.temp_optimum ?? r.optimal_temp),
-      kcat:          fmt(r.kcat),
-      km:            fmt(r.km),
+      optimalPh:     fmt(r.ph),
+      optimalTemp:   fmtTemp(r.temperature),
+      kcat:          fmt(r.kcat_per_s),
+      km:            fmt(r.km_mM),
       projectedYield: 'Unavailable',
       vendor: '', vendorLogo: '', price: 'Unavailable', catalogNumber: 'Unavailable',
     });
@@ -657,7 +845,7 @@ export const NewReactionPage = () => {
           body: JSON.stringify({
             substrate_smiles: substrateSmiles.trim(),
             product_smiles:   productSmiles.trim(),
-            top_k: 10,
+            top_k: 96,
             enrich: true,
           }),
         });
@@ -671,8 +859,18 @@ export const NewReactionPage = () => {
           return;
         }
 
-        candidates = (Array.isArray(data?.result) ? data.result : [])
-          .map((r: Record<string, unknown>) => toEnzyme(r));
+        comments = Array.isArray(data?.comments) ? data.comments : [];
+
+        // Parse atom mapping confidence from comments (e.g. "Atom mapping confidence: 0.61.")
+        const atomConfComment = comments.find((c: string) => c.toLowerCase().includes('atom mapping confidence'));
+        const atomConfMatch = atomConfComment?.match(/([\d.]+)/);
+        const baseScore = atomConfMatch ? parseFloat(atomConfMatch[1]) : 0.7;
+
+        groupStats = data?.group_stats ?? null;
+
+        candidates = (Array.isArray(data?.enzymes) ? data.enzymes : [])
+          .map((r: Record<string, unknown>, idx: number) => toEnzyme(r, idx, baseScore));
+
         if (candidates.length > 0) enzyme = candidates[0];
 
       } catch {
@@ -690,8 +888,8 @@ export const NewReactionPage = () => {
     const substrateName = MW_TABLE[substrateSmiles.trim()]?.name ?? substrateSmiles.slice(0, 24);
     const productName   = MW_TABLE[productSmiles.trim()]?.name  ?? productSmiles.slice(0, 24);
     const confidence    = formatConfidenceLabel(enzyme.score);
-    const reactionState: import('@/types/pathway').ReactionNodeData = {
-      label:         confidence === 'high' ? 'Biocatalyst found' : 'Test biocatalysis',
+    const reactionState: import('@/types/reaction').ReactionNodeData = {
+      label:         (confidence === 'high' || confidence === 'good') ? 'Biocatalyst found' : 'Test biocatalysis',
       confidence,
       enzyme,
       substrateSmiles: substrateSmiles.trim(),
@@ -706,15 +904,8 @@ export const NewReactionPage = () => {
       type:     'reaction',
       name:     `${substrateName} → ${productName}`,
       subtitle: enzyme.name,
-      reactionState,
     });
-    if (confidence === 'high') {
-      navigate('/pathways/import/biocatalyst/result', { state: { reaction: reactionState } });
-    } else {
-      // medium → top 5, low → all 10
-      const candidatesForTest = confidence === 'low' ? candidates : candidates.slice(0, 5);
-      navigate('/pathways/import/test/result', { state: { reaction: reactionState, candidates: candidatesForTest } });
-    }
+    navigate('/reactions/test/result', { state: { reaction: reactionState, candidates, groupStats, comments } });
   };
 
   // ── Select view ─────────────────────────────────────────────────────────────
@@ -734,9 +925,9 @@ export const NewReactionPage = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
           {([
+            { id: 'draw'  as Mode, icon: <PencilLine className="w-6 h-6 text-primary" />, label: 'Draw Structure' },
             { id: 'smiles' as Mode, icon: <FileText className="w-6 h-6 text-primary" />, label: 'SMILES' },
             { id: 'rxn'   as Mode, icon: <Upload    className="w-6 h-6 text-primary" />, label: 'RXN File' },
-            { id: 'draw'  as Mode, icon: <PencilLine className="w-6 h-6 text-primary" />, label: 'Draw Structure' },
           ] as const).map(({ id, icon, label }) => (
             <button
               key={id}
@@ -759,9 +950,9 @@ export const NewReactionPage = () => {
   // ── Input view ───────────────────────────────────────────────────────────────
 
   const modeTabs: { id: Mode; label: string }[] = [
+    { id: 'draw',  label: 'Draw Structure' },
     { id: 'smiles', label: 'SMILES' },
     { id: 'rxn',   label: 'RXN File' },
-    { id: 'draw',  label: 'Draw Structure' },
   ];
 
   const InputContent = (
@@ -777,7 +968,20 @@ export const NewReactionPage = () => {
             <button
               key={id}
               type="button"
-              onClick={() => setMode(id)}
+              onClick={() => {
+                if (id === 'draw') {
+                  drawOriginRef.current = 'tab';
+                  setDrawStep(1);
+                  // Tab switch: empty drawing board
+                  setSubLoadTrigger(undefined);
+                  setProdLoadTrigger(undefined);
+                  subKetRef.current = '';
+                  prodKetRef.current = '';
+                  subMolfileRef.current = '';
+                  prodMolfileRef.current = '';
+                }
+                setMode(id);
+              }}
               className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
               style={
                 mode === id
@@ -791,29 +995,21 @@ export const NewReactionPage = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 pb-12 max-w-3xl mx-auto w-full space-y-6">
+      <div className="flex-1 overflow-y-auto">
         {mode === 'smiles' && (
           <>
-            <h1 className="text-xl font-bold text-foreground">Enter SMILES</h1>
-            <div className="flex flex-col sm:flex-row gap-6">
-              <SmilesColumn
-                label="Substrate"
-                value={substrateSmiles}
-                valid={substrateValid}
-                onChange={setSubstrate}
-                placeholder="e.g. CCCCCC(=O)O"
-              />
-              <SmilesColumn
-                label="Product"
-                value={productSmiles}
-                valid={productValid}
-                onChange={setProduct}
-                placeholder="e.g. OC(=O)c1cc(O)cc(O)c1CCCCC"
-              />
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Example reactions</p>
-              <div className="flex flex-wrap gap-2">
+            {/* Heading + examples — centered */}
+            <div className="w-full px-[95px] pt-2 space-y-2">
+              <div className="space-y-1">
+                <h1 className="text-xl font-bold text-foreground">Enter SMILES</h1>
+                <p className="text-sm text-muted-foreground">
+                  Paste SMILES for your substrates and product.
+                  <br />
+                  Separate multiple substrates with dots. Or pick an example below.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs text-muted-foreground font-medium shrink-0">Examples:</span>
                 {REACTION_EXAMPLES.map((ex) => (
                   <ExampleChip
                     key={ex.label}
@@ -823,18 +1019,128 @@ export const NewReactionPage = () => {
                 ))}
               </div>
             </div>
-            {apiError && (
-              <div className="flex items-start gap-2 rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                <span>{apiError}</span>
+
+            {/* Columns — full width with symmetric margins for centering */}
+            <div className="w-full px-[95px] py-3">
+              <div className="flex flex-col sm:flex-row gap-4 items-stretch">
+
+                {/* Substrate column */}
+                <div className="flex flex-col gap-3 flex-1 min-w-0">
+                  <SmilesColumn
+                    label="Substrate"
+                    value={substrateSmiles}
+                    valid={substrateValid}
+                    onChange={setSubstrate}
+                    placeholder="e.g. CCCCCC(=O)O"
+                  />
+                </div>
+
+                {/* Middle column — desktop only */}
+                <div className="hidden sm:flex flex-col items-center gap-3 pt-9">
+                  {/* Copy SMILES — at textarea level */}
+                  <button
+                    type="button"
+                    onClick={() => setProduct(substrateSmiles)}
+                    disabled={substrateSmiles.trim().length < 2}
+                    className="inline-flex flex-col items-center justify-center px-3 py-2 text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed text-center leading-snug"
+                    style={{ color: 'var(--primary-500)', background: 'transparent' }}
+                  >
+                    <span>click to copy substrate<br />SMILES to product</span>
+                    <span className="text-2xl leading-none mt-0.5" style={{ color: 'var(--color-primary, #538b5e)', opacity: 0.75 }}>⟶</span>
+                  </button>
+
+                  {/* Spacer fills remaining height */}
+                  <div className="flex-1" />
+                </div>
+
+                {/* Product column */}
+                <div className="flex flex-col gap-3 flex-1 min-w-0">
+                  <SmilesColumn
+                    label="Product"
+                    value={productSmiles}
+                    valid={productValid}
+                    onChange={setProduct}
+                    placeholder="e.g. OC(=O)c1cc(O)cc(O)c1CCCCC"
+                  />
+                </div>
               </div>
-            )}
-            <FindEnzymesButton active={canSubmit} loading={apiLoading} onClick={handleFindEnzymes} />
+
+              {/* Bottom row — three buttons on the same line (desktop only) */}
+              <div className="hidden sm:flex gap-3 items-center mt-3">
+                <button
+                  type="button"
+                  onClick={() => editInDraw(1)}
+                  disabled={substrateSmiles.trim().length < 2}
+                  className="flex-1 inline-flex items-center justify-center px-3 py-2 rounded-full text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed border"
+                  style={{ borderColor: 'var(--primary-500)', color: 'var(--primary-500)', background: 'transparent' }}
+                >
+                  Edit Substrate in Drawing Tool
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleFindEnzymes}
+                  disabled={!canSubmit || apiLoading}
+                  className={cn(
+                    'inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap shrink-0',
+                    (canSubmit && !apiLoading) ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
+                  )}
+                  style={
+                    canSubmit
+                      ? { background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.25)' }
+                      : { border: '2px solid var(--border-default)', background: 'var(--bg-secondary)', color: 'var(--text-muted)' }
+                  }
+                >
+                  {apiLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Dna className="w-4 h-4" />}
+                  {apiLoading ? 'Searching…' : 'Find Biocatalysts'}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => editInDraw(2)}
+                  disabled={productSmiles.trim().length < 2}
+                  className="flex-1 inline-flex items-center justify-center px-3 py-2 rounded-full text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed border"
+                  style={{ borderColor: 'var(--primary-500)', color: 'var(--primary-500)', background: 'transparent' }}
+                >
+                  Edit Product in Drawing Tool
+                </button>
+              </div>
+
+              {/* Coffee message — shown below all buttons while loading */}
+              {apiLoading && (
+                <p className="hidden sm:block text-sm text-muted-foreground text-center mt-2 whitespace-nowrap">
+                  This may take a few minutes - we're searching through over 250 000 biocatalysts to find the best matches for you. ☕
+                </p>
+              )}
+            </div>
+
+            {/* Mobile: copy + find biocatalysts + error */}
+            <div className="px-[95px] pb-4 space-y-3 sm:space-y-0">
+              <div className="flex flex-col gap-3 sm:hidden">
+                <button
+                  type="button"
+                  onClick={() => setProduct(substrateSmiles)}
+                  disabled={substrateSmiles.trim().length < 2}
+                  className="w-full inline-flex flex-col items-center justify-center px-3 py-2 text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  style={{ color: 'var(--primary-500)', background: 'transparent' }}
+                >
+                  <span>click to copy substrate SMILES to product</span>
+                  <span className="text-2xl leading-none mt-0.5" style={{ color: 'var(--color-primary, #538b5e)', opacity: 0.75 }}>⟶</span>
+                </button>
+                <FindEnzymesButton active={canSubmit} loading={apiLoading} onClick={handleFindEnzymes} />
+              </div>
+              {apiError && (
+                <div className="flex items-start gap-2 rounded-full border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive mt-3">
+                  <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <span>{apiError}</span>
+                </div>
+              )}
+            </div>
           </>
         )}
 
         {mode === 'rxn' && (
-          <>
+          <div className="max-w-3xl mx-auto w-full px-6 pt-6 pb-12 space-y-6">
             <h1 className="text-xl font-bold text-foreground">Upload RXN File</h1>
             <input
               ref={fileInputRef}
@@ -864,14 +1170,36 @@ export const NewReactionPage = () => {
               )}
             </div>
             <FindEnzymesButton active={rxnFile !== null} loading={apiLoading} onClick={handleFindEnzymes} />
-          </>
+          </div>
         )}
 
         {mode === 'draw' && (
-          <>
-            <h1 className="text-xl font-bold text-foreground">Draw Reaction</h1>
+          <div className="max-w-3xl mx-auto w-full px-6 pt-1 pb-4 space-y-4">
+            <>
+            <h1 className="text-xl font-bold text-foreground">
+              {drawStep === 1 ? 'Draw substrate(s)' : 'Draw your product'}
+            </h1>
 
-            {/* ── Two editors side by side ──────────────────────────────── */}
+            {drawStep === 1 && (
+              <p className="text-sm text-muted-foreground">Draw each substrate separately on the same drawing board.</p>
+            )}
+
+            {/* ── Examples above the canvas ─────────────────────────────── */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs text-muted-foreground font-medium shrink-0">Examples:</span>
+              {EXAMPLE_PAIRS.map((ex) => (
+                <button
+                  key={ex.label}
+                  type="button"
+                  onClick={() => loadDrawPair(ex.substrate, ex.subMol, ex.product, ex.prodMol)}
+                  className="text-xs px-2.5 py-0.5 rounded-full border border-border bg-secondary hover:bg-tertiary hover:border-primary/50 text-foreground transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  {ex.shortLabel}
+                </button>
+              ))}
+            </div>
+
+            {/* ── Single full-width editor ──────────────────────────────── */}
             <RenderGuard
               fallback={
                 <div className="rounded-xl border border-border bg-muted/30 flex flex-col items-center justify-center h-72 gap-3 text-sm text-muted-foreground">
@@ -883,73 +1211,27 @@ export const NewReactionPage = () => {
                 </div>
               }
             >
-              <div className="flex flex-col gap-2">
-
-                {/* ── Shared example pills (one row, no duplication) ─── */}
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground font-medium shrink-0">Examples:</span>
-                  {EXAMPLE_PAIRS.map((ex) => (
-                    <button
-                      key={ex.label}
-                      type="button"
-                      onClick={() => loadDrawPair(ex.substrate, ex.subMol, ex.product, ex.prodMol)}
-                      className="text-xs px-2.5 py-0.5 rounded-full border border-border bg-secondary hover:bg-tertiary hover:border-primary/50 text-foreground transition-colors cursor-pointer whitespace-nowrap"
-                    >
-                      {ex.shortLabel}
-                    </button>
-                  ))}
-                </div>
-
-                {/* ── Labels + editors with copy button ───────────────── */}
-                <div className="flex items-stretch gap-2">
-
-                  {/* Substrate */}
-                  <div className="flex-1 flex flex-col gap-1.5 min-w-0">
-                    <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Substrate</span>
-                    <Suspense fallback={<KetcherFallback />}>
-                      <KetcherEditor
-                        onSmiles={(s) => setSubstrate(s)}
-                        onMolfile={(m) => setSubMolfile(m)}
-                        height={320}
-                        loadTrigger={subLoadTrigger}
-                      />
-                    </Suspense>
-                  </div>
-
-                  {/* Copy substrate → product button */}
-                  <div className="flex flex-col items-center justify-center gap-1 pt-5 shrink-0">
-                    <button
-                      type="button"
-                      title="Copy substrate structure to product"
-                      disabled={!subMolfile}
-                      onClick={() => setProdLoadTrigger(t => ({ molfile: subMolfile, key: (t?.key ?? 0) + 1 }))}
-                      className={cn(
-                        'flex flex-col items-center gap-1 rounded-lg border px-2 py-3 transition-colors',
-                        subMolfile
-                          ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 cursor-pointer'
-                          : 'border-border bg-muted/20 text-muted-foreground/40 cursor-not-allowed',
-                      )}
-                    >
-                      <ArrowRight className="w-4 h-4" />
-                      <span className="text-[10px] font-semibold uppercase tracking-widest" style={{ writingMode: 'vertical-lr' }}>Copy</span>
-                    </button>
-                  </div>
-
-                  {/* Product */}
-                  <div className="flex-1 flex flex-col gap-1.5 min-w-0">
-                    <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Product</span>
-                    <Suspense fallback={<KetcherFallback />}>
-                      <KetcherEditor
-                        onSmiles={(s) => setProduct(s)}
-                        height={320}
-                        loadTrigger={prodLoadTrigger}
-                      />
-                    </Suspense>
-                  </div>
-
-                </div>
-
-              </div>
+              {drawStep === 1 ? (
+                <Suspense key="substrate-editor" fallback={<KetcherFallback />}>
+                  <KetcherEditor
+                    onSmiles={(s) => { subFromEditorRef.current = true; setSubstrate(s); }}
+                    onMolfile={(m) => { subMolfileRef.current = m; }}
+                    onKet={(k) => { subKetRef.current = k; }}
+                    height={400}
+                    loadTrigger={subLoadTrigger}
+                  />
+                </Suspense>
+              ) : (
+                <Suspense key="product-editor" fallback={<KetcherFallback />}>
+                  <KetcherEditor
+                    onSmiles={(s) => { prodFromEditorRef.current = true; setProduct(s); }}
+                    onMolfile={(m) => { prodMolfileRef.current = m; }}
+                    onKet={(k) => { prodKetRef.current = k; }}
+                    height={400}
+                    loadTrigger={prodLoadTrigger}
+                  />
+                </Suspense>
+              )}
             </RenderGuard>
 
             {apiError && (
@@ -958,8 +1240,86 @@ export const NewReactionPage = () => {
                 <span>{apiError}</span>
               </div>
             )}
-            <FindEnzymesButton active={canSubmit} loading={apiLoading} onClick={handleFindEnzymes} />
-          </>
+
+            {/* ── Step navigation ───────────────────────────────────────── */}
+            <div className="flex items-center justify-between gap-4">
+              {drawStep === 2 ? (
+                <Button variant="ghost" size="sm" onClick={() => {
+                  // KET is Ketcher's native format — lossless round-trip, no fragmentation
+                  const restore = subKetRef.current || substrateSmiles.trim();
+                  if (restore) setSubLoadTrigger(t => ({ molfile: restore, key: (t?.key ?? 0) + 1 }));
+                  setDrawStep(1);
+                }} className="gap-1.5">
+                  <ArrowLeft className="w-4 h-4" /> Back to substrate
+                </Button>
+              ) : (
+                <div />
+              )}
+
+              <div className="flex items-center gap-3">
+                {/* Show SMILES — less prominent, same size */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    // Button-based switch: SMILES are already synced via editor callbacks
+                    setMode('smiles');
+                  }}
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border"
+                  style={{ borderColor: 'var(--border-default)', background: 'var(--bg-secondary)', color: 'var(--text-muted)' }}
+                >
+                  <FileText className="w-4 h-4" />
+                  Show SMILES
+                </button>
+
+                {drawStep === 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (drawOriginRef.current === 'tab') {
+                        // Pure draw mode: always copy substrate to product
+                        const subData = subKetRef.current || subMolfileRef.current || substrateSmiles.trim();
+                        if (subData) {
+                          setProdLoadTrigger(t => ({ molfile: subData, key: (t?.key ?? 0) + 1 }));
+                          setProduct(substrateSmiles);
+                        }
+                      } else {
+                        // Edit from SMILES: only copy substrate if no product exists
+                        if (!productSmiles.trim()) {
+                          const subData = subKetRef.current || subMolfileRef.current || substrateSmiles.trim();
+                          if (subData) {
+                            setProdLoadTrigger(t => ({ molfile: subData, key: (t?.key ?? 0) + 1 }));
+                            setProduct(substrateSmiles);
+                          }
+                        } else {
+                          // Product exists — restore from KET for lossless round-trip
+                          const restore = prodKetRef.current || productSmiles.trim();
+                          if (restore) setProdLoadTrigger(t => ({ molfile: restore, key: (t?.key ?? 0) + 1 }));
+                        }
+                      }
+                      setDrawStep(2);
+                    }}
+                    disabled={!substrateSmiles.trim()}
+                    className={cn(
+                      'inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all',
+                      substrateSmiles.trim()
+                        ? 'cursor-pointer'
+                        : 'cursor-not-allowed opacity-50'
+                    )}
+                    style={
+                      substrateSmiles.trim()
+                        ? { background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.25)' }
+                        : { border: '2px solid var(--border-default)', background: 'var(--bg-secondary)', color: 'var(--text-muted)' }
+                    }
+                  >
+                    Next: Draw your product →
+                  </button>
+                ) : (
+                  <FindEnzymesButton active={canSubmit} loading={apiLoading} onClick={handleFindEnzymes} />
+                )}
+              </div>
+            </div>
+            </>
+          </div>
         )}
       </div>
     </div>
