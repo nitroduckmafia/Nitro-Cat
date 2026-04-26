@@ -35,7 +35,17 @@
       "Bash(cp \"C:\\\\Users\\\\okey\\\\OneDrive\\\\Dokumenty\\\\Claude\\\\Projects\\\\NitroCAT\\\\node_modules\\\\ketcher-standalone\\\\dist\\\\binaryWasm\\\\indigoWorker-5d0a61ab.js\" \"C:\\\\Users\\\\okey\\\\OneDrive\\\\Dokumenty\\\\Claude\\\\Projects\\\\NitroCAT\\\\public\\\\indigoWorker-5d0a61ab.js\")",
       "Bash(node scripts/copy-ketcher-assets.js)",
       "Bash(node:*)",
-      "Bash(bun run:*)"
+      "mcp__plugin_woz_code__Edit",
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git fetch *)",
+      "Bash(git merge *)",
+      "Bash(git stash *)",
+      "Bash(git rm *)",
+      "mcp__plugin_woz_code__Search",
+      "Skill(woz:woz-login)"
     ]
   }
 }

@@ -733,6 +733,9 @@ export const NewReactionPage = () => {
 
   /** Load a substrate + product pair into the two draw editors */
   const loadDrawPair = (subSmiles: string, subMolfile: string, prodSmiles: string, prodMolfile: string) => {
+    // Clear stale KET refs so the new example's mol is used on step 2
+    subKetRef.current = '';
+    prodKetRef.current = '';
     setSubLoadTrigger(t => ({ molfile: subMolfile,  key: (t?.key ?? 0) + 1 }));
     setProdLoadTrigger(t => ({ molfile: prodMolfile, key: (t?.key ?? 0) + 1 }));
     setSubstrate(subSmiles);
@@ -1242,45 +1245,33 @@ export const NewReactionPage = () => {
             )}
 
             {/* ── Step navigation ───────────────────────────────────────── */}
-            <div className="flex items-center justify-between gap-4">
-              {drawStep === 2 ? (
+            <div className="relative flex items-center justify-center w-full">
+              {drawStep === 2 && !apiLoading && (
                 <Button variant="ghost" size="sm" onClick={() => {
-                  // KET is Ketcher's native format — lossless round-trip, no fragmentation
                   const restore = subKetRef.current || substrateSmiles.trim();
                   if (restore) setSubLoadTrigger(t => ({ molfile: restore, key: (t?.key ?? 0) + 1 }));
                   setDrawStep(1);
-                }} className="gap-1.5">
+                }} className="absolute left-0 gap-1.5">
                   <ArrowLeft className="w-4 h-4" /> Back to substrate
                 </Button>
-              ) : (
-                <div />
               )}
 
-              <div className="flex items-center gap-3">
-                {/* Show SMILES — less prominent, same size */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Button-based switch: SMILES are already synced via editor callbacks
-                    setMode('smiles');
-                  }}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border"
-                  style={{ borderColor: 'var(--border-default)', background: 'var(--bg-secondary)', color: 'var(--text-muted)' }}
-                >
-                  <FileText className="w-4 h-4" />
-                  Show SMILES
-                </button>
-
-                {drawStep === 1 ? (
+              {drawStep === 1 ? (
                   <button
                     type="button"
                     onClick={() => {
                       if (drawOriginRef.current === 'tab') {
-                        // Pure draw mode: always copy substrate to product
-                        const subData = subKetRef.current || subMolfileRef.current || substrateSmiles.trim();
-                        if (subData) {
-                          setProdLoadTrigger(t => ({ molfile: subData, key: (t?.key ?? 0) + 1 }));
-                          setProduct(substrateSmiles);
+                        if (productSmiles.trim()) {
+                          // Product already set (e.g. by example pill) — restore it
+                          const restore = prodKetRef.current || productSmiles.trim();
+                          if (restore) setProdLoadTrigger(t => ({ molfile: restore, key: (t?.key ?? 0) + 1 }));
+                        } else {
+                          // No product yet — copy substrate as starting point for editing
+                          const subData = subKetRef.current || subMolfileRef.current || substrateSmiles.trim();
+                          if (subData) {
+                            setProdLoadTrigger(t => ({ molfile: subData, key: (t?.key ?? 0) + 1 }));
+                            setProduct(substrateSmiles);
+                          }
                         }
                       } else {
                         // Edit from SMILES: only copy substrate if no product exists
@@ -1316,7 +1307,6 @@ export const NewReactionPage = () => {
                 ) : (
                   <FindEnzymesButton active={canSubmit} loading={apiLoading} onClick={handleFindEnzymes} />
                 )}
-              </div>
             </div>
             </>
           </div>

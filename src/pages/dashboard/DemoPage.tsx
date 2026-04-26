@@ -356,7 +356,7 @@ function EmailCaptureModal({ open, onClose }: { open: boolean; onClose: () => vo
             <>
               <div className="text-2xl font-bold">Stay in the loop</div>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Be notified when NitroCat goes live and get early access to instant enzyme screening.
+                Be notified when NitroCat goes live and get early access to enzyme ordering.
               </p>
               <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                 <input

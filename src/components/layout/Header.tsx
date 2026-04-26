@@ -32,7 +32,7 @@ export const Header = () => {
                 <div className="flex flex-col gap-1">
                   <div className="text-2xl font-bold">Stay in the loop</div>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Be first to know when NitroCat launches for everyone.
+                    Be notified when NitroCat goes live and get early access to enzyme ordering.
                   </p>
                 </div>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
