@@ -1,60 +1,78 @@
-import { useLocation, Link } from "react-router-dom";
-import { useAuth } from "@/lib/auth/context";
-import { ThemeToggle } from "./ThemeToggle";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { FlaskConical } from "lucide-react";
-
-const routeTitles: Record<string, string> = {
-  '/pathways': 'Pathways',
-  '/pathways/new': 'New Pathway',
-  '/history': 'History',
-  '/settings': 'Settings',
-  '/profile': 'Profile',
-};
-
-function getTitle(pathname: string): string {
-  if (routeTitles[pathname]) return routeTitles[pathname];
-  const match = pathname.match(/^\/pathways\/([^/]+)\/results$/);
-  if (match) return 'Pathway Results';
-  const matchDetail = pathname.match(/^\/pathways\/([^/]+)$/);
-  if (matchDetail) return 'Pathway Detail';
-  return 'NitroCat';
-}
-
-function getInitials(name: string): string {
-  return name
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
-}
+import { useState } from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 export const Header = () => {
-  const location = useLocation();
-  const { user } = useAuth();
-  const title = getTitle(location.pathname);
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (email) setSubmitted(true);
+  }
 
   return (
-    <header className="h-12 flex items-center justify-between px-4 border-b border-border bg-background shrink-0">
-      <div className="flex items-center gap-2">
-        <FlaskConical className="w-4 h-4 text-primary" />
-        <span className="text-sm font-semibold text-foreground">{title}</span>
-      </div>
+    <>
+      <header className="flex items-center justify-end px-6 py-4 bg-background shrink-0">
+        <button
+          type="button"
+          onClick={() => { setOpen(true); setSubmitted(false); setEmail(''); }}
+          style={{ background: '#538b5e', color: '#fff' }}
+          className="px-6 py-2.5 rounded-2xl text-sm font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
+        >
+          Join waiting list 🧬
+        </button>
+      </header>
 
-      <div className="flex items-center gap-2">
-        <ThemeToggle />
-        {user && (
-          <Link to="/profile" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <span className="text-sm text-muted-foreground hidden sm:block">{user.name}</span>
-            <Avatar className="h-7 w-7">
-              <AvatarFallback className="text-xs bg-primary/15 text-primary">
-                {getInitials(user.name)}
-              </AvatarFallback>
-            </Avatar>
-          </Link>
-        )}
-      </div>
-    </header>
+      <Dialog open={open} onOpenChange={o => { if (!o) setOpen(false); }}>
+        <DialogContent className="max-w-sm p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[#141C18]">
+          <div className="p-6 flex flex-col gap-4">
+            {!submitted ? (
+              <>
+                <div className="flex flex-col gap-1">
+                  <div className="text-2xl font-bold">Stay in the loop</div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Be first to know when NitroCat launches for everyone.
+                  </p>
+                </div>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    required
+                    className="w-full px-3 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm outline-none focus:border-primary transition-colors"
+                  />
+                  <button
+                    type="submit"
+                    style={{ background: '#538b5e', color: '#fff' }}
+                    className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
+                  >
+                    Notify me 🧬
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                <div className="text-center text-4xl pt-1">✅</div>
+                <div className="text-xl font-bold text-center">You're on the list!</div>
+                <p className="text-sm text-muted-foreground text-center">
+                  We'll let you know at <span className="text-foreground font-medium">{email}</span> when NitroCat launches.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  style={{ background: '#538b5e', color: '#fff' }}
+                  className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
+                >
+                  Done
+                </button>
+              </>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };

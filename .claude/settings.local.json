@@ -34,7 +34,10 @@
       "Bash(cp \"C:\\\\Users\\\\okey\\\\OneDrive\\\\Dokumenty\\\\Claude\\\\Projects\\\\NitroCAT\\\\node_modules\\\\ketcher-standalone\\\\dist\\\\binaryWasm\\\\indigo-ketcher-1.40.0.wasm\" \"C:\\\\Users\\\\okey\\\\OneDrive\\\\Dokumenty\\\\Claude\\\\Projects\\\\NitroCAT\\\\public\\\\indigo-ketcher-1.40.0.wasm\")",
       "Bash(cp \"C:\\\\Users\\\\okey\\\\OneDrive\\\\Dokumenty\\\\Claude\\\\Projects\\\\NitroCAT\\\\node_modules\\\\ketcher-standalone\\\\dist\\\\binaryWasm\\\\indigoWorker-5d0a61ab.js\" \"C:\\\\Users\\\\okey\\\\OneDrive\\\\Dokumenty\\\\Claude\\\\Projects\\\\NitroCAT\\\\public\\\\indigoWorker-5d0a61ab.js\")",
       "Bash(node scripts/copy-ketcher-assets.js)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "mcp__plugin_woz_code__Edit",
+      "Bash(git checkout *)",
+      "Bash(git add *)"
     ]
   }
 }

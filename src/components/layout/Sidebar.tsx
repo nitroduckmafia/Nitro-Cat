@@ -1,20 +1,19 @@
-import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSidebar } from "@/lib/context/SidebarContext";
 import {
   Plus,
-  FlaskConical,
   Settings,
-  User,
   ChevronLeft,
   ChevronRight,
   History,
+  Gamepad2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import { cn } from "@/lib/utils";
 
 export const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const { collapsed, setCollapsed } = useSidebar();
   const navigate = useNavigate();
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(path + '/');
@@ -50,7 +49,7 @@ export const Sidebar = () => {
       {/* Find Biocatalyst Button */}
       <div className="p-2 pb-2">
         <Button
-          onClick={() => navigate('/pathways/new')}
+          onClick={() => navigate('/reactions/new')}
           variant="outline"
           className={cn(
             "w-full border-dashed border-sidebar-border text-sidebar-foreground hover:text-foreground hover:border-primary",
@@ -67,16 +66,16 @@ export const Sidebar = () => {
       {!collapsed && (
         <div className="px-2 pb-2 space-y-1">
           <button
-            onClick={() => navigate('/pathways')}
+            onClick={() => navigate('/demo')}
             className={cn(
               "w-full text-left flex items-center gap-2 px-2 py-1.5 rounded-md text-sm transition-colors",
-              isActive('/pathways')
+              isActive('/demo')
                 ? "bg-accent text-accent-foreground font-medium"
                 : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground"
             )}
           >
-            <FlaskConical className="w-4 h-4" />
-            Pathways
+            <Gamepad2 className="w-4 h-4" />
+            Game
           </button>
           <button
             onClick={() => navigate('/history')}
@@ -98,7 +97,6 @@ export const Sidebar = () => {
 
       {/* Bottom section */}
       <div className="border-t border-sidebar-border p-2 space-y-1">
-        <ThemeToggle />
         <Button
           variant="ghost"
           onClick={() => navigate('/settings')}
@@ -111,19 +109,6 @@ export const Sidebar = () => {
         >
           <Settings className="w-4 h-4" />
           {!collapsed && <span className="ml-2">Settings</span>}
-        </Button>
-        <Button
-          variant="ghost"
-          onClick={() => navigate('/profile')}
-          className={cn(
-            "w-full text-sidebar-foreground hover:text-foreground",
-            collapsed ? "px-0 justify-center" : "justify-start",
-            isActive('/profile') && "bg-accent text-accent-foreground"
-          )}
-          size="sm"
-        >
-          <User className="w-4 h-4" />
-          {!collapsed && <span className="ml-2">Profile</span>}
         </Button>
       </div>
     </aside>
