@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
   History,
+  Gamepad2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
@@ -64,6 +65,18 @@ export const Sidebar = () => {
       {/* Nav links */}
       {!collapsed && (
         <div className="px-2 pb-2 space-y-1">
+          <button
+            onClick={() => navigate('/demo')}
+            className={cn(
+              "w-full text-left flex items-center gap-2 px-2 py-1.5 rounded-md text-sm transition-colors",
+              isActive('/demo')
+                ? "bg-accent text-accent-foreground font-medium"
+                : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-foreground"
+            )}
+          >
+            <Gamepad2 className="w-4 h-4" />
+            Game
+          </button>
           <button
             onClick={() => navigate('/history')}
             className={cn(

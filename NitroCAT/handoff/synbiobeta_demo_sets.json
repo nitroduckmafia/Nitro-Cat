@@ -1,0 +1,1092 @@
+[
+  {
+    "set_id": 1,
+    "impossible_ec": "3.10.1.1",
+    "impossible_ec_name": "N-sulfoglucosamine sulfohydrolase",
+    "impossible_position": 9,
+    "reactions": [
+      {
+        "id": "D13",
+        "ec": "2.4.1.91",
+        "ec_name": "Quercetin 3-O-glucosyltransferase (UGT)",
+        "substrate_name": "quercetin + UDP-glucose",
+        "product_name": "isoquercitrin + UDP",
+        "reaction_smiles": "Oc1ccc(-c2oc3cc(O)cc(O)c3c(=O)c2O)cc1O.OC[C@H]1O[C@@H](OP(=O)(O)OP(=O)(O)OC[C@H]2O[C@@H](n3ccc(=O)[nH]c3=O)[C@H](O)[C@@H]2O)[C@H](O)[C@@H](O)[C@@H]1O>>Oc1ccc(-c2oc3cc(O)cc(O)c3c(=O)c2O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1O.OP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2ccc(=O)[nH]c2=O)[C@H](O)[C@@H]1O",
+        "story": "UGT-catalysed glucosylation of quercetin — converts the hydrophobic yellow plant pigment into a water-soluble glycoside; the basis of bioavailability in onion skin",
+        "is_impossible": false
+      },
+      {
+        "id": "D10",
+        "ec": "3.2.1.21",
+        "ec_name": "β-glucosidase (chromogenic)",
+        "substrate_name": "p-nitrophenyl-β-D-glucopyranoside",
+        "product_name": "D-glucose + p-nitrophenol",
+        "reaction_smiles": "O=[N+]([O-])c1ccc(O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1.O>>OC[C@H]1O[C@@H](O)[C@H](O)[C@@H](O)[C@H]1O.O=[N+]([O-])c1ccc(O)cc1",
+        "story": "β-glucosidase — releases bright yellow p-nitrophenol (visible to the naked eye); gold-standard chromogenic glycosidase assay substrate",
+        "is_impossible": false
+      },
+      {
+        "id": "D15",
+        "ec": "2.1.1.68",
+        "ec_name": "Caffeate O-methyltransferase (COMT)",
+        "substrate_name": "caffeate + SAM",
+        "product_name": "ferulate + SAH",
+        "reaction_smiles": "Oc1ccc(/C=C/C(=O)O)cc1O.C[S+](CC[C@@H](N)C(=O)O)C[C@H]1O[C@@H](n2cnc3c(N)ncnc23)[C@H](O)[C@@H]1O>>COc1cc(/C=C/C(=O)O)ccc1O.CSCC[C@@H](N)C(=O)O",
+        "story": "COMT — SAM-dependent methylation of caffeate 3-OH to give ferulate; controls flux into guaiacyl vs syringyl lignin units in wood formation",
+        "is_impossible": false
+      },
+      {
+        "id": "D30",
+        "ec": "6.3.2.2",
+        "ec_name": "Glutamate cyclisation / pyroglutamate synthase",
+        "substrate_name": "L-glutamate + ATP",
+        "product_name": "pyroglutamate + ADP + Pᵢ",
+        "reaction_smiles": "N[C@@H](CCC(=O)O)C(=O)O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O.O=C1CC[C@@H](C(=O)O)N1.OP(=O)(O)O",
+        "story": "ATP-driven glutamate ring closure — makes the pyroglutamyl cap used to stabilise bioactive peptides (TRH, neurotensin) against N-terminal exopeptidases",
+        "is_impossible": false
+      },
+      {
+        "id": "D16",
+        "ec": "1.14.13.36",
+        "ec_name": "4-coumarate 3-hydroxylase (CYP98A3)",
+        "substrate_name": "p-coumarate + NADPH + O₂",
+        "product_name": "caffeate + NADP⁺ + H₂O",
+        "reaction_smiles": "OC(=O)/C=C/c1ccc(O)cc1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>OC(=O)/C=C/c1ccc(O)c(O)c1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
+        "story": "CYP98A3 — regioselective aromatic C3-hydroxylation of coumaroyl; one of the most highly expressed CYPs in Arabidopsis",
+        "is_impossible": false
+      },
+      {
+        "id": "D26",
+        "ec": "4.2.1.2",
+        "ec_name": "Fumarase (fumarate hydratase)",
+        "substrate_name": "fumarate + H₂O",
+        "product_name": "L-malate",
+        "reaction_smiles": "OC(=O)/C=C/C(=O)O.O>>OC(=O)[C@@H](O)CC(=O)O",
+        "story": "Fumarase — anti addition of water to fumarate; gives exclusively (S)-malate; the textbook example of stereospecific hydration in the TCA cycle",
+        "is_impossible": false
+      },
+      {
+        "id": "D01",
+        "ec": "4.3.1.24",
+        "ec_name": "Phenylalanine ammonia-lyase (PAL)",
+        "substrate_name": "L-phenylalanine",
+        "product_name": "trans-cinnamate + NH₃",
+        "reaction_smiles": "N[C@@H](Cc1ccccc1)C(=O)O>>OC(=O)/C=C/c1ccccc1.N",
+        "story": "PAL — gate enzyme for the phenylpropanoid pathway; makes the cinnamic acid backbone for lignin and all plant flavonoids",
+        "is_impossible": false
+      },
+      {
+        "id": "D20",
+        "ec": "1.1.1.1",
+        "ec_name": "Alcohol dehydrogenase (benzyl alcohol)",
+        "substrate_name": "benzyl alcohol + NAD⁺",
+        "product_name": "benzaldehyde + NADH + H⁺",
+        "reaction_smiles": "OCc1ccccc1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)c1>>O=Cc1ccccc1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.[H+]",
+        "story": "Zinc-dependent ADH — oxidises benzyl alcohol to benzaldehyde (bitter almond aroma); archetype of pro-S hydride transfer to NAD⁺",
+        "is_impossible": false
+      },
+      {
+        "id": "IMP01",
+        "ec": "3.10.1.1",
+        "ec_name": "N-sulfoglucosamine sulfohydrolase",
+        "substrate_name": "4-methylumbelliferyl-2-sulfamino-2-deoxy-β-D-glucopyranoside",
+        "product_name": "4-methylumbelliferyl-glucosamine + sulfate",
+        "reaction_smiles": "Cc1cc(=O)oc2cc(O[C@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3NS(=O)(=O)O)ccc12.O>>Cc1cc(=O)oc2cc(O[C@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3N)ccc12.OS(=O)(=O)O",
+        "story": "N–S bond hydrolysis — only 1 training example in 46,000. CLIPZyme has essentially zero signal for this bond type.",
+        "n_training_examples": 1,
+        "is_impossible": true
+      },
+      {
+        "id": "D07",
+        "ec": "5.3.1.5",
+        "ec_name": "Xylose isomerase",
+        "substrate_name": "D-xylose",
+        "product_name": "D-xylulose",
+        "reaction_smiles": "OC[C@@H](O)[C@H](O)[C@@H](O)C=O>>OC[C@@H](O)[C@H](O)C(=O)CO",
+        "story": "Xylose isomerase — the same enzyme family industrially converts glucose to fructose for high-fructose corn syrup; metal-assisted hydride shift",
+        "is_impossible": false
+      }
+    ]
+  },
+  {
+    "set_id": 2,
+    "impossible_ec": "3.11.1.1",
+    "impossible_ec_name": "Phosphonoacetaldehyde hydrolase",
+    "impossible_position": 2,
+    "reactions": [
+      {
+        "id": "D28",
+        "ec": "2.7.1.21",
+        "ec_name": "Thymidine kinase (stavudine d4T)",
+        "substrate_name": "stavudine (d4T) + ATP",
+        "product_name": "d4T-5'-monophosphate + ADP",
+        "reaction_smiles": "Cc1cn([C@H]2CC[C@@H](CO)O2)c(=O)[nH]c1=O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>Cc1cn([C@H]2CC[C@@H](COP(=O)(O)O)O2)c(=O)[nH]c1=O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O",
+        "story": "Thymidine kinase — phosphorylates the anti-HIV nucleoside analogue stavudine (d4T); first activation step required for its NRTI mechanism of action",
+        "is_impossible": false
+      },
+      {
+        "id": "IMP02",
+        "ec": "3.11.1.1",
+        "ec_name": "Phosphonoacetaldehyde hydrolase",
+        "substrate_name": "phosphonoacetaldehyde",
+        "product_name": "acetaldehyde + phosphate",
+        "reaction_smiles": "O=CCP(=O)(O)O.O>>CC=O.OP(=O)(O)O",
+        "story": "P–C bond hydrolysis — only 8 training examples. Phosphonates are synthetic compounds; this unusual bond type is absent from the enzyme screening set.",
+        "n_training_examples": 8,
+        "is_impossible": true
+      },
+      {
+        "id": "D36",
+        "ec": "1.13.11.3",
+        "ec_name": "Protocatechuate 3,4-dioxygenase",
+        "substrate_name": "protocatechuate + O₂",
+        "product_name": "3-carboxy-cis,cis-muconate",
+        "reaction_smiles": "OC(=O)c1ccc(O)c(O)c1.O=O>>OC(=O)/C=C\\C(=O)/C=C/C(=O)O",
+        "story": "Ring-cleaving dioxygenase — breaks the aromatic ring of protocatechuate; key enzyme in bacterial degradation of lignin-derived aromatics in contaminated soil",
+        "is_impossible": false
+      },
+      {
+        "id": "D14",
+        "ec": "2.4.1.x",
+        "ec_name": "Resveratrol 3-O-glucosyltransferase",
+        "substrate_name": "resveratrol + UDP-glucose",
+        "product_name": "piceid (resveratrol-3-glucoside) + UDP",
+        "reaction_smiles": "Oc1ccc(/C=C/c2cc(O)cc(O)c2)cc1.OC[C@H]1O[C@@H](OP(=O)(O)OP(=O)(O)OC[C@H]2O[C@@H](n3ccc(=O)[nH]c3=O)[C@H](O)[C@@H]2O)[C@H](O)[C@@H](O)[C@@H]1O>>OC[C@H]1O[C@@H](Oc2cc(O)cc(/C=C/c3ccc(O)cc3)c2)[C@H](O)[C@@H](O)[C@@H]1O.OP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2ccc(=O)[nH]c2=O)[C@H](O)[C@@H]1O",
+        "story": "Resveratrol glucosylation — converts the red-wine polyphenol stilbene into its inactive storage glucoside piceid; reversed during grape berry ripening",
+        "is_impossible": false
+      },
+      {
+        "id": "D02",
+        "ec": "4.1.1.28",
+        "ec_name": "Aromatic-L-amino-acid decarboxylase (Trp)",
+        "substrate_name": "L-tryptophan",
+        "product_name": "tryptamine + CO₂",
+        "reaction_smiles": "N[C@@H](Cc1c[nH]c2ccccc12)C(=O)O>>NCCc1c[nH]c2ccccc12.O=C=O",
+        "story": "AADC — decarboxylates tryptophan to tryptamine, the precursor to serotonin, melatonin, and the entire monoterpene-indole alkaloid family",
+        "is_impossible": false
+      },
+      {
+        "id": "D11",
+        "ec": "3.2.1.37",
+        "ec_name": "β-xylosidase (bromophenol reporter)",
+        "substrate_name": "4-bromophenyl-β-D-xylopyranoside",
+        "product_name": "D-xylose + 4-bromophenol",
+        "reaction_smiles": "O.O[C@@H]1[C@@H](O)[C@H](Oc2ccc(Br)cc2)OC[C@H]1O>>O[C@@H]1[C@@H](O)[C@H](O)OC[C@H]1O.Oc1ccc(Br)cc1",
+        "story": "β-xylosidase with halogenated reporter — the bromophenol product can be coupled to Trinder reagent for highly sensitive colorimetric detection",
+        "is_impossible": false
+      },
+      {
+        "id": "D22",
+        "ec": "3.4.13.20",
+        "ec_name": "β-Ala-His dipeptidase (CN2 carnosinase)",
+        "substrate_name": "β-alanyl-glycine + H₂O",
+        "product_name": "glycine + β-alanine",
+        "reaction_smiles": "NCCC(=O)NCC(=O)O.O>>NCC(=O)O.NCCC(=O)O",
+        "story": "Carnosinase CN2 — cleaves the β-alanyl amide bond; muscle carnosine is the principal intracellular pH buffer during intense exercise",
+        "is_impossible": false
+      },
+      {
+        "id": "D08",
+        "ec": "5.5.1.6",
+        "ec_name": "Chalcone isomerase",
+        "substrate_name": "naringenin chalcone",
+        "product_name": "(2S)-naringenin",
+        "reaction_smiles": "O=C(/C=C/c1ccc(O)cc1)c1cc(O)cc(O)c1>>O=C1C[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21",
+        "story": "Chalcone isomerase — intramolecular Michael addition with perfect (2S) enantioselectivity and no cofactor; first committed step in flavonoid biosynthesis",
+        "is_impossible": false
+      },
+      {
+        "id": "D17",
+        "ec": "1.14.13.149",
+        "ec_name": "Coumarin 7-hydroxylase (CYP2A6)",
+        "substrate_name": "coumarin + NADPH + O₂",
+        "product_name": "7-hydroxycoumarin (umbelliferone) + NADP⁺ + H₂O",
+        "reaction_smiles": "O=c1ccc2ccccc2o1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>O=c1ccc2cc(O)ccc2o1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
+        "story": "CYP2A6 — human hepatic CYP; converts coumarin to the fluorescent umbelliferone; the standard probe reaction for CYP2A6 phenotyping in clinical pharmacogenomics",
+        "is_impossible": false
+      },
+      {
+        "id": "D21",
+        "ec": "1.1.1.x",
+        "ec_name": "Cinnamyl alcohol dehydrogenase (CAD)",
+        "substrate_name": "cinnamaldehyde + NADH + H⁺",
+        "product_name": "cinnamyl alcohol + NAD⁺",
+        "reaction_smiles": "O=C/C=C/c1ccccc1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.[H+]>>OC/C=C/c1ccccc1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)c1",
+        "story": "CAD — final step of monolignol biosynthesis; NADPH-reduction of hydroxycinnamaldehydes to monolignols before oxidative polymerisation into lignin",
+        "is_impossible": false
+      }
+    ]
+  },
+  {
+    "set_id": 3,
+    "impossible_ec": "2.8.3.9",
+    "impossible_ec_name": "Butyrate-acetoacetate CoA-transferase",
+    "impossible_position": 2,
+    "reactions": [
+      {
+        "id": "D37",
+        "ec": "1.14.18.1",
+        "ec_name": "Tyrosinase (Tyr hydroxylation)",
+        "substrate_name": "L-tyrosine + O₂",
+        "product_name": "L-DOPA + H₂O",
+        "reaction_smiles": "N[C@@H](Cc1ccc(O)cc1)C(=O)O.O=O>>N[C@@H](Cc1ccc(O)c(O)c1)C(=O)O.O",
+        "story": "Tyrosinase — bifunctional copper oxidase that hydroxylates tyrosine to DOPA; responsible for skin pigmentation, mushroom browning, and melanin biosynthesis",
+        "is_impossible": false
+      },
+      {
+        "id": "IMP03b",
+        "ec": "2.8.3.9",
+        "ec_name": "Butyrate-acetoacetate CoA-transferase",
+        "substrate_name": "butyryl-CoA + acetoacetate",
+        "product_name": "butyrate + acetoacetyl-CoA",
+        "reaction_smiles": "CCCC(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O.CC(=O)CC(=O)O>>CCCC(=O)O.CC(=O)CC(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O",
+        "story": "CoA-transferase (EC 2.8.3) — transfers thioester without hydrolysis. Fewer than 30 examples in EnzymeMap; no representative in the screening set.",
+        "n_training_examples": 15,
+        "is_impossible": true
+      },
+      {
+        "id": "D03",
+        "ec": "4.1.1.28",
+        "ec_name": "DOPA decarboxylase",
+        "substrate_name": "L-DOPA",
+        "product_name": "dopamine + CO₂",
+        "reaction_smiles": "N[C@@H](Cc1ccc(O)c(O)c1)C(=O)O>>NCCc1ccc(O)c(O)c1.O=C=O",
+        "story": "Same enzyme as tryptophan AADC — decarboxylates L-DOPA to dopamine; the key step in the biosynthesis that is bypassed in Parkinson's disease",
+        "is_impossible": false
+      },
+      {
+        "id": "D15",
+        "ec": "2.1.1.68",
+        "ec_name": "Caffeate O-methyltransferase (COMT)",
+        "substrate_name": "caffeate + SAM",
+        "product_name": "ferulate + SAH",
+        "reaction_smiles": "Oc1ccc(/C=C/C(=O)O)cc1O.C[S+](CC[C@@H](N)C(=O)O)C[C@H]1O[C@@H](n2cnc3c(N)ncnc23)[C@H](O)[C@@H]1O>>COc1cc(/C=C/C(=O)O)ccc1O.CSCC[C@@H](N)C(=O)O",
+        "story": "COMT — SAM-dependent methylation of caffeate 3-OH to give ferulate; controls flux into guaiacyl vs syringyl lignin units in wood formation",
+        "is_impossible": false
+      },
+      {
+        "id": "D12",
+        "ec": "3.2.1.23",
+        "ec_name": "β-galactosidase (lactase)",
+        "substrate_name": "lactose",
+        "product_name": "D-glucose + D-galactose",
+        "reaction_smiles": "OC[C@H]1O[C@@H](O[C@H]2[C@@H](O)[C@@H](O)[C@@H](CO)O[C@@H]2O)[C@H](O)[C@@H](O)[C@H]1O.O>>OC[C@H]1O[C@@H](O)[C@H](O)[C@@H](O)[C@H]1O.OC[C@@H]1O[C@@H](O)[C@@H](O)[C@H](O)[C@H]1O",
+        "story": "Lactase — the enzyme lactose-intolerant people lack; industrial enzyme added to dairy for lactose-free milk production worldwide",
+        "is_impossible": false
+      },
+      {
+        "id": "D29",
+        "ec": "2.7.1.20",
+        "ec_name": "Adenosine kinase",
+        "substrate_name": "adenosine + ATP",
+        "product_name": "AMP + ADP",
+        "reaction_smiles": "Nc1ncnc2c1ncn2[C@@H]1O[C@H](CO)[C@@H](O)[C@H]1O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)O)[C@@H](O)[C@H]1O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O",
+        "story": "Adenosine kinase — regulates extracellular adenosine, a neuroprotective signalling molecule; AK inhibition raises adenosine levels to protect against seizures",
+        "is_impossible": false
+      },
+      {
+        "id": "D23",
+        "ec": "3.4.21.4",
+        "ec_name": "Trypsin",
+        "substrate_name": "Ala-Arg dipeptide + H₂O",
+        "product_name": "L-Ala + L-Arg",
+        "reaction_smiles": "C[C@@H](N)C(=O)N[C@@H](CCCNC(=N)N)C(=O)O.O>>C[C@@H](N)C(=O)O.N[C@@H](CCCNC(=N)N)C(=O)O",
+        "story": "Trypsin — serine protease that cleaves C-terminal to Arg/Lys; founding member of the chymotrypsin superfamily; workhorse of proteomics sample preparation",
+        "is_impossible": false
+      },
+      {
+        "id": "D27",
+        "ec": "4.2.1.17",
+        "ec_name": "Enoyl-CoA hydratase (crotonase)",
+        "substrate_name": "crotonyl-CoA + H₂O",
+        "product_name": "(S)-3-hydroxybutanoyl-CoA",
+        "reaction_smiles": "CC=CC(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O.O>>C[C@@H](O)CC(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O",
+        "story": "Crotonase — syn hydration of the 2-enoyl-CoA double bond; core β-oxidation enzyme; the CoA thioester visualises the substrate's origin beautifully",
+        "is_impossible": false
+      },
+      {
+        "id": "D18",
+        "ec": "1.14.14.11",
+        "ec_name": "Styrene monooxygenase (SMO)",
+        "substrate_name": "styrene + NADPH + O₂",
+        "product_name": "(S)-styrene oxide + NADP⁺ + H₂O",
+        "reaction_smiles": "C=Cc1ccccc1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>[C@@H]1(c2ccccc2)CO1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
+        "story": "Styrene monooxygenase — epoxidises styrene to enantiopure (S)-styrene oxide; biocatalysis workhorse for chiral pharmaceutical building blocks",
+        "is_impossible": false
+      },
+      {
+        "id": "D09",
+        "ec": "5.3.3.2",
+        "ec_name": "Isopentenyl-diphosphate isomerase (IDI)",
+        "substrate_name": "IPP (isopentenyl-PP)",
+        "product_name": "DMAPP (dimethylallyl-PP)",
+        "reaction_smiles": "CC(=C)COP(=O)(O)OP(=O)(O)O>>CC(C)=COP(=O)(O)OP(=O)(O)O",
+        "story": "IDI — activates the isoprene unit; entry point to the entire terpene and steroid universe comprising >50,000 natural products",
+        "is_impossible": false
+      }
+    ]
+  },
+  {
+    "set_id": 4,
+    "impossible_ec": "3.9.1.2",
+    "impossible_ec_name": "Aryl-phosphate phosphomonoesterase",
+    "impossible_position": 2,
+    "reactions": [
+      {
+        "id": "D04",
+        "ec": "4.1.1.22",
+        "ec_name": "Histidine decarboxylase",
+        "substrate_name": "L-histidine",
+        "product_name": "histamine + CO₂",
+        "reaction_smiles": "N[C@@H](Cc1c[nH]cn1)C(=O)O>>NCCc1c[nH]cn1.O=C=O",
+        "story": "PLP-dependent histidine decarboxylase — makes histamine; the antiallergy drug cimetidine inhibits downstream H2 receptors",
+        "is_impossible": false
+      },
+      {
+        "id": "IMP04",
+        "ec": "3.9.1.2",
+        "ec_name": "Aryl-phosphate phosphomonoesterase",
+        "substrate_name": "p-nitrophenyl phosphate",
+        "product_name": "p-nitrophenol + phosphate",
+        "reaction_smiles": "O=[N+]([O-])c1ccc(OP(=O)(O)O)cc1.O>>O=[N+]([O-])c1ccc(O)cc1.OP(=O)(O)O",
+        "story": "EC 3.9 aryl-phosphatase — only 3 training examples. Visually identical to acid phosphatase but mechanistically distinct; CLIPZyme cannot distinguish the two.",
+        "n_training_examples": 3,
+        "is_impossible": true
+      },
+      {
+        "id": "D16",
+        "ec": "1.14.13.36",
+        "ec_name": "4-coumarate 3-hydroxylase (CYP98A3)",
+        "substrate_name": "p-coumarate + NADPH + O₂",
+        "product_name": "caffeate + NADP⁺ + H₂O",
+        "reaction_smiles": "OC(=O)/C=C/c1ccc(O)cc1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>OC(=O)/C=C/c1ccc(O)c(O)c1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
+        "story": "CYP98A3 — regioselective aromatic C3-hydroxylation of coumaroyl; one of the most highly expressed CYPs in Arabidopsis",
+        "is_impossible": false
+      },
+      {
+        "id": "D20",
+        "ec": "1.1.1.1",
+        "ec_name": "Alcohol dehydrogenase (benzyl alcohol)",
+        "substrate_name": "benzyl alcohol + NAD⁺",
+        "product_name": "benzaldehyde + NADH + H⁺",
+        "reaction_smiles": "OCc1ccccc1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)c1>>O=Cc1ccccc1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.[H+]",
+        "story": "Zinc-dependent ADH — oxidises benzyl alcohol to benzaldehyde (bitter almond aroma); archetype of pro-S hydride transfer to NAD⁺",
+        "is_impossible": false
+      },
+      {
+        "id": "D25",
+        "ec": "3.3.2.10",
+        "ec_name": "Styrene oxide hydrolase",
+        "substrate_name": "(S)-styrene oxide + H₂O",
+        "product_name": "(R)-1-phenylethane-1,2-diol",
+        "reaction_smiles": "[C@@H]1(c2ccccc2)CO1.O>>OC[C@H](O)c1ccccc1",
+        "story": "Epoxide hydrolase — Asp-nucleophile-mediated ring opening with retention; stereocomplementary to SMO; combined they give both enantiomers of the chiral diol",
+        "is_impossible": false
+      },
+      {
+        "id": "D33",
+        "ec": "3.1.1.3",
+        "ec_name": "Lipase (tributyrin)",
+        "substrate_name": "tributyrin + H₂O",
+        "product_name": "dibutyrin + butyric acid",
+        "reaction_smiles": "CCCC(=O)OCC(OC(=O)CCC)COC(=O)CCC.O>>CCCC(=O)OCC(O)COC(=O)CCC.CCCC(=O)O",
+        "story": "Triacylglycerol lipase — serine hydrolase; cleaves ester bond of triglycerides; the most industrially-used enzyme class after protease; active in non-aqueous media",
+        "is_impossible": false
+      },
+      {
+        "id": "D10",
+        "ec": "3.2.1.21",
+        "ec_name": "β-glucosidase (chromogenic)",
+        "substrate_name": "p-nitrophenyl-β-D-glucopyranoside",
+        "product_name": "D-glucose + p-nitrophenol",
+        "reaction_smiles": "O=[N+]([O-])c1ccc(O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1.O>>OC[C@H]1O[C@@H](O)[C@H](O)[C@@H](O)[C@H]1O.O=[N+]([O-])c1ccc(O)cc1",
+        "story": "β-glucosidase — releases bright yellow p-nitrophenol (visible to the naked eye); gold-standard chromogenic glycosidase assay substrate",
+        "is_impossible": false
+      },
+      {
+        "id": "D07",
+        "ec": "5.3.1.5",
+        "ec_name": "Xylose isomerase",
+        "substrate_name": "D-xylose",
+        "product_name": "D-xylulose",
+        "reaction_smiles": "OC[C@@H](O)[C@H](O)[C@@H](O)C=O>>OC[C@@H](O)[C@H](O)C(=O)CO",
+        "story": "Xylose isomerase — the same enzyme family industrially converts glucose to fructose for high-fructose corn syrup; metal-assisted hydride shift",
+        "is_impossible": false
+      },
+      {
+        "id": "D24",
+        "ec": "2.3.2.5",
+        "ec_name": "Glutaminyl cyclotransferase (QC)",
+        "substrate_name": "L-Gln-dipeptide N-terminus",
+        "product_name": "pyroglutamyl-peptide + NH₃",
+        "reaction_smiles": "NC(=O)CC[C@H](N)C(N)=O>>N.NC(=O)[C@@H]1CCC(=O)N1",
+        "story": "Glutaminyl cyclase — caps N-terminal glutamine with the pyroglutamyl ring; protects therapeutic peptides (GnRH, neurotensin) against aminopeptidase degradation",
+        "is_impossible": false
+      },
+      {
+        "id": "D30",
+        "ec": "6.3.2.2",
+        "ec_name": "Glutamate cyclisation / pyroglutamate synthase",
+        "substrate_name": "L-glutamate + ATP",
+        "product_name": "pyroglutamate + ADP + Pᵢ",
+        "reaction_smiles": "N[C@@H](CCC(=O)O)C(=O)O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O.O=C1CC[C@@H](C(=O)O)N1.OP(=O)(O)O",
+        "story": "ATP-driven glutamate ring closure — makes the pyroglutamyl cap used to stabilise bioactive peptides (TRH, neurotensin) against N-terminal exopeptidases",
+        "is_impossible": false
+      }
+    ]
+  },
+  {
+    "set_id": 5,
+    "impossible_ec": "5.99.1.4",
+    "impossible_ec_name": "Hydroxy-lactol isomerase",
+    "impossible_position": 4,
+    "reactions": [
+      {
+        "id": "D21",
+        "ec": "1.1.1.x",
+        "ec_name": "Cinnamyl alcohol dehydrogenase (CAD)",
+        "substrate_name": "cinnamaldehyde + NADH + H⁺",
+        "product_name": "cinnamyl alcohol + NAD⁺",
+        "reaction_smiles": "O=C/C=C/c1ccccc1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.[H+]>>OC/C=C/c1ccccc1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)c1",
+        "story": "CAD — final step of monolignol biosynthesis; NADPH-reduction of hydroxycinnamaldehydes to monolignols before oxidative polymerisation into lignin",
+        "is_impossible": false
+      },
+      {
+        "id": "D26",
+        "ec": "4.2.1.2",
+        "ec_name": "Fumarase (fumarate hydratase)",
+        "substrate_name": "fumarate + H₂O",
+        "product_name": "L-malate",
+        "reaction_smiles": "OC(=O)/C=C/C(=O)O.O>>OC(=O)[C@@H](O)CC(=O)O",
+        "story": "Fumarase — anti addition of water to fumarate; gives exclusively (S)-malate; the textbook example of stereospecific hydration in the TCA cycle",
+        "is_impossible": false
+      },
+      {
+        "id": "D08",
+        "ec": "5.5.1.6",
+        "ec_name": "Chalcone isomerase",
+        "substrate_name": "naringenin chalcone",
+        "product_name": "(2S)-naringenin",
+        "reaction_smiles": "O=C(/C=C/c1ccc(O)cc1)c1cc(O)cc(O)c1>>O=C1C[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21",
+        "story": "Chalcone isomerase — intramolecular Michael addition with perfect (2S) enantioselectivity and no cofactor; first committed step in flavonoid biosynthesis",
+        "is_impossible": false
+      },
+      {
+        "id": "IMP05",
+        "ec": "5.99.1.4",
+        "ec_name": "Hydroxy-lactol isomerase",
+        "substrate_name": "(2R)-2-hydroxyphenyl-δ-lactol-acid",
+        "product_name": "2-(2-hydroxyphenyl)-keto-acid",
+        "reaction_smiles": "O=C(O)[C@@]1(O)/C=C\\c2ccccc2O1>>O=C(O)C(=O)/C=C/c1ccccc1O",
+        "story": "EC 5.99 'other isomerases' — only 2 training examples. Cofactor-free lactol ring opening; no structural homologue exists in the screening set.",
+        "n_training_examples": 2,
+        "is_impossible": true
+      },
+      {
+        "id": "D34",
+        "ec": "3.1.3.2",
+        "ec_name": "Acid phosphatase (p-NPP assay)",
+        "substrate_name": "p-nitrophenyl phosphate + H₂O",
+        "product_name": "p-nitrophenol + phosphate",
+        "reaction_smiles": "O=[N+]([O-])c1ccc(OP(=O)(O)O)cc1.O>>O=[N+]([O-])c1ccc(O)cc1.OP(=O)(O)O",
+        "story": "Acid phosphatase — p-NPP releases bright yellow p-nitrophenol at 405 nm; gold standard for the widely used colorimetric phosphatase assay in clinical diagnostics",
+        "is_impossible": false
+      },
+      {
+        "id": "D13",
+        "ec": "2.4.1.91",
+        "ec_name": "Quercetin 3-O-glucosyltransferase (UGT)",
+        "substrate_name": "quercetin + UDP-glucose",
+        "product_name": "isoquercitrin + UDP",
+        "reaction_smiles": "Oc1ccc(-c2oc3cc(O)cc(O)c3c(=O)c2O)cc1O.OC[C@H]1O[C@@H](OP(=O)(O)OP(=O)(O)OC[C@H]2O[C@@H](n3ccc(=O)[nH]c3=O)[C@H](O)[C@@H]2O)[C@H](O)[C@@H](O)[C@@H]1O>>Oc1ccc(-c2oc3cc(O)cc(O)c3c(=O)c2O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1O.OP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2ccc(=O)[nH]c2=O)[C@H](O)[C@@H]1O",
+        "story": "UGT-catalysed glucosylation of quercetin — converts the hydrophobic yellow plant pigment into a water-soluble glycoside; the basis of bioavailability in onion skin",
+        "is_impossible": false
+      },
+      {
+        "id": "D35",
+        "ec": "5.4.99.2",
+        "ec_name": "Methylmalonyl-CoA mutase (B₁₂)",
+        "substrate_name": "(R)-methylmalonyl-CoA",
+        "product_name": "succinyl-CoA",
+        "reaction_smiles": "C[C@@H](C(=O)O)C(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O>>CCCC(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O",
+        "story": "Methylmalonyl-CoA mutase — B₁₂-dependent 1,2-carbon skeleton rearrangement; links branched amino acid catabolism and odd-chain fatty acid oxidation to the TCA cycle",
+        "is_impossible": false
+      },
+      {
+        "id": "D31",
+        "ec": "6.3.2.49",
+        "ec_name": "Trp-His peptide ligase",
+        "substrate_name": "L-tryptophan + L-histidine + ATP",
+        "product_name": "Trp-His dipeptide + ADP + Pᵢ",
+        "reaction_smiles": "N[C@@H](Cc1c[nH]c2ccccc12)C(=O)O.N[C@@H](Cc1cnc[nH]1)C(=O)O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>N[C@@H](Cc1c[nH]c2ccccc12)C(=O)N[C@@H](Cc1cnc[nH]1)C(=O)O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O.OP(=O)(O)O",
+        "story": "ATP-dependent Trp-His peptide ligase — forms the dipeptide anserine precursor; non-ribosomal-like peptide bond formation between the two most UV-active amino acids",
+        "is_impossible": false
+      },
+      {
+        "id": "D17",
+        "ec": "1.14.13.149",
+        "ec_name": "Coumarin 7-hydroxylase (CYP2A6)",
+        "substrate_name": "coumarin + NADPH + O₂",
+        "product_name": "7-hydroxycoumarin (umbelliferone) + NADP⁺ + H₂O",
+        "reaction_smiles": "O=c1ccc2ccccc2o1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>O=c1ccc2cc(O)ccc2o1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
+        "story": "CYP2A6 — human hepatic CYP; converts coumarin to the fluorescent umbelliferone; the standard probe reaction for CYP2A6 phenotyping in clinical pharmacogenomics",
+        "is_impossible": false
+      },
+      {
+        "id": "D05",
+        "ec": "4.1.1.96",
+        "ec_name": "Spermidine biosynthesis decarboxylase",
+        "substrate_name": "N-carbamoylspermidine",
+        "product_name": "spermidine + CO₂",
+        "reaction_smiles": "NCCCNCCCCNC(=O)O>>NCCCCNCCCN.O=C=O",
+        "story": "Polyamine decarboxylase — spermidine is essential for hypusination of eIF5A, the universal translational regulator across all domains of life",
+        "is_impossible": false
+      }
+    ]
+  },
+  {
+    "set_id": 6,
+    "impossible_ec": "1.18.1.2",
+    "impossible_ec_name": "Dibromodiosphenol reductase",
+    "impossible_position": 3,
+    "reactions": [
+      {
+        "id": "D09",
+        "ec": "5.3.3.2",
+        "ec_name": "Isopentenyl-diphosphate isomerase (IDI)",
+        "substrate_name": "IPP (isopentenyl-PP)",
+        "product_name": "DMAPP (dimethylallyl-PP)",
+        "reaction_smiles": "CC(=C)COP(=O)(O)OP(=O)(O)O>>CC(C)=COP(=O)(O)OP(=O)(O)O",
+        "story": "IDI — activates the isoprene unit; entry point to the entire terpene and steroid universe comprising >50,000 natural products",
+        "is_impossible": false
+      },
+      {
+        "id": "D01",
+        "ec": "4.3.1.24",
+        "ec_name": "Phenylalanine ammonia-lyase (PAL)",
+        "substrate_name": "L-phenylalanine",
+        "product_name": "trans-cinnamate + NH₃",
+        "reaction_smiles": "N[C@@H](Cc1ccccc1)C(=O)O>>OC(=O)/C=C/c1ccccc1.N",
+        "story": "PAL — gate enzyme for the phenylpropanoid pathway; makes the cinnamic acid backbone for lignin and all plant flavonoids",
+        "is_impossible": false
+      },
+      {
+        "id": "IMP06",
+        "ec": "1.18.1.2",
+        "ec_name": "Dibromodiosphenol reductase",
+        "substrate_name": "2,6-dibromodiosphenol + NADPH + H⁺",
+        "product_name": "2,6-dibromo-3-hydroxy-p-cymene + NADP⁺",
+        "reaction_smiles": "CC1=C(Br)C(=O)C(C(C)C)=C(Br)C1=O.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.[H+]>>CC1=C(Br)[C@@H](O)C(C(C)C)=C(Br)C1=O.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)c1",
+        "story": "Ferredoxin-NADP reductase acting on a halogenated quinone — only 2 training examples. Bromo-substituted substrate is completely out of distribution for CLIPZyme.",
+        "n_training_examples": 2,
+        "is_impossible": true
+      },
+      {
+        "id": "D04",
+        "ec": "4.1.1.22",
+        "ec_name": "Histidine decarboxylase",
+        "substrate_name": "L-histidine",
+        "product_name": "histamine + CO₂",
+        "reaction_smiles": "N[C@@H](Cc1c[nH]cn1)C(=O)O>>NCCc1c[nH]cn1.O=C=O",
+        "story": "PLP-dependent histidine decarboxylase — makes histamine; the antiallergy drug cimetidine inhibits downstream H2 receptors",
+        "is_impossible": false
+      },
+      {
+        "id": "D28",
+        "ec": "2.7.1.21",
+        "ec_name": "Thymidine kinase (stavudine d4T)",
+        "substrate_name": "stavudine (d4T) + ATP",
+        "product_name": "d4T-5'-monophosphate + ADP",
+        "reaction_smiles": "Cc1cn([C@H]2CC[C@@H](CO)O2)c(=O)[nH]c1=O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>Cc1cn([C@H]2CC[C@@H](COP(=O)(O)O)O2)c(=O)[nH]c1=O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O",
+        "story": "Thymidine kinase — phosphorylates the anti-HIV nucleoside analogue stavudine (d4T); first activation step required for its NRTI mechanism of action",
+        "is_impossible": false
+      },
+      {
+        "id": "D39",
+        "ec": "4.2.1.92",
+        "ec_name": "Oleate hydratase",
+        "substrate_name": "oleic acid + H₂O",
+        "product_name": "(R)-10-hydroxystearic acid",
+        "reaction_smiles": "CCCCCCCC/C=C\\CCCCCCCC(=O)O.O>>CCCCCCCCC(O)CCCCCCCC(=O)O",
+        "story": "Oleate hydratase — Markovnikov-selective hydration of the oleic acid double bond; industrially relevant for making 10-hydroxystearic acid from renewable olive oil",
+        "is_impossible": false
+      },
+      {
+        "id": "D32",
+        "ec": "1.10.3.2",
+        "ec_name": "Laccase (catechol → quinone)",
+        "substrate_name": "catechol + ½O₂",
+        "product_name": "o-benzoquinone + H₂O",
+        "reaction_smiles": "Oc1ccccc1O.O=O>>O=C1C=CC(=O)C=C1.O",
+        "story": "Laccase — multicopper oxidase that converts catechols to quinones; responsible for enzymatic browning of cut fruit and oxidative delignification in white-rot fungi",
+        "is_impossible": false
+      },
+      {
+        "id": "D22",
+        "ec": "3.4.13.20",
+        "ec_name": "β-Ala-His dipeptidase (CN2 carnosinase)",
+        "substrate_name": "β-alanyl-glycine + H₂O",
+        "product_name": "glycine + β-alanine",
+        "reaction_smiles": "NCCC(=O)NCC(=O)O.O>>NCC(=O)O.NCCC(=O)O",
+        "story": "Carnosinase CN2 — cleaves the β-alanyl amide bond; muscle carnosine is the principal intracellular pH buffer during intense exercise",
+        "is_impossible": false
+      },
+      {
+        "id": "D19",
+        "ec": "1.14.11.9",
+        "ec_name": "Flavanone 3-hydroxylase (FHT/F3H)",
+        "substrate_name": "(2S)-naringenin + 2-oxoglutarate + O₂",
+        "product_name": "(2R,3R)-dihydrokaempferol + succinate + CO₂",
+        "reaction_smiles": "O=C1C[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21.OC(=O)CCC(=O)O.O=O>>O=C1[C@@H](O)[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21.OC(=O)CCC(=O)O.O=C=O",
+        "story": "FHT — 2-oxoglutarate-dependent dioxygenase; installs 3-OH on naringenin to branch the flavonoid pathway toward kaempferol, quercetin, and anthocyanins",
+        "is_impossible": false
+      },
+      {
+        "id": "D14",
+        "ec": "2.4.1.x",
+        "ec_name": "Resveratrol 3-O-glucosyltransferase",
+        "substrate_name": "resveratrol + UDP-glucose",
+        "product_name": "piceid (resveratrol-3-glucoside) + UDP",
+        "reaction_smiles": "Oc1ccc(/C=C/c2cc(O)cc(O)c2)cc1.OC[C@H]1O[C@@H](OP(=O)(O)OP(=O)(O)OC[C@H]2O[C@@H](n3ccc(=O)[nH]c3=O)[C@H](O)[C@@H]2O)[C@H](O)[C@@H](O)[C@@H]1O>>OC[C@H]1O[C@@H](Oc2cc(O)cc(/C=C/c3ccc(O)cc3)c2)[C@H](O)[C@@H](O)[C@@H]1O.OP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2ccc(=O)[nH]c2=O)[C@H](O)[C@@H]1O",
+        "story": "Resveratrol glucosylation — converts the red-wine polyphenol stilbene into its inactive storage glucoside piceid; reversed during grape berry ripening",
+        "is_impossible": false
+      }
+    ]
+  },
+  {
+    "set_id": 7,
+    "impossible_ec": "1.10.3.16",
+    "impossible_ec_name": "Phenazine biosynthesis oxidase",
+    "impossible_position": 2,
+    "reactions": [
+      {
+        "id": "D36",
+        "ec": "1.13.11.3",
+        "ec_name": "Protocatechuate 3,4-dioxygenase",
+        "substrate_name": "protocatechuate + O₂",
+        "product_name": "3-carboxy-cis,cis-muconate",
+        "reaction_smiles": "OC(=O)c1ccc(O)c(O)c1.O=O>>OC(=O)/C=C\\C(=O)/C=C/C(=O)O",
+        "story": "Ring-cleaving dioxygenase — breaks the aromatic ring of protocatechuate; key enzyme in bacterial degradation of lignin-derived aromatics in contaminated soil",
+        "is_impossible": false
+      },
+      {
+        "id": "IMP07",
+        "ec": "1.10.3.16",
+        "ec_name": "Phenazine biosynthesis oxidase",
+        "substrate_name": "dihydrophenazine-1,6-dicarboxylate + O₂",
+        "product_name": "phenazine-1,6-dicarboxylate + H₂O₂",
+        "reaction_smiles": "O=C(O)c1cccc2c1N[C@@H]1CC=C[C@@H](C(=O)O)[C@@H]1N2.O=O>>O=C(O)c1cccc2nc3c(cccc3C(=O)O)nc12.OO",
+        "story": "Phenazine oxidase — only 6 training examples. Makes the antibiotic phenazine scaffold in Pseudomonas; entirely out-of-distribution for the screening set.",
+        "n_training_examples": 6,
+        "is_impossible": true
+      },
+      {
+        "id": "D02",
+        "ec": "4.1.1.28",
+        "ec_name": "Aromatic-L-amino-acid decarboxylase (Trp)",
+        "substrate_name": "L-tryptophan",
+        "product_name": "tryptamine + CO₂",
+        "reaction_smiles": "N[C@@H](Cc1c[nH]c2ccccc12)C(=O)O>>NCCc1c[nH]c2ccccc12.O=C=O",
+        "story": "AADC — decarboxylates tryptophan to tryptamine, the precursor to serotonin, melatonin, and the entire monoterpene-indole alkaloid family",
+        "is_impossible": false
+      },
+      {
+        "id": "D23",
+        "ec": "3.4.21.4",
+        "ec_name": "Trypsin",
+        "substrate_name": "Ala-Arg dipeptide + H₂O",
+        "product_name": "L-Ala + L-Arg",
+        "reaction_smiles": "C[C@@H](N)C(=O)N[C@@H](CCCNC(=N)N)C(=O)O.O>>C[C@@H](N)C(=O)O.N[C@@H](CCCNC(=N)N)C(=O)O",
+        "story": "Trypsin — serine protease that cleaves C-terminal to Arg/Lys; founding member of the chymotrypsin superfamily; workhorse of proteomics sample preparation",
+        "is_impossible": false
+      },
+      {
+        "id": "D11",
+        "ec": "3.2.1.37",
+        "ec_name": "β-xylosidase (bromophenol reporter)",
+        "substrate_name": "4-bromophenyl-β-D-xylopyranoside",
+        "product_name": "D-xylose + 4-bromophenol",
+        "reaction_smiles": "O.O[C@@H]1[C@@H](O)[C@H](Oc2ccc(Br)cc2)OC[C@H]1O>>O[C@@H]1[C@@H](O)[C@H](O)OC[C@H]1O.Oc1ccc(Br)cc1",
+        "story": "β-xylosidase with halogenated reporter — the bromophenol product can be coupled to Trinder reagent for highly sensitive colorimetric detection",
+        "is_impossible": false
+      },
+      {
+        "id": "D34",
+        "ec": "3.1.3.2",
+        "ec_name": "Acid phosphatase (p-NPP assay)",
+        "substrate_name": "p-nitrophenyl phosphate + H₂O",
+        "product_name": "p-nitrophenol + phosphate",
+        "reaction_smiles": "O=[N+]([O-])c1ccc(OP(=O)(O)O)cc1.O>>O=[N+]([O-])c1ccc(O)cc1.OP(=O)(O)O",
+        "story": "Acid phosphatase — p-NPP releases bright yellow p-nitrophenol at 405 nm; gold standard for the widely used colorimetric phosphatase assay in clinical diagnostics",
+        "is_impossible": false
+      },
+      {
+        "id": "D18",
+        "ec": "1.14.14.11",
+        "ec_name": "Styrene monooxygenase (SMO)",
+        "substrate_name": "styrene + NADPH + O₂",
+        "product_name": "(S)-styrene oxide + NADP⁺ + H₂O",
+        "reaction_smiles": "C=Cc1ccccc1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>[C@@H]1(c2ccccc2)CO1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
+        "story": "Styrene monooxygenase — epoxidises styrene to enantiopure (S)-styrene oxide; biocatalysis workhorse for chiral pharmaceutical building blocks",
+        "is_impossible": false
+      },
+      {
+        "id": "D15",
+        "ec": "2.1.1.68",
+        "ec_name": "Caffeate O-methyltransferase (COMT)",
+        "substrate_name": "caffeate + SAM",
+        "product_name": "ferulate + SAH",
+        "reaction_smiles": "Oc1ccc(/C=C/C(=O)O)cc1O.C[S+](CC[C@@H](N)C(=O)O)C[C@H]1O[C@@H](n2cnc3c(N)ncnc23)[C@H](O)[C@@H]1O>>COc1cc(/C=C/C(=O)O)ccc1O.CSCC[C@@H](N)C(=O)O",
+        "story": "COMT — SAM-dependent methylation of caffeate 3-OH to give ferulate; controls flux into guaiacyl vs syringyl lignin units in wood formation",
+        "is_impossible": false
+      },
+      {
+        "id": "D27",
+        "ec": "4.2.1.17",
+        "ec_name": "Enoyl-CoA hydratase (crotonase)",
+        "substrate_name": "crotonyl-CoA + H₂O",
+        "product_name": "(S)-3-hydroxybutanoyl-CoA",
+        "reaction_smiles": "CC=CC(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O.O>>C[C@@H](O)CC(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O",
+        "story": "Crotonase — syn hydration of the 2-enoyl-CoA double bond; core β-oxidation enzyme; the CoA thioester visualises the substrate's origin beautifully",
+        "is_impossible": false
+      },
+      {
+        "id": "D06",
+        "ec": "4.3.1.23",
+        "ec_name": "Tyrosine ammonia-lyase (TAL)",
+        "substrate_name": "L-tyrosine",
+        "product_name": "p-coumarate + NH₃",
+        "reaction_smiles": "N[C@@H](Cc1ccc(O)cc1)C(=O)O>>OC(=O)/C=C/c1ccc(O)cc1.N",
+        "story": "TAL — makes p-coumaric acid, the universal building block for flavonoids, stilbenes, coumarins, and all monolignols",
+        "is_impossible": false
+      }
+    ]
+  },
+  {
+    "set_id": 8,
+    "impossible_ec": "5.2.1.5",
+    "impossible_ec_name": "Linoleate Δ11 cis-trans isomerase",
+    "impossible_position": 5,
+    "reactions": [
+      {
+        "id": "D16",
+        "ec": "1.14.13.36",
+        "ec_name": "4-coumarate 3-hydroxylase (CYP98A3)",
+        "substrate_name": "p-coumarate + NADPH + O₂",
+        "product_name": "caffeate + NADP⁺ + H₂O",
+        "reaction_smiles": "OC(=O)/C=C/c1ccc(O)cc1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>OC(=O)/C=C/c1ccc(O)c(O)c1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
+        "story": "CYP98A3 — regioselective aromatic C3-hydroxylation of coumaroyl; one of the most highly expressed CYPs in Arabidopsis",
+        "is_impossible": false
+      },
+      {
+        "id": "D37",
+        "ec": "1.14.18.1",
+        "ec_name": "Tyrosinase (Tyr hydroxylation)",
+        "substrate_name": "L-tyrosine + O₂",
+        "product_name": "L-DOPA + H₂O",
+        "reaction_smiles": "N[C@@H](Cc1ccc(O)cc1)C(=O)O.O=O>>N[C@@H](Cc1ccc(O)c(O)c1)C(=O)O.O",
+        "story": "Tyrosinase — bifunctional copper oxidase that hydroxylates tyrosine to DOPA; responsible for skin pigmentation, mushroom browning, and melanin biosynthesis",
+        "is_impossible": false
+      },
+      {
+        "id": "D20",
+        "ec": "1.1.1.1",
+        "ec_name": "Alcohol dehydrogenase (benzyl alcohol)",
+        "substrate_name": "benzyl alcohol + NAD⁺",
+        "product_name": "benzaldehyde + NADH + H⁺",
+        "reaction_smiles": "OCc1ccccc1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)c1>>O=Cc1ccccc1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.[H+]",
+        "story": "Zinc-dependent ADH — oxidises benzyl alcohol to benzaldehyde (bitter almond aroma); archetype of pro-S hydride transfer to NAD⁺",
+        "is_impossible": false
+      },
+      {
+        "id": "D07",
+        "ec": "5.3.1.5",
+        "ec_name": "Xylose isomerase",
+        "substrate_name": "D-xylose",
+        "product_name": "D-xylulose",
+        "reaction_smiles": "OC[C@@H](O)[C@H](O)[C@@H](O)C=O>>OC[C@@H](O)[C@H](O)C(=O)CO",
+        "story": "Xylose isomerase — the same enzyme family industrially converts glucose to fructose for high-fructose corn syrup; metal-assisted hydride shift",
+        "is_impossible": false
+      },
+      {
+        "id": "IMP08",
+        "ec": "5.2.1.5",
+        "ec_name": "Linoleate Δ11 cis-trans isomerase",
+        "substrate_name": "linoleic acid (9Z,12Z)",
+        "product_name": "conjugated linoleic acid (9E,11E)",
+        "reaction_smiles": "CCCCC/C=C\\C/C=C\\CCCCCCCC(=O)O>>CCCCCC/C=C/C=C/CCCCCCCC(=O)O",
+        "story": "Fatty acid cis-trans isomerase — only 6 training examples. Geometry change only, no cofactor; no structural homologue anywhere in the enzyme screening set.",
+        "n_training_examples": 6,
+        "is_impossible": true
+      },
+      {
+        "id": "D12",
+        "ec": "3.2.1.23",
+        "ec_name": "β-galactosidase (lactase)",
+        "substrate_name": "lactose",
+        "product_name": "D-glucose + D-galactose",
+        "reaction_smiles": "OC[C@H]1O[C@@H](O[C@H]2[C@@H](O)[C@@H](O)[C@@H](CO)O[C@@H]2O)[C@H](O)[C@@H](O)[C@H]1O.O>>OC[C@H]1O[C@@H](O)[C@H](O)[C@@H](O)[C@H]1O.OC[C@@H]1O[C@@H](O)[C@@H](O)[C@H](O)[C@H]1O",
+        "story": "Lactase — the enzyme lactose-intolerant people lack; industrial enzyme added to dairy for lactose-free milk production worldwide",
+        "is_impossible": false
+      },
+      {
+        "id": "D29",
+        "ec": "2.7.1.20",
+        "ec_name": "Adenosine kinase",
+        "substrate_name": "adenosine + ATP",
+        "product_name": "AMP + ADP",
+        "reaction_smiles": "Nc1ncnc2c1ncn2[C@@H]1O[C@H](CO)[C@@H](O)[C@H]1O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)O)[C@@H](O)[C@H]1O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O",
+        "story": "Adenosine kinase — regulates extracellular adenosine, a neuroprotective signalling molecule; AK inhibition raises adenosine levels to protect against seizures",
+        "is_impossible": false
+      },
+      {
+        "id": "D24",
+        "ec": "2.3.2.5",
+        "ec_name": "Glutaminyl cyclotransferase (QC)",
+        "substrate_name": "L-Gln-dipeptide N-terminus",
+        "product_name": "pyroglutamyl-peptide + NH₃",
+        "reaction_smiles": "NC(=O)CC[C@H](N)C(N)=O>>N.NC(=O)[C@@H]1CCC(=O)N1",
+        "story": "Glutaminyl cyclase — caps N-terminal glutamine with the pyroglutamyl ring; protects therapeutic peptides (GnRH, neurotensin) against aminopeptidase degradation",
+        "is_impossible": false
+      },
+      {
+        "id": "D03",
+        "ec": "4.1.1.28",
+        "ec_name": "DOPA decarboxylase",
+        "substrate_name": "L-DOPA",
+        "product_name": "dopamine + CO₂",
+        "reaction_smiles": "N[C@@H](Cc1ccc(O)c(O)c1)C(=O)O>>NCCc1ccc(O)c(O)c1.O=C=O",
+        "story": "Same enzyme as tryptophan AADC — decarboxylates L-DOPA to dopamine; the key step in the biosynthesis that is bypassed in Parkinson's disease",
+        "is_impossible": false
+      },
+      {
+        "id": "D33",
+        "ec": "3.1.1.3",
+        "ec_name": "Lipase (tributyrin)",
+        "substrate_name": "tributyrin + H₂O",
+        "product_name": "dibutyrin + butyric acid",
+        "reaction_smiles": "CCCC(=O)OCC(OC(=O)CCC)COC(=O)CCC.O>>CCCC(=O)OCC(O)COC(=O)CCC.CCCC(=O)O",
+        "story": "Triacylglycerol lipase — serine hydrolase; cleaves ester bond of triglycerides; the most industrially-used enzyme class after protease; active in non-aqueous media",
+        "is_impossible": false
+      }
+    ]
+  },
+  {
+    "set_id": 9,
+    "impossible_ec": "6.1.1.12",
+    "impossible_ec_name": "Aspartyl-tRNA synthetase",
+    "impossible_position": 2,
+    "reactions": [
+      {
+        "id": "D17",
+        "ec": "1.14.13.149",
+        "ec_name": "Coumarin 7-hydroxylase (CYP2A6)",
+        "substrate_name": "coumarin + NADPH + O₂",
+        "product_name": "7-hydroxycoumarin (umbelliferone) + NADP⁺ + H₂O",
+        "reaction_smiles": "O=c1ccc2ccccc2o1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>O=c1ccc2cc(O)ccc2o1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
+        "story": "CYP2A6 — human hepatic CYP; converts coumarin to the fluorescent umbelliferone; the standard probe reaction for CYP2A6 phenotyping in clinical pharmacogenomics",
+        "is_impossible": false
+      },
+      {
+        "id": "IMP09",
+        "ec": "6.1.1.12",
+        "ec_name": "Aspartyl-tRNA synthetase",
+        "substrate_name": "Asp-AMP intermediate + PPᵢ",
+        "product_name": "AMP + L-aspartate + PPᵢ",
+        "reaction_smiles": "Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OC(=O)[C@@H](N)CC(=O)O)[C@@H](O)[C@H]1O.OP(=O)(O)OP(=O)(O)O>>Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O.N[C@@H](CC(=O)O)C(=O)O.OP(=O)(O)O",
+        "story": "AaRS aminoacylation — only 1 training example of EC 6.1.1.12. The Asp-AMP intermediate chemistry is entirely foreign to the screening enzyme set.",
+        "n_training_examples": 1,
+        "is_impossible": true
+      },
+      {
+        "id": "D21",
+        "ec": "1.1.1.x",
+        "ec_name": "Cinnamyl alcohol dehydrogenase (CAD)",
+        "substrate_name": "cinnamaldehyde + NADH + H⁺",
+        "product_name": "cinnamyl alcohol + NAD⁺",
+        "reaction_smiles": "O=C/C=C/c1ccccc1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.[H+]>>OC/C=C/c1ccccc1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](O)[C@@H]3O)[C@@H](O)[C@H]2O)c1",
+        "story": "CAD — final step of monolignol biosynthesis; NADPH-reduction of hydroxycinnamaldehydes to monolignols before oxidative polymerisation into lignin",
+        "is_impossible": false
+      },
+      {
+        "id": "D13",
+        "ec": "2.4.1.91",
+        "ec_name": "Quercetin 3-O-glucosyltransferase (UGT)",
+        "substrate_name": "quercetin + UDP-glucose",
+        "product_name": "isoquercitrin + UDP",
+        "reaction_smiles": "Oc1ccc(-c2oc3cc(O)cc(O)c3c(=O)c2O)cc1O.OC[C@H]1O[C@@H](OP(=O)(O)OP(=O)(O)OC[C@H]2O[C@@H](n3ccc(=O)[nH]c3=O)[C@H](O)[C@@H]2O)[C@H](O)[C@@H](O)[C@@H]1O>>Oc1ccc(-c2oc3cc(O)cc(O)c3c(=O)c2O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1O.OP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2ccc(=O)[nH]c2=O)[C@H](O)[C@@H]1O",
+        "story": "UGT-catalysed glucosylation of quercetin — converts the hydrophobic yellow plant pigment into a water-soluble glycoside; the basis of bioavailability in onion skin",
+        "is_impossible": false
+      },
+      {
+        "id": "D35",
+        "ec": "5.4.99.2",
+        "ec_name": "Methylmalonyl-CoA mutase (B₁₂)",
+        "substrate_name": "(R)-methylmalonyl-CoA",
+        "product_name": "succinyl-CoA",
+        "reaction_smiles": "C[C@@H](C(=O)O)C(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O>>CCCC(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O",
+        "story": "Methylmalonyl-CoA mutase — B₁₂-dependent 1,2-carbon skeleton rearrangement; links branched amino acid catabolism and odd-chain fatty acid oxidation to the TCA cycle",
+        "is_impossible": false
+      },
+      {
+        "id": "D30",
+        "ec": "6.3.2.2",
+        "ec_name": "Glutamate cyclisation / pyroglutamate synthase",
+        "substrate_name": "L-glutamate + ATP",
+        "product_name": "pyroglutamate + ADP + Pᵢ",
+        "reaction_smiles": "N[C@@H](CCC(=O)O)C(=O)O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O.O=C1CC[C@@H](C(=O)O)N1.OP(=O)(O)O",
+        "story": "ATP-driven glutamate ring closure — makes the pyroglutamyl cap used to stabilise bioactive peptides (TRH, neurotensin) against N-terminal exopeptidases",
+        "is_impossible": false
+      },
+      {
+        "id": "D25",
+        "ec": "3.3.2.10",
+        "ec_name": "Styrene oxide hydrolase",
+        "substrate_name": "(S)-styrene oxide + H₂O",
+        "product_name": "(R)-1-phenylethane-1,2-diol",
+        "reaction_smiles": "[C@@H]1(c2ccccc2)CO1.O>>OC[C@H](O)c1ccccc1",
+        "story": "Epoxide hydrolase — Asp-nucleophile-mediated ring opening with retention; stereocomplementary to SMO; combined they give both enantiomers of the chiral diol",
+        "is_impossible": false
+      },
+      {
+        "id": "D10",
+        "ec": "3.2.1.21",
+        "ec_name": "β-glucosidase (chromogenic)",
+        "substrate_name": "p-nitrophenyl-β-D-glucopyranoside",
+        "product_name": "D-glucose + p-nitrophenol",
+        "reaction_smiles": "O=[N+]([O-])c1ccc(O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1.O>>OC[C@H]1O[C@@H](O)[C@H](O)[C@@H](O)[C@H]1O.O=[N+]([O-])c1ccc(O)cc1",
+        "story": "β-glucosidase — releases bright yellow p-nitrophenol (visible to the naked eye); gold-standard chromogenic glycosidase assay substrate",
+        "is_impossible": false
+      },
+      {
+        "id": "D08",
+        "ec": "5.5.1.6",
+        "ec_name": "Chalcone isomerase",
+        "substrate_name": "naringenin chalcone",
+        "product_name": "(2S)-naringenin",
+        "reaction_smiles": "O=C(/C=C/c1ccc(O)cc1)c1cc(O)cc(O)c1>>O=C1C[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21",
+        "story": "Chalcone isomerase — intramolecular Michael addition with perfect (2S) enantioselectivity and no cofactor; first committed step in flavonoid biosynthesis",
+        "is_impossible": false
+      },
+      {
+        "id": "D05",
+        "ec": "4.1.1.96",
+        "ec_name": "Spermidine biosynthesis decarboxylase",
+        "substrate_name": "N-carbamoylspermidine",
+        "product_name": "spermidine + CO₂",
+        "reaction_smiles": "NCCCNCCCCNC(=O)O>>NCCCCNCCCN.O=C=O",
+        "story": "Polyamine decarboxylase — spermidine is essential for hypusination of eIF5A, the universal translational regulator across all domains of life",
+        "is_impossible": false
+      }
+    ]
+  },
+  {
+    "set_id": 10,
+    "impossible_ec": "6.5.1.1",
+    "impossible_ec_name": "ATP-dependent DNA ligase",
+    "impossible_position": 5,
+    "reactions": [
+      {
+        "id": "D22",
+        "ec": "3.4.13.20",
+        "ec_name": "β-Ala-His dipeptidase (CN2 carnosinase)",
+        "substrate_name": "β-alanyl-glycine + H₂O",
+        "product_name": "glycine + β-alanine",
+        "reaction_smiles": "NCCC(=O)NCC(=O)O.O>>NCC(=O)O.NCCC(=O)O",
+        "story": "Carnosinase CN2 — cleaves the β-alanyl amide bond; muscle carnosine is the principal intracellular pH buffer during intense exercise",
+        "is_impossible": false
+      },
+      {
+        "id": "D04",
+        "ec": "4.1.1.22",
+        "ec_name": "Histidine decarboxylase",
+        "substrate_name": "L-histidine",
+        "product_name": "histamine + CO₂",
+        "reaction_smiles": "N[C@@H](Cc1c[nH]cn1)C(=O)O>>NCCc1c[nH]cn1.O=C=O",
+        "story": "PLP-dependent histidine decarboxylase — makes histamine; the antiallergy drug cimetidine inhibits downstream H2 receptors",
+        "is_impossible": false
+      },
+      {
+        "id": "D38",
+        "ec": "2.3.1.95",
+        "ec_name": "Stilbene synthase / chalcone synthase (Claisen condensation)",
+        "substrate_name": "4-coumaroyl-CoA + malonyl-CoA",
+        "product_name": "coumarate + malonyl release (decarboxylative Claisen)",
+        "reaction_smiles": "OC(=O)/C=C/c1ccc(O)cc1.CC(C)(COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O)[C@@H](O)C(=O)NCCC(=O)NCCSC(=O)CC(=O)O>>Oc1ccc(/C=C/C(=O)O)cc1.O=C=O.CC(C)(COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O)[C@@H](O)C(=O)NCCC(=O)NCCSC(=O)O",
+        "story": "Type III PKS — decarboxylative Claisen condensation of malonyl-CoA onto coumaroyl-CoA; entry point to the entire flavonoid and stilbene families in plants",
+        "is_impossible": false
+      },
+      {
+        "id": "D06",
+        "ec": "4.3.1.23",
+        "ec_name": "Tyrosine ammonia-lyase (TAL)",
+        "substrate_name": "L-tyrosine",
+        "product_name": "p-coumarate + NH₃",
+        "reaction_smiles": "N[C@@H](Cc1ccc(O)cc1)C(=O)O>>OC(=O)/C=C/c1ccc(O)cc1.N",
+        "story": "TAL — makes p-coumaric acid, the universal building block for flavonoids, stilbenes, coumarins, and all monolignols",
+        "is_impossible": false
+      },
+      {
+        "id": "IMP10",
+        "ec": "6.5.1.1",
+        "ec_name": "ATP-dependent DNA ligase",
+        "substrate_name": "two ADP molecules (nicked-DNA model)",
+        "product_name": "AppAMP adenylated intermediate + PPᵢ",
+        "reaction_smiles": "Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)OC[C@H]2O[C@@H](n3cnc4c(N)ncnc43)[C@@H](O)[C@H]2O)[C@@H](O)[C@H]1O.OP(=O)(O)O",
+        "story": "DNA ligase — only 12 training examples. Phosphodiester bond formation in nucleic acid metabolism; no enzyme in the screening set catalyses this reaction type.",
+        "n_training_examples": 12,
+        "is_impossible": true
+      },
+      {
+        "id": "D14",
+        "ec": "2.4.1.x",
+        "ec_name": "Resveratrol 3-O-glucosyltransferase",
+        "substrate_name": "resveratrol + UDP-glucose",
+        "product_name": "piceid (resveratrol-3-glucoside) + UDP",
+        "reaction_smiles": "Oc1ccc(/C=C/c2cc(O)cc(O)c2)cc1.OC[C@H]1O[C@@H](OP(=O)(O)OP(=O)(O)OC[C@H]2O[C@@H](n3ccc(=O)[nH]c3=O)[C@H](O)[C@@H]2O)[C@H](O)[C@@H](O)[C@@H]1O>>OC[C@H]1O[C@@H](Oc2cc(O)cc(/C=C/c3ccc(O)cc3)c2)[C@H](O)[C@@H](O)[C@@H]1O.OP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2ccc(=O)[nH]c2=O)[C@H](O)[C@@H]1O",
+        "story": "Resveratrol glucosylation — converts the red-wine polyphenol stilbene into its inactive storage glucoside piceid; reversed during grape berry ripening",
+        "is_impossible": false
+      },
+      {
+        "id": "D28",
+        "ec": "2.7.1.21",
+        "ec_name": "Thymidine kinase (stavudine d4T)",
+        "substrate_name": "stavudine (d4T) + ATP",
+        "product_name": "d4T-5'-monophosphate + ADP",
+        "reaction_smiles": "Cc1cn([C@H]2CC[C@@H](CO)O2)c(=O)[nH]c1=O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>Cc1cn([C@H]2CC[C@@H](COP(=O)(O)O)O2)c(=O)[nH]c1=O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O",
+        "story": "Thymidine kinase — phosphorylates the anti-HIV nucleoside analogue stavudine (d4T); first activation step required for its NRTI mechanism of action",
+        "is_impossible": false
+      },
+      {
+        "id": "D31",
+        "ec": "6.3.2.49",
+        "ec_name": "Trp-His peptide ligase",
+        "substrate_name": "L-tryptophan + L-histidine + ATP",
+        "product_name": "Trp-His dipeptide + ADP + Pᵢ",
+        "reaction_smiles": "N[C@@H](Cc1c[nH]c2ccccc12)C(=O)O.N[C@@H](Cc1cnc[nH]1)C(=O)O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>N[C@@H](Cc1c[nH]c2ccccc12)C(=O)N[C@@H](Cc1cnc[nH]1)C(=O)O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O.OP(=O)(O)O",
+        "story": "ATP-dependent Trp-His peptide ligase — forms the dipeptide anserine precursor; non-ribosomal-like peptide bond formation between the two most UV-active amino acids",
+        "is_impossible": false
+      },
+      {
+        "id": "D19",
+        "ec": "1.14.11.9",
+        "ec_name": "Flavanone 3-hydroxylase (FHT/F3H)",
+        "substrate_name": "(2S)-naringenin + 2-oxoglutarate + O₂",
+        "product_name": "(2R,3R)-dihydrokaempferol + succinate + CO₂",
+        "reaction_smiles": "O=C1C[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21.OC(=O)CCC(=O)O.O=O>>O=C1[C@@H](O)[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21.OC(=O)CCC(=O)O.O=C=O",
+        "story": "FHT — 2-oxoglutarate-dependent dioxygenase; installs 3-OH on naringenin to branch the flavonoid pathway toward kaempferol, quercetin, and anthocyanins",
+        "is_impossible": false
+      },
+      {
+        "id": "D09",
+        "ec": "5.3.3.2",
+        "ec_name": "Isopentenyl-diphosphate isomerase (IDI)",
+        "substrate_name": "IPP (isopentenyl-PP)",
+        "product_name": "DMAPP (dimethylallyl-PP)",
+        "reaction_smiles": "CC(=C)COP(=O)(O)OP(=O)(O)O>>CC(C)=COP(=O)(O)OP(=O)(O)O",
+        "story": "IDI — activates the isoprene unit; entry point to the entire terpene and steroid universe comprising >50,000 natural products",
+        "is_impossible": false
+      }
+    ]
+  }
+]

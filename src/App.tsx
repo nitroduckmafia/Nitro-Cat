@@ -12,6 +12,7 @@ import LandingPage from "@/pages/LandingPage";
 import NotFound from "@/pages/NotFound";
 import NewReactionPage from "@/pages/NewReactionPage";
 import HistoryPage from "@/pages/dashboard/HistoryPage";
+import DemoPage from "@/pages/dashboard/DemoPage";
 import SettingsPage from "@/pages/dashboard/SettingsPage";
 import TestReactionPage from "@/pages/dashboard/TestReactionPage";
 
@@ -33,6 +34,7 @@ const App = () => (
                 <Route path="/reactions/new" element={<NewReactionPage />} />
                 <Route path="/reactions/test/result" element={<TestReactionPage />} />
                 <Route path="/history" element={<HistoryPage />} />
+                <Route path="/demo" element={<DemoPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
               </Route>
 

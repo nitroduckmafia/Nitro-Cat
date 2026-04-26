@@ -74,7 +74,6 @@ export default function KetcherEditor({ onSmiles, onMolfile, onKet, height = 320
     ketcherRef.current = ketcher;
     setStatus('ready');
 
-    // ketcher.changeEvent is a Subscription — use .add() to listen for edits
     ketcher.changeEvent.add(() => {
       emitStructure();
     });

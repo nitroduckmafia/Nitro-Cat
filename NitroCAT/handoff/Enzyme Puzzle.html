@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NitroCat — Enzyme Puzzle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/smiles-drawer@2.1.7/dist/smiles-drawer.min.js"></script>
+  <style>
+    /* ── Tokens ───────────────────────────────────────────────── */
+    :root[data-theme="dark"] {
+      --bg:        #0A0F0D;
+      --bg2:       #0F1612;
+      --bg3:       #1A2420;
+      --bge:       #141C18;
+      --fg:        #E6F3ED;
+      --fg2:       #8B9E94;
+      --fg3:       #6E7F76;
+      --bd:        #2D3932;
+      --bd2:       #3D4F44;
+      --pri:       #538b5e;
+      --pri-hi:    #34D399;
+      --ok:        #3FB950;
+      --err:       #F87171;
+      --warn:      #F59E0B;
+      --sb-bg:     #0C1410;
+      --sb-active: rgba(83,139,94,0.14);
+    }
+    :root[data-theme="light"] {
+      --bg:        #FFFFFF;
+      --bg2:       #F7FBF9;
+      --bg3:       #EFF6F3;
+      --bge:       #FFFFFF;
+      --fg:        #1A1A1A;
+      --fg2:       #4A5568;
+      --fg3:       #718096;
+      --bd:        #E2E8F0;
+      --bd2:       #CBD5E0;
+      --pri:       #538b5e;
+      --pri-hi:    #059669;
+      --ok:        #059669;
+      --err:       #DC2626;
+      --warn:      #D97706;
+      --sb-bg:     #F0F7F3;
+      --sb-active: rgba(83,139,94,0.10);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--bg); color: var(--fg);
+      height: 100vh; overflow: hidden;
+      transition: background .2s, color .2s;
+    }
+
+    /* ── App shell ─────────────────────────────────────────────── */
+    .app { display: flex; height: 100vh; overflow: hidden; }
+
+    /* ── Sidebar ────────────────────────────────────────────────── */
+    .sidebar {
+      display: flex; flex-direction: column;
+      width: 224px; height: 100vh;
+      background: var(--sb-bg);
+      border-right: 1px solid var(--bd);
+      transition: width .25s ease, background .2s;
+      flex-shrink: 0; overflow: hidden;
+    }
+    .sidebar.collapsed { width: 52px; }
+
+    .sb-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 10px 10px 12px;
+      border-bottom: 1px solid var(--bd);
+      min-height: 54px;
+    }
+    .sb-logo {
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer; text-decoration: none;
+      flex: 1; min-width: 0;
+    }
+    .nd-logo { height: 32px; width: 32px; object-fit: contain; flex-shrink: 0; }
+    .nd-name {
+      font-size: 13px; font-weight: 600; color: var(--fg);
+      white-space: nowrap; overflow: hidden;
+      transition: opacity .2s, width .2s;
+    }
+    .sidebar.collapsed .nd-name { opacity: 0; width: 0; }
+
+    .sb-collapse {
+      width: 28px; height: 28px; border-radius: 6px;
+      border: 1px solid var(--bd); background: transparent;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--fg2); flex-shrink: 0;
+      transition: border-color .15s, color .15s;
+    }
+    .sb-collapse:hover { border-color: var(--pri); color: var(--pri); }
+
+    .sb-nav { padding: 8px; display: flex; flex-direction: column; gap: 2px; flex: 1; }
+
+    .sb-cta {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 10px; border-radius: 8px;
+      border: 1.5px dashed var(--bd2);
+      background: transparent; color: var(--fg2);
+      cursor: pointer; font-size: 13px; font-weight: 500;
+      font-family: 'IBM Plex Sans', sans-serif;
+      text-decoration: none;
+      transition: border-color .15s, color .15s;
+      white-space: nowrap; overflow: hidden;
+      margin-bottom: 4px;
+    }
+    .sb-cta:hover { border-color: var(--pri); color: var(--pri); }
+    .sb-cta-label { transition: opacity .2s; }
+    .sidebar.collapsed .sb-cta-label { opacity: 0; width: 0; overflow: hidden; }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 7px 10px; border-radius: 8px;
+      background: transparent; border: none;
+      color: var(--fg2); font-size: 13px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      cursor: pointer; width: 100%; text-align: left;
+      transition: background .15s, color .15s;
+      white-space: nowrap; overflow: hidden;
+    }
+    .nav-item:hover { background: var(--bg3); color: var(--fg); }
+    .nav-item.active { background: var(--sb-active); color: var(--pri); font-weight: 600; }
+    .nav-item svg { flex-shrink: 0; }
+    .nav-label { transition: opacity .2s; }
+    .sidebar.collapsed .nav-label { opacity: 0; width: 0; overflow: hidden; }
+
+    .sb-bottom {
+      border-top: 1px solid var(--bd);
+      padding: 8px;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+
+    /* ── Main content ───────────────────────────────────────────── */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    /* ── Instruction bar ───────────────────────────────────────── */
+    .instr-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 24px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--bd);
+      gap: 16px; flex-shrink: 0;
+      transition: background .2s;
+    }
+    .instr-text { font-size: 13px; color: var(--fg2); }
+    .instr-text strong { color: var(--pri); font-weight: 600; }
+    .btn-row { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .btn {
+      padding: 7px 18px; border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      font-family: 'IBM Plex Sans', sans-serif;
+      cursor: pointer; transition: all .15s; white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--pri); color: #fff; border: none;
+      opacity: .4; pointer-events: none;
+    }
+    .btn-primary.on { opacity: 1; pointer-events: auto; box-shadow: 0 0 14px rgba(83,139,94,.3); }
+    .btn-primary.on:hover { background: var(--pri-hi); }
+    .btn-outline { background: transparent; border: 1px solid var(--bd); color: var(--fg); display: none; }
+    .btn-outline:hover { border-color: var(--pri); color: var(--pri); }
+    .btn-outline.visible { display: block; }
+
+    /* Score pill */
+    .score-pill {
+      display: none; align-items: center; gap: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--fg2);
+      background: var(--bg2); border: 1px solid var(--bd);
+      border-radius: 20px; padding: 4px 12px;
+    }
+    .score-pill.on { display: flex; }
+    .score-n { font-weight: 700; color: var(--pri); }
+
+    /* ── Cards grid ─────────────────────────────────────────────── */
+    .game-area { flex: 1; overflow-y: auto; padding: 18px 24px; align-content: start; }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      min-width: 0;
+    }
+
+    /* ── Reaction card ───────────────────────────────────────────── */
+    .rxn-card {
+      background: var(--bg2); border: 1.5px solid var(--bd);
+      border-radius: 12px; padding: 14px;
+      cursor: pointer; transition: border-color .15s, background .15s, box-shadow .15s;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .rxn-card:hover:not(.rev) { border-color: var(--pri); background: var(--bg3); }
+    .rxn-card.sel { border-color: var(--pri); background: var(--bg3); box-shadow: 0 0 0 3px rgba(83,139,94,.12); }
+    .rxn-card.rev { cursor: default; }
+    .rxn-card.imp-card { border-color: var(--err); background: rgba(239,68,68,.04); }
+    .rxn-card.dok-card { border-color: var(--ok); }
+
+    .mol-row { display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .mol-wrap {
+      flex: 1; min-width: 0; height: 108px;
+      background: var(--bg); border-radius: 8px;
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .mol-wrap > div { width: 170px; height: 108px; flex-shrink: 0; overflow: hidden; }
+    .mol-wrap svg { display: block; width: 170px !important; height: 108px !important; }
+    .rxn-arrow { font-size: 20px; color: var(--pri); opacity: .65; flex-shrink: 0; }
+
+    .names-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; }
+    .mol-lbl { font-size: 10.5px; color: var(--fg3); line-height: 1.35; text-wrap: pretty; }
+    .mol-lbl.l { text-align: left; }
+    .mol-lbl.r { text-align: right; }
+
+    .card-footer { display: flex; align-items: center; justify-content: flex-end; }
+    .sbadge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
+    }
+    .sbadge-pick { background: rgba(83,139,94,.12); color: var(--pri); }
+    .sbadge-ok   { background: rgba(63,185,80,.12);  color: var(--ok); }
+    .sbadge-imp  { background: rgba(239,68,68,.12);  color: var(--err); }
+
+    /* Revealed body (after answer) */
+    .rev-body { display: none; flex-direction: column; gap: 8px; padding-top: 10px; border-top: 1px solid var(--bd); }
+    .rev-body.on { display: flex; }
+    .rev-story { font-size: 11.5px; color: var(--fg2); line-height: 1.55; font-style: italic; }
+    .rev-training { font-size: 10.5px; font-family: 'JetBrains Mono', monospace; color: var(--err); }
+    .rev-ok-label { font-size: 11.5px; font-weight: 600; color: var(--ok); }
+    .enz-tbl { width: 100%; border-collapse: collapse; }
+    .enz-tbl tr { border-top: 1px solid var(--bd); }
+    .enz-tbl tr:first-child { border-top: none; }
+    .enz-tbl td { padding: 3.5px 4px; font-size: 10.5px; color: var(--fg2); vertical-align: middle; }
+    .enz-tbl .en { color: var(--fg); font-weight: 500; }
+    .enz-tbl .eo { font-style: italic; }
+    .enz-tbl .es { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; text-align: right; white-space: nowrap; }
+
+    /* ── Modals ─────────────────────────────────────────────────── */
+    .overlay {
+      display: none; position: fixed; inset: 0; z-index: 400;
+      background: rgba(10,15,13,.78); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .overlay.on { display: flex; }
+
+    .modal {
+      background: var(--bge); border: 1px solid var(--bd);
+      border-radius: 18px; width: 100%; max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 24px 48px rgba(0,0,0,.4);
+      animation: modal-in .18s ease;
+    }
+    @keyframes modal-in { from { opacity:0; transform: scale(.96) translateY(8px); } to { opacity:1; transform: none; } }
+
+    .modal-wrong { max-width: 520px; }
+    .modal-correct { max-width: 400px; }
+
+    .modal-head {
+      padding: 24px 24px 0;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .modal-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .modal-icon.err { background: rgba(239,68,68,.12); }
+    .modal-icon.ok  { background: rgba(63,185,80,.12); }
+    .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .modal-sub   { font-size: 13px; color: var(--fg2); }
+
+    .modal-body { padding: 18px 24px 24px; display: flex; flex-direction: column; gap: 14px; }
+
+    /* Molecule pair in modal */
+    .modal-mol-row { display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .modal-mol-wrap {
+      flex: 1; min-width: 0; height: 108px;
+      background: var(--bg); border-radius: 10px; border: 1px solid var(--bd);
+      overflow: hidden; display: flex; align-items: center; justify-content: center;
+    }
+    .modal-mol-wrap > div { width: 170px; height: 108px; flex-shrink: 0; overflow: hidden; }
+    .modal-mol-wrap svg { display: block; width: 170px !important; height: 108px !important; }
+    .modal-arrow { font-size: 24px; color: var(--pri); opacity: .65; flex-shrink: 0; }
+    .modal-names { display: grid; grid-template-columns: 1fr auto 1fr; }
+    .modal-mlbl { font-size: 11px; color: var(--fg3); line-height: 1.35; }
+    .modal-mlbl.l { text-align: left; }
+    .modal-mlbl.r { text-align: right; }
+
+    .modal-ec {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--fg2); background: var(--bg3);
+      border-radius: 6px; padding: 6px 10px;
+    }
+    .modal-story { font-size: 12.5px; color: var(--fg2); line-height: 1.6; font-style: italic; }
+    .modal-training { font-size: 11.5px; font-family: 'JetBrains Mono', monospace; color: var(--err); }
+
+    .modal-divider { height: 1px; background: var(--bd); }
+
+    /* Congrats card */
+    .confetti-zone { text-align: center; padding: 8px 0 4px; font-size: 52px; line-height: 1; }
+    .congrats-title { font-size: 24px; font-weight: 700; text-align: center; }
+    .congrats-score {
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--fg2);
+    }
+    .igem-callout {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; border-radius: 12px;
+      border: 1px solid var(--pri); background: rgba(83,139,94,.07);
+    }
+    .igem-icon { font-size: 28px; flex-shrink: 0; }
+    .igem-text { font-size: 14px; font-weight: 600; color: var(--fg); line-height: 1.4; }
+    .igem-text span { color: var(--pri); }
+
+    /* Modal action buttons */
+    .modal-actions { display: flex; flex-direction: column; gap: 8px; }
+    .ma-primary {
+      width: 100%; padding: 11px; border-radius: 9px;
+      background: var(--pri); color: #fff; border: none;
+      font-size: 13.5px; font-weight: 700; font-family: 'IBM Plex Sans', sans-serif;
+      cursor: pointer; transition: background .15s;
+      box-shadow: 0 0 16px rgba(83,139,94,.28);
+    }
+    .ma-primary:hover { background: var(--pri-hi); }
+    .ma-outline {
+      width: 100%; padding: 10px; border-radius: 9px;
+      background: transparent; border: 1px solid var(--bd); color: var(--fg);
+      font-size: 13px; font-weight: 600; font-family: 'IBM Plex Sans', sans-serif;
+      cursor: pointer; transition: border-color .15s, color .15s;
+    }
+    .ma-outline:hover { border-color: var(--pri); color: var(--pri); }
+    .ma-ghost {
+      width: 100%; padding: 8px; border: none; background: transparent;
+      font-size: 12px; color: var(--fg3); font-family: 'IBM Plex Sans', sans-serif;
+      cursor: pointer; transition: color .15s;
+    }
+    .ma-ghost:hover { color: var(--fg); }
+
+    /* ── Auto-reset overlay ─────────────────────────────────────── */
+    .reset-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(10,15,13,.82); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center;
+    }
+    .reset-overlay.on { display: flex; }
+    .reset-card {
+      background: var(--bge); border: 1px solid var(--bd);
+      border-radius: 18px; padding: 36px 44px; text-align: center;
+      box-shadow: 0 24px 48px rgba(0,0,0,.4);
+    }
+    .reset-card h2 { font-size: 19px; font-weight: 700; margin-bottom: 6px; }
+    .reset-card p  { font-size: 13px; color: var(--fg2); margin-bottom: 18px; }
+    .reset-num {
+      font-size: 56px; line-height: 1; margin-bottom: 20px;
+      font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--pri);
+    }
+    .reset-play {
+      padding: 10px 28px; border: 1px solid var(--pri); color: var(--pri);
+      background: transparent; border-radius: 8px; font-size: 13px; font-weight: 600;
+      font-family: 'IBM Plex Sans', sans-serif; cursor: pointer; transition: background .15s;
+    }
+    .reset-play:hover { background: rgba(83,139,94,.12); }
+
+    /* ── Loading ───────────────────────────────────────────────── */
+    .loading { display: flex; align-items: center; justify-content: center; height: 260px; gap: 10px; color: var(--fg2); font-size: 14px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 20px; height: 20px; border: 2px solid var(--bd); border-top-color: var(--pri); border-radius: 50%; animation: spin .7s linear infinite; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ── Sidebar ─────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-header">
+      <a class="sb-logo" href="https://nitrocat.tech" target="_blank">
+        <img src="public/nitroduck-logo.png" class="nd-logo" alt="Nitroduck">
+        <span class="nd-name">NitroCat</span>
+      </a>
+      <button class="sb-collapse" id="collapse-btn" title="Toggle sidebar">
+        <svg id="collapse-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    </div>
+
+    <div class="sb-nav">
+      <a class="sb-cta" href="https://nitrocat.tech/reactions/new" target="_blank">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span class="sb-cta-label">Find Biocatalyst</span>
+      </a>
+
+      <button class="nav-item active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="11" x2="15.01" y2="11"/><line x1="17" y1="13" x2="17.01" y2="13"/><rect x="2" y="6" width="20" height="12" rx="2"/></svg>
+        <span class="nav-label">Game</span>
+      </button>
+
+      <button class="nav-item" onclick="window.open('https://nitrocat.tech/history','_blank')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+        <span class="nav-label">History</span>
+      </button>
+    </div>
+
+    <div class="sb-bottom">
+      <button class="nav-item" id="theme-btn">
+        <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+        <span class="nav-label" id="theme-label">Light mode</span>
+      </button>
+      <button class="nav-item" onclick="window.open('https://nitrocat.tech/settings','_blank')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span class="nav-label">Settings</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── Main content ──────────────────────────────────────────── -->
+  <div class="main">
+
+    <!-- Instruction / action bar -->
+    <div class="instr-bar">
+      <div style="display:flex; align-items:center; gap:16px; flex:1; min-width:0;">
+        <div class="score-pill" id="score-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+          <span id="score-text" class="score-n">0/0</span>
+        </div>
+        <div class="instr-text" id="instr-text">
+          Six reactions below. <strong>Only one has no known enzyme</strong> — can you find the impossible reaction?
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="reveal-btn">Reveal Answer</button>
+        <button class="btn btn-outline" id="next-btn">Next Round →</button>
+      </div>
+    </div>
+
+    <!-- Game area -->
+    <div class="game-area">
+      <div class="loading" id="loading"><div class="spinner"></div>Loading reactions…</div>
+      <div class="cards-grid" id="grid" style="display:none;"></div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ── Wrong answer modal ─────────────────────────────────────── -->
+<div class="overlay" id="wrong-overlay">
+  <div class="modal modal-wrong">
+    <div class="modal-head">
+      <div class="modal-icon err">✕</div>
+      <div>
+        <div class="modal-title">Not quite!</div>
+        <div class="modal-sub">The impossible reaction was actually this one:</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-mol-row">
+        <div class="modal-mol-wrap"><div id="m-sub"></div></div>
+        <div class="modal-arrow">⟶</div>
+        <div class="modal-mol-wrap"><div id="m-prod"></div></div>
+      </div>
+      <div class="modal-names">
+        <span class="modal-mlbl l" id="m-sub-name"></span>
+        <span></span>
+        <span class="modal-mlbl r" id="m-prod-name"></span>
+      </div>
+      <div class="modal-ec" id="m-ec"></div>
+      <p class="modal-story" id="m-story"></p>
+      <p class="modal-training" id="m-training"></p>
+      <div class="modal-divider"></div>
+      <div class="modal-actions">
+        <button class="ma-primary" onclick="tryAgain()">Try this set again</button>
+        <button class="ma-outline" onclick="joinList()">Join the waiting list 🧬</button>
+        <button class="ma-ghost" onclick="nextRound()">Skip to next round →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Correct answer modal ───────────────────────────────────── -->
+<div class="overlay" id="correct-overlay">
+  <div class="modal modal-correct">
+    <div class="modal-body" style="padding-top:24px;">
+      <div class="confetti-zone">🎉</div>
+      <div class="congrats-title">You found it!</div>
+      <div class="congrats-score" id="congrats-score"></div>
+      <div class="modal-divider"></div>
+      <div class="igem-callout">
+        <div class="igem-icon">📸</div>
+        <div class="igem-text">You can take a photo with the <span>iGEM Grand Prize!</span></div>
+      </div>
+      <div class="modal-divider"></div>
+      <div class="modal-actions">
+        <button class="ma-primary" onclick="joinList()">Join the waiting list 🧬</button>
+        <button class="ma-outline" onclick="nextRound()">Next Round →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Auto-reset overlay ────────────────────────────────────── -->
+<div class="reset-overlay" id="reset-overlay">
+  <div class="reset-card">
+    <h2>Ready for the next visitor?</h2>
+    <p>Starting a new round automatically</p>
+    <div class="reset-num" id="reset-num">10</div>
+    <button class="reset-play" onclick="cancelAndPlay()">Play now</button>
+  </div>
+</div>
+
+<script>
+// ── Icons for theme toggle ────────────────────────────────────
+const SUN_SVG  = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`;
+const MOON_SVG = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>`;
+
+// ── State ─────────────────────────────────────────────────────
+let allSets   = [], usedIds = new Set();
+let reactions = [], selectedId = null;
+let phase     = 'guess';   // 'guess' | 'revealed'
+let score     = { c:0, t:0 };
+let roundResult = null;    // null | 'correct' | 'wrong'
+let isDark    = true;
+let drawer    = null;
+let sidebarCollapsed = false;
+let resetTimer = null, resetInterval = null;
+
+// ── Drawer ────────────────────────────────────────────────────
+function initDrawer() {
+  drawer = new SmilesDrawer.SmiDrawer({
+    width: 170, height: 108,
+    bondThickness: 1.0, padding: 22,
+    fontSizeLarge: 5.5, fontSizeSmall: 4,
+    themes: {
+      dark: {
+        C:'#C5D5CC', O:'#F87171', N:'#60A5FA', F:'#34D399', CL:'#34D399',
+        BR:'#FBBF24', I:'#A78BFA', P:'#FB923C', S:'#FCD34D',
+        B:'#FB923C', SI:'#9CA3AF', H:'#C5D5CC', BACKGROUND:'#0A0F0D'
+      },
+      light: {
+        C:'#1A1A1A', O:'#DC2626', N:'#2563EB', F:'#16A34A', CL:'#16A34A',
+        BR:'#92400E', I:'#7C3AED', P:'#C2410C', S:'#B45309',
+        B:'#C2410C', SI:'#6B7280', H:'#1A1A1A', BACKGROUND:'#F7FBF9'
+      }
+    }
+  });
+}
+
+// ── SMILES ────────────────────────────────────────────────────
+function longest(s) { return (s||'').split('.').reduce((a,b)=>b.length>a.length?b:a,''); }
+function splitRxn(s) { const [l,r]=(s||'').split('>>'); return {sub:longest(l),prod:longest(r)}; }
+
+function drawMol(smiles, containerEl) {
+  if (!drawer || !smiles || !containerEl) return;
+  const theme = isDark ? 'dark' : 'light';
+  try {
+    drawer.draw(smiles, null, theme, (svg) => {
+      containerEl.innerHTML = '';
+      if (svg) containerEl.appendChild(svg);
+      else fallback(containerEl);
+    }, () => fallback(containerEl));
+  } catch(e) { fallback(containerEl); }
+}
+
+function fallback(el) {
+  if (!el) return;
+  const bg = isDark ? '#0A0F0D' : '#F7FBF9';
+  const fg = isDark ? '#2D3932' : '#CBD5E0';
+  el.innerHTML = `<svg width="170" height="108" xmlns="http://www.w3.org/2000/svg"><rect width="170" height="108" fill="${bg}"/><text x="85" y="60" text-anchor="middle" dominant-baseline="middle" font-size="26" fill="${fg}">⬡</text></svg>`;
+}
+
+function redrawAll() {
+  reactions.forEach((rxn, i) => {
+    const {sub, prod} = splitRxn(rxn.reaction_smiles);
+    drawMol(sub,  document.getElementById(`cs-${i}`));
+    drawMol(prod, document.getElementById(`cp-${i}`));
+  });
+}
+
+// ── Mock enzymes ──────────────────────────────────────────────
+const ORGS = ['Escherichia coli K-12','Bacillus subtilis 168','Streptomyces coelicolor','Saccharomyces cerevisiae','Pseudomonas putida KT2440','Aspergillus niger','Thermus thermophilus HB8','Homo sapiens','Candida antarctica ATCC 32657'];
+function hash(id, i) { let h=5381; for(let c=0;c<id.length;c++) h=(h*33+id.charCodeAt(c))&0x7fffffff; return Math.max(.55, .97-i*.085-(h%80)/1000); }
+function scoreColor(s) { return s>=.9?'#3FB950':s>=.7?'#F59E0B':'#F87171'; }
+function mockEnzymes(rxn) {
+  const base = rxn.ec_name.split('(')[0].trim();
+  return [0,1,2].map(i=>({
+    name: i===0 ? rxn.ec_name : base+(i===1?' variant':' homolog'),
+    org:  ORGS[(rxn.id.charCodeAt(0)*(i+3))%ORGS.length],
+    score: hash(rxn.id+i, i)
+  }));
+}
+
+// ── Render grid ───────────────────────────────────────────────
+function render() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  reactions.forEach((rxn, i) => {
+    const isSel = selectedId === rxn.id;
+    const isRev = phase === 'revealed';
+    const isImp = rxn.is_impossible;
+
+    let cls = 'rxn-card';
+    if (isSel && !isRev) cls += ' sel';
+    if (isRev) { cls += ' rev'; cls += isImp ? ' imp-card' : ' dok-card'; }
+
+    let badge = '';
+    if (!isRev && isSel)  badge = `<span class="sbadge sbadge-pick">● Your pick</span>`;
+    else if (isRev && isImp) badge = `<span class="sbadge sbadge-imp">✕ No enzyme</span>`;
+    else if (isRev)          badge = `<span class="sbadge sbadge-ok">✓ Found</span>`;
+
+    let revBody = '';
+    if (isRev) {
+      if (isImp) {
+        const nEx = rxn.n_training_examples !== undefined
+          ? `<p class="rev-training">Only ${rxn.n_training_examples} training example${rxn.n_training_examples!==1?'s':''} in CLIPZyme's dataset</p>` : '';
+        revBody = `<div class="rev-body on"><p class="rev-story">${rxn.story}</p>${nEx}</div>`;
+      } else {
+        const rows = mockEnzymes(rxn).map(e=>{
+          const pct = Math.round(e.score*100);
+          return `<tr><td class="en">${e.name}</td><td class="eo">${e.org}</td><td class="es" style="color:${scoreColor(e.score)}">${pct}%</td></tr>`;
+        }).join('');
+        revBody = `<div class="rev-body on"><p class="rev-ok-label">✓ NitroCat found candidate enzymes</p><table class="enz-tbl">${rows}</table></div>`;
+      }
+    }
+
+    grid.innerHTML += `
+      <div class="${cls}" data-id="${rxn.id}">
+        <div class="mol-row">
+          <div class="mol-wrap"><div id="cs-${i}"></div></div>
+          <div class="rxn-arrow">⟶</div>
+          <div class="mol-wrap"><div id="cp-${i}"></div></div>
+        </div>
+        <div class="names-row">
+          <span class="mol-lbl l">${rxn.substrate_name}</span>
+          <span></span>
+          <span class="mol-lbl r">${rxn.product_name}</span>
+        </div>
+        <div class="card-footer">${badge}</div>
+        ${revBody}
+      </div>`;
+  });
+
+  grid.querySelectorAll('.rxn-card').forEach(c => c.addEventListener('click', () => onCard(c.dataset.id)));
+  requestAnimationFrame(() => setTimeout(redrawAll, 40));
+}
+
+// ── UI sync ───────────────────────────────────────────────────
+function syncUI() {
+  if (score.t > 0) {
+    document.getElementById('score-pill').classList.add('on');
+    document.getElementById('score-text').textContent = `${score.c}/${score.t}`;
+  }
+  const rb = document.getElementById('reveal-btn');
+  const nb = document.getElementById('next-btn');
+  if (phase === 'revealed') {
+    rb.style.display = 'none';
+    nb.classList.add('visible');
+  } else {
+    rb.style.display = 'block';
+    nb.classList.remove('visible');
+    rb.classList.toggle('on', !!selectedId);
+  }
+}
+
+// ── Card click ────────────────────────────────────────────────
+function onCard(id) {
+  if (phase !== 'guess') return;
+  selectedId = id;
+  render();
+  syncUI();
+}
+
+// ── Reveal ────────────────────────────────────────────────────
+function reveal() {
+  if (!selectedId || phase !== 'guess') return;
+  const sel = reactions.find(r => r.id === selectedId);
+  const correct = sel?.is_impossible ?? false;
+
+  if (roundResult === null) {
+    roundResult = correct ? 'correct' : 'wrong';
+    score.t++;
+    if (correct) score.c++;
+  }
+
+  phase = 'revealed';
+  render();
+  syncUI();
+  startReset();
+
+  if (correct) showCorrectModal();
+  else showWrongModal();
+}
+
+// ── Wrong modal ───────────────────────────────────────────────
+function showWrongModal() {
+  const imp = reactions.find(r => r.is_impossible);
+  if (!imp) return;
+  const {sub, prod} = splitRxn(imp.reaction_smiles);
+  document.getElementById('m-sub-name').textContent  = imp.substrate_name;
+  document.getElementById('m-prod-name').textContent = imp.product_name;
+  document.getElementById('m-ec').textContent        = `${imp.ec_name}  ·  EC ${imp.ec}`;
+  document.getElementById('m-story').textContent     = imp.story;
+  const tn = document.getElementById('m-training');
+  tn.textContent = imp.n_training_examples !== undefined
+    ? `Only ${imp.n_training_examples} training example${imp.n_training_examples!==1?'s':''} in CLIPZyme's dataset` : '';
+
+  document.getElementById('wrong-overlay').classList.add('on');
+  requestAnimationFrame(() => setTimeout(() => {
+    drawMol(sub,  document.getElementById('m-sub'));
+    drawMol(prod, document.getElementById('m-prod'));
+  }, 60));
+}
+
+// ── Correct modal ─────────────────────────────────────────────
+function showCorrectModal() {
+  document.getElementById('congrats-score').textContent = `Score: ${score.c} / ${score.t} correct`;
+  document.getElementById('correct-overlay').classList.add('on');
+}
+
+function closeModals() {
+  document.getElementById('wrong-overlay').classList.remove('on');
+  document.getElementById('correct-overlay').classList.remove('on');
+}
+
+// ── Try again (same set) ──────────────────────────────────────
+function tryAgain() {
+  closeModals();
+  stopReset();
+  selectedId = null;
+  phase = 'guess';
+  render();
+  syncUI();
+}
+
+// ── Next round ────────────────────────────────────────────────
+function nextRound() {
+  closeModals();
+  pickRound();
+}
+
+// ── Join list ─────────────────────────────────────────────────
+function joinList() {
+  window.open('https://nitrocat.tech', '_blank');
+}
+
+// ── Pick round ────────────────────────────────────────────────
+function pickRound() {
+  stopReset();
+  document.getElementById('reset-overlay').classList.remove('on');
+  let pool = allSets.filter(s => !usedIds.has(s.set_id));
+  if (!pool.length) { usedIds.clear(); pool = [...allSets]; }
+  const set = pool[Math.floor(Math.random() * pool.length)];
+  usedIds.add(set.set_id);
+
+  const imp    = set.reactions.find(r => r.is_impossible);
+  const doable = set.reactions.filter(r => !r.is_impossible).sort(() => Math.random()-.5).slice(0, 5);
+  reactions = [...doable];
+  reactions.splice(Math.floor(Math.random() * 6), 0, imp);
+
+  selectedId  = null;
+  phase       = 'guess';
+  roundResult = null;
+  render();
+  syncUI();
+}
+
+// ── Auto-reset ────────────────────────────────────────────────
+function startReset() {
+  resetTimer = setTimeout(showResetOverlay, 30000);
+  ['mousemove','click','keydown','touchstart'].forEach(ev =>
+    document.addEventListener(ev, onActivity, {once:true, passive:true}));
+}
+function onActivity() { stopReset(); }
+function stopReset() {
+  clearTimeout(resetTimer); clearInterval(resetInterval);
+  resetTimer = resetInterval = null;
+  ['mousemove','click','keydown','touchstart'].forEach(ev =>
+    document.removeEventListener(ev, onActivity));
+}
+function showResetOverlay() {
+  let n = 10;
+  document.getElementById('reset-num').textContent = n;
+  document.getElementById('reset-overlay').classList.add('on');
+  resetInterval = setInterval(() => {
+    n--;
+    document.getElementById('reset-num').textContent = n;
+    if (n <= 0) { clearInterval(resetInterval); resetInterval = null; document.getElementById('reset-overlay').classList.remove('on'); pickRound(); }
+  }, 1000);
+}
+function cancelAndPlay() { stopReset(); document.getElementById('reset-overlay').classList.remove('on'); pickRound(); }
+
+// ── Theme ─────────────────────────────────────────────────────
+function toggleTheme() {
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('theme-icon').innerHTML = isDark ? SUN_SVG : MOON_SVG;
+  document.getElementById('theme-label').textContent = isDark ? 'Light mode' : 'Dark mode';
+  redrawAll();
+  // Redraw modal molecules if modal is open
+  const imp = reactions.find(r => r.is_impossible);
+  if (imp && document.getElementById('wrong-overlay').classList.contains('on')) {
+    const {sub, prod} = splitRxn(imp.reaction_smiles);
+    drawMol(sub,  document.getElementById('m-sub'));
+    drawMol(prod, document.getElementById('m-prod'));
+  }
+}
+
+// ── Sidebar collapse ──────────────────────────────────────────
+function toggleSidebar() {
+  sidebarCollapsed = !sidebarCollapsed;
+  document.getElementById('sidebar').classList.toggle('collapsed', sidebarCollapsed);
+  const icon = document.getElementById('collapse-icon');
+  icon.innerHTML = sidebarCollapsed
+    ? `<path d="M9 18l6-6-6-6"/>`
+    : `<path d="M15 18l-6-6 6-6"/>`;
+}
+
+// ── Init ──────────────────────────────────────────────────────
+async function init() {
+  initDrawer();
+  document.getElementById('reveal-btn').addEventListener('click', reveal);
+  document.getElementById('next-btn').addEventListener('click', nextRound);
+  document.getElementById('theme-btn').addEventListener('click', toggleTheme);
+  document.getElementById('collapse-btn').addEventListener('click', toggleSidebar);
+
+  const res = await fetch('data/synbiobeta_demo_sets.json');
+  allSets   = await res.json();
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('grid').style.display    = 'grid';
+  pickRound();
+}
+
+init().catch(console.error);
+</script>
+</body>
+</html>
