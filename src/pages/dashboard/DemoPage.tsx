@@ -1,5 +1,5 @@
 // DemoPage.tsx
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from 'next-themes';
 import SmilesDrawer from 'smiles-drawer';
 import { Trophy } from 'lucide-react';
@@ -12,31 +12,110 @@ import { cn } from '@/lib/utils';
 type Phase = 'intro' | 'guess' | 'revealed';
 
 // ── helpers ──────────────────────────────────────────────────────────────────
-function pickLongest(s: string): string {
-  return s.split('.').reduce((a, b) => (b.length > a.length ? b : a), '');
+// ncnc = purine core (ATP, ADP, GTP, GDP, NAD+, NADH, NADP+, NADPH, FAD, CoA all share it).
+// P(=O) + [nH] catches pyrimidine nucleotides (UDP, UTP, UMP, CDP) via phosphate + uracil NH.
+const COFACTOR_NAME_TOKENS = [
+  'ATP', 'ADP', 'AMP', 'GTP', 'GDP', 'GMP',
+  'UTP', 'UDP', 'UMP', 'CTP', 'CDP', 'CMP',
+  'NAD+', 'NADH', 'NADP+', 'NADPH',
+  'FAD', 'FADH2', 'FMN', 'FMNH2',
+  'CoA', 'acetyl-CoA', 'Pi', 'Pᵢ', 'PPi', 'PPᵢ',
+];
+function isCofactor(smi: string): boolean {
+  if (smi.includes('ncnc')) return true;
+  if (smi.includes('P(=O)') && smi.includes('[nH]')) return true;
+  // inorganic phosphate / pyrophosphate: has phosphate, no C or N atoms, short
+  if (smi.includes('P(=O)') && !smi.includes('C') && !smi.includes('N') && smi.length <= 25) return true;
+  return false;
 }
-function parseSMILES(s: string) {
+function pickMainIdx(s: string): { smiles: string; origIdx: number } {
+  const parts = s.split('.');
+  const pool = parts.map((smiles, origIdx) => ({ smiles, origIdx })).filter(({ smiles }) => !isCofactor(smiles));
+  const candidates = pool.length > 0 ? pool : parts.map((smiles, origIdx) => ({ smiles, origIdx }));
+  return candidates.reduce((a, b) => (b.smiles.length > a.smiles.length ? b : a), candidates[0]);
+}
+function pickMain(s: string): string {
+  return pickMainIdx(s).smiles;
+}
+function pickLabel(fullName: string, origIdx: number): string {
+  const parts = fullName.split(/\s*\+\s*/);
+  if (parts.length <= 1) return fullName;
+  const nonCofactorParts = parts.filter(p => !COFACTOR_NAME_TOKENS.some(t => p.trim().includes(t)));
+  if (nonCofactorParts.length === 1) return nonCofactorParts[0].trim();
+  return (parts[origIdx] ?? parts[0]).trim();
+}
+function parseSMILES(s: string, subName = '', prodName = '') {
   const [l, r] = s.split('>>');
-  return { substrate: pickLongest(l ?? ''), product: pickLongest(r ?? '') };
+  const subInfo = pickMainIdx(l ?? '');
+  const prodInfo = pickMainIdx(r ?? '');
+  return {
+    substrate: subInfo.smiles,
+    product: prodInfo.smiles,
+    subLabel: subName ? pickLabel(subName, subInfo.origIdx) : subName,
+    prodLabel: prodName ? pickLabel(prodName, prodInfo.origIdx) : prodName,
+  };
 }
 
 const MOCK_ORGS = [
-  'Escherichia coli K-12', 'Bacillus subtilis 168', 'Streptomyces coelicolor',
-  'Saccharomyces cerevisiae', 'Pseudomonas putida KT2440', 'Aspergillus niger',
-  'Thermus thermophilus HB8',
+  // plants
+  'Arabidopsis thaliana Col-0',
+  'Catharanthus roseus (L.) G.Don',
+  'Papaver somniferum L.',
+  'Taxus brevifolia Nutt.',
+  'Cannabis sativa L.',
+  'Nicotiana tabacum cv. Bright Yellow 2',
+  'Solanum lycopersicum cv. Heinz 1706',
+  'Oryza sativa Japonica Group',
+  'Glycine max cv. Williams 82',
+  'Zea mays B73',
+  'Mentha piperita L.',
+  'Salvia rosmarinus Schleid.',
+  'Vitis vinifera cv. Pinot Noir',
+  'Camellia sinensis (L.) Kuntze',
+  // plant-associated microbes
+  'Sinorhizobium meliloti 1021',
+  'Agrobacterium tumefaciens C58',
+  'Streptomyces coelicolor A3(2)',
+  'Pseudomonas putida KT2440',
+  // workhorse expression hosts
+  'Escherichia coli K-12',
+  'Saccharomyces cerevisiae S288C',
+  'Pichia pastoris GS115',
+  'Corynebacterium glutamicum ATCC 13032',
+  // thermophiles / archaea
+  'Pyrococcus furiosus DSM 3638',
+  'Sulfolobus acidocaldarius DSM 639',
 ];
 function mockScore(id: string, off: number): number {
   let h = 5381;
   for (let i = 0; i < id.length; i++) h = (h * 33 + id.charCodeAt(i)) & 0x7fffffff;
   return Math.max(0.55, 0.97 - off * 0.085 - (h % 80) / 1000);
 }
-function getMockEnzymes(rxn: DemoReaction) {
+function getMockEnzymes(rxn: DemoReaction, orgs?: string[]) {
   const base = rxn.ec_name.split('(')[0].trim();
   return [0, 1, 2].map(i => ({
     name: i === 0 ? rxn.ec_name : base + (i === 1 ? ' variant' : ' homolog'),
-    org: MOCK_ORGS[(rxn.id.charCodeAt(0) * (i + 3)) % MOCK_ORGS.length],
+    org: orgs ? orgs[i] : MOCK_ORGS[(rxn.id.charCodeAt(0) * (i + 3)) % MOCK_ORGS.length],
     score: mockScore(rxn.id + i, i),
   }));
+}
+function buildRoundOrgs(reactions: DemoReaction[]): Map<string, string[]> {
+  const counts = new Map<string, number>();
+  const result = new Map<string, string[]>();
+  for (const rxn of reactions) {
+    const pool = [...MOCK_ORGS].sort(() => Math.random() - 0.5);
+    const picked: string[] = [];
+    for (const org of pool) {
+      if (picked.length >= 3) break;
+      if ((counts.get(org) ?? 0) < 2) {
+        picked.push(org);
+        counts.set(org, (counts.get(org) ?? 0) + 1);
+      }
+    }
+    for (const org of pool) { if (picked.length >= 3) break; if (!picked.includes(org)) picked.push(org); }
+    result.set(rxn.id, picked);
+  }
+  return result;
 }
 function scoreColor(s: number) {
   return s >= 0.9 ? '#3FB950' : s >= 0.7 ? '#F59E0B' : '#F87171';
@@ -50,9 +129,36 @@ function buildAllRounds(): DemoReaction[][] {
   const allDoable = sets.flatMap((s: any) => s.reactions.filter((r: any) => !r.is_impossible)) as DemoReaction[];
   const imp = [...allImp].sort(() => Math.random() - 0.5);
   const doable = [...allDoable].sort(() => Math.random() - 0.5);
+
+  const shownSmiles = new Set<string>();
+  function molKey(rxn: DemoReaction) {
+    const [l, r] = rxn.reaction_smiles.split('>>');
+    return [pickMain(l ?? ''), pickMain(r ?? '')];
+  }
+  function pickUnique(pool: DemoReaction[], n: number): DemoReaction[] {
+    const result: DemoReaction[] = [];
+    for (const rxn of pool) {
+      if (result.length >= n) break;
+      const [sub, prod] = molKey(rxn);
+      if (!shownSmiles.has(sub) && !shownSmiles.has(prod)) {
+        shownSmiles.add(sub);
+        shownSmiles.add(prod);
+        result.push(rxn);
+      }
+    }
+    // fallback if pool too small
+    for (const rxn of pool) {
+      if (result.length >= n) break;
+      if (!result.includes(rxn)) result.push(rxn);
+    }
+    return result;
+  }
+
   return Array.from({ length: MAX_ROUNDS }, (_, i) => {
-    const three = doable.slice(i * 3, i * 3 + 3);
-    return [...three, imp[i]].sort(() => Math.random() - 0.5);
+    const impRxn = imp[i];
+    if (impRxn) { const [s, p] = molKey(impRxn); shownSmiles.add(s); shownSmiles.add(p); }
+    const three = pickUnique(doable, 3);
+    return [...three, ...(impRxn ? [impRxn] : [])].sort(() => Math.random() - 0.5);
   });
 }
 
@@ -79,7 +185,7 @@ function MolViewer({ smiles, drawer, theme, drawerReady }: {
 function MolPair({ rxn, drawer, theme, drawerReady }: {
   rxn: DemoReaction; drawer: React.MutableRefObject<any>; theme: string; drawerReady: boolean;
 }) {
-  const { substrate, product } = parseSMILES(rxn.reaction_smiles);
+  const { substrate, product, subLabel, prodLabel } = parseSMILES(rxn.reaction_smiles, rxn.substrate_name, rxn.product_name);
   return (
     <>
       <div className="flex items-center gap-2">
@@ -92,21 +198,21 @@ function MolPair({ rxn, drawer, theme, drawerReady }: {
         </div>
       </div>
       <div className="grid grid-cols-[1fr_auto_1fr]">
-        <span className="text-sm text-muted-foreground leading-snug">{rxn.substrate_name}</span>
+        <span className="text-sm text-muted-foreground leading-snug">{subLabel}</span>
         <span />
-        <span className="text-sm text-muted-foreground leading-snug text-right">{rxn.product_name}</span>
+        <span className="text-sm text-muted-foreground leading-snug text-right">{prodLabel}</span>
       </div>
     </>
   );
 }
 
 // ── ReactionCard ──────────────────────────────────────────────────────────────
-function ReactionCard({ rxn, selected, phase, onClick, onEnzymeClick, drawer, theme, drawerReady }: {
+function ReactionCard({ rxn, selected, phase, onClick, onEnzymeClick, orgs, drawer, theme, drawerReady }: {
   rxn: DemoReaction; selected: boolean; phase: Phase; onClick: () => void; onEnzymeClick?: () => void;
-  drawer: React.MutableRefObject<any>; theme: string; drawerReady: boolean;
+  orgs?: string[]; drawer: React.MutableRefObject<any>; theme: string; drawerReady: boolean;
 }) {
   const revealed = phase === 'revealed';
-  const enzymes = getMockEnzymes(rxn);
+  const enzymes = getMockEnzymes(rxn, orgs);
   const handleClick = !revealed ? onClick : (revealed && !rxn.is_impossible ? onEnzymeClick : undefined);
   return (
     <div
@@ -177,9 +283,9 @@ function ReactionCard({ rxn, selected, phase, onClick, onEnzymeClick, drawer, th
 }
 
 // ── EnzymeDetailModal ────────────────────────────────────────────────────────
-function EnzymeDetailModal({ rxn, onClose }: { rxn: DemoReaction | null; onClose: () => void }) {
+function EnzymeDetailModal({ rxn, orgs, onClose }: { rxn: DemoReaction | null; orgs?: string[]; onClose: () => void }) {
   if (!rxn) return null;
-  const enzymes = getMockEnzymes(rxn);
+  const enzymes = getMockEnzymes(rxn, orgs);
   return (
     <Dialog open={!!rxn} onOpenChange={o => { if (!o) onClose(); }}>
       <DialogContent className="max-w-[500px] w-[90vw] p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[#141C18]">
@@ -443,6 +549,7 @@ export default function DemoPage() {
   const [gameOverOpen, setGameOverOpen] = useState(false);
 
   const impossibleRxn = reactions.find(r => r.is_impossible) ?? null;
+  const roundOrgs = useMemo(() => buildRoundOrgs(reactions), [reactions]);
 
   function startNextRound() {
     setWrongOpen(false);
@@ -644,6 +751,7 @@ export default function DemoPage() {
               phase={phase}
               onClick={() => setSelectedId(rxn.id)}
               onEnzymeClick={() => setEnzymeRxn(rxn)}
+              orgs={roundOrgs.get(rxn.id)}
               drawer={drawerRef}
               theme={theme}
               drawerReady={drawerReady}
@@ -673,7 +781,7 @@ export default function DemoPage() {
         onJoinList={() => { setGameOverOpen(false); setEmailOpen(true); }}
         onClose={() => setGameOverOpen(false)}
       />
-      <EnzymeDetailModal rxn={enzymeRxn} onClose={() => setEnzymeRxn(null)} />
+      <EnzymeDetailModal rxn={enzymeRxn} orgs={roundOrgs.get(enzymeRxn?.id ?? '')} onClose={() => setEnzymeRxn(null)} />
       <EmailCaptureModal open={emailOpen} onClose={() => setEmailOpen(false)} />
       {showReset && (
         <ResetOverlay countdown={countdown} onPlayNow={() => { setShowReset(false); startNextRound(); }} />
