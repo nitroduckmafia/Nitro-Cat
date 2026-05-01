@@ -52,6 +52,13 @@
   --danger-600: #DC2626;
   --danger-700: #B91C1C;
 
+  /* Brand accent palette (promoted from landing.css) */
+  --green-sage: #538b5e;
+  --green-bright: #6ca033;
+  --green-dark: #25512b;
+  --green-bright-hover: #5a8a28;
+  --amber: #B45309;
+
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(68, 115, 81, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(68, 115, 81, 0.1), 0 2px 4px -1px rgba(68, 115, 81, 0.06);

@@ -1,27 +1,11 @@
-/* Scoped landing page styles. All rules live under .nc-landing so they don't
-   bleed into the rest of the app (which uses different theme tokens). */
+/* Landing page styles. Color/background/border tokens are now sourced from
+   the global theme (src/styles/themes/{light,dark}.css). Layout-only rules
+   remain scoped under .nc-landing / .nc-landing-modal. */
 
 .nc-landing {
-  --green-bright: #6ca033;
-  --green-dark: #25512b;
-  --green-sage: #538b5e;
-  --green-bright-hover: #5a8a28;
-  --ink: #1a2a1c;
-  --ink-soft: #4a5a4d;
-  --ink-mute: #8a948b;
-  --landing-bg: #ffffff;
-  --bg-soft: #f6f8f4;
-  --bg-tint: #eef3ea;
-  --line: #e4e9e0;
-  --line-strong: #cfd6c9;
-  --amber: #c98a1a;
-  --shadow-sm: 0 1px 2px rgba(37, 81, 43, 0.04), 0 2px 6px rgba(37, 81, 43, 0.04);
-  --shadow-md: 0 4px 14px rgba(37, 81, 43, 0.06), 0 2px 4px rgba(37, 81, 43, 0.04);
-  --shadow-lg: 0 24px 60px rgba(37, 81, 43, 0.18), 0 4px 14px rgba(37, 81, 43, 0.08);
-
   font-family: 'Urbanist', system-ui, -apple-system, sans-serif;
-  color: var(--ink);
-  background: var(--landing-bg);
+  color: var(--text-primary);
+  background: var(--bg-primary);
   font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -53,7 +37,7 @@
   z-index: 50;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: saturate(140%) blur(10px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .nc-landing .nav-inner {
@@ -122,14 +106,14 @@
   line-height: 1;
   letter-spacing: -0.02em;
   margin: 0 0 8px;
-  color: var(--ink);
+  color: var(--text-primary);
   text-wrap: balance;
 }
 
 .nc-landing .h1-sub {
   font-size: 14px;
   font-weight: 500;
-  color: var(--ink-mute);
+  color: var(--text-tertiary);
   letter-spacing: 0.02em;
   margin: 0 0 32px;
 }
@@ -138,7 +122,7 @@
   font-size: clamp(32px, 4.6vw, 64px);
   line-height: 1.05;
   font-weight: 800;
-  color: var(--ink);
+  color: var(--text-primary);
   max-width: 980px;
   margin: 0 auto 16px;
   text-wrap: balance;
@@ -188,8 +172,8 @@
   align-items: start;
   padding: 14px 16px;
   border-radius: 14px;
-  background: var(--landing-bg);
-  border: 1px solid var(--line);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
   transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 .nc-landing .step:hover {
@@ -214,7 +198,7 @@
 .nc-landing .step-text {
   font-size: 16px;
   font-weight: 400;
-  color: var(--ink);
+  color: var(--text-primary);
   padding-top: 7px;
 }
 .nc-landing .step-text .em {
@@ -241,7 +225,7 @@
   border-radius: 0;
   font-size: 14px;
   font-weight: 500;
-  color: var(--ink-soft);
+  color: var(--text-secondary);
 }
 .nc-landing .badge-icon {
   flex-shrink: 0;
@@ -298,9 +282,9 @@
 
 /* ======= SHOWCASE ======= */
 .nc-landing .showcase {
-  background: var(--bg-soft);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
   padding: 80px 32px;
   margin-top: 32px;
 }
@@ -343,7 +327,7 @@
 
 .nc-landing .card {
   background: #fff;
-  border: 1px solid var(--line);
+  border: 1px solid var(--border-default);
   border-radius: 18px;
   padding: 22px;
   text-align: left;
@@ -390,9 +374,9 @@
 }
 .nc-landing .card-mol {
   aspect-ratio: 16/9;
-  background: var(--bg-soft);
+  background: var(--bg-secondary);
   border-radius: 12px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--border-default);
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -414,7 +398,7 @@
   font-size: 17px;
   font-weight: 700;
   line-height: 1.3;
-  color: var(--ink);
+  color: var(--text-primary);
   margin: 0;
   text-wrap: balance;
 }
@@ -424,7 +408,7 @@
   justify-content: flex-end;
   margin-top: auto;
   padding-top: 14px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border-default);
 }
 .nc-landing .card-meta-right {
   font-size: 13px;
@@ -433,7 +417,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: var(--bg-tint);
+  background: var(--bg-tertiary);
   padding: 8px 14px;
   border-radius: 999px;
   transition: background 0.15s, color 0.15s;
@@ -806,9 +790,9 @@
 .nc-landing .footer {
   padding: 32px;
   text-align: center;
-  color: var(--ink-mute);
+  color: var(--text-tertiary);
   font-size: 13px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border-default);
 }
 
 /* ======= ANIMS ======= */

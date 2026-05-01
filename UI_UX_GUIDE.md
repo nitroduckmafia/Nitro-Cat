@@ -24,21 +24,33 @@ Never use raw Tailwind colors (e.g. `text-green-500`). Always use semantic CSS v
 | `--bg-secondary` | `#F7FBF9` | `#0F1612` | Card/panel backgrounds |
 | `--bg-tertiary` | `#EFF6F3` | `#1A2420` | Hover states, inset areas |
 | `--bg-elevated` | `#FFFFFF` | `#141C18` | Modals, popovers |
-| `--primary-500` | `#10B981` | `#10B981` | CTA buttons, active states, accents |
+| `--primary-500` | `#538b5e` | `#538b5e` | CTA buttons, active states, accents (sage) |
 | `--primary-600` | `#059669` | `#34D399` | Hover on primary elements |
 | `--border-default` | `#E2E8F0` | `#2D3932` | All default borders |
 | `--border-interactive` | `#059669` | `#3FB950` | Focused inputs, hover borders |
 
+### Brand accent palette
+Promoted from the landing-page handoff so the same greens are available app-wide. Same hex in both modes (brand colors don't flip with theme):
+
+| Token | Hex | Usage |
+|---|---|---|
+| `--green-sage` | `#538b5e` | Primary brand green; hover borders, secondary accents |
+| `--green-bright` | `#6ca033` | Bright accent — landing CTA, step numbers, card highlights |
+| `--green-bright-hover` | `#5a8a28` | Hover state for `--green-bright` buttons |
+| `--green-dark` | `#25512b` | Deep accent — body leads, card titles, dark CTAs |
+| `--amber` | `#B45309` | Warning accent (alias of `--warning-700`) |
+
 ### Confidence color scale (enzyme scoring)
-This is a core visual language — keep it consistent everywhere:
+This is a core visual language — keep it consistent everywhere. Logic is implemented in `formatConfidenceLabel()` in `src/lib/utils/formatting.ts`:
 
 | Score | Label | Color token | Usage |
 |---|---|---|---|
-| ≥ 0.9 | `high` | `--success-*` (green) | `border-l-success-500` on enzyme cards |
-| 0.6 – 0.89 | `medium` | `--warning-*` (amber) | `border-l-warning-500` on enzyme cards |
-| < 0.6 | `low` | `--danger-*` (red) | `border-l-danger-500` on enzyme cards |
+| ≥ 0.9 | `high` | `--success-*` (sage green) | `border-l-success-500` on enzyme cards |
+| 0.8 – 0.899 | `good` | `--green-bright` | High-quality match accent |
+| 0.5 – 0.799 | `medium` | `--warning-*` (amber) | `border-l-warning-500` on enzyme cards |
+| < 0.5 | `low` | `--danger-*` (red) | `border-l-danger-500` on enzyme cards |
 
-Always use `formatConfidenceLabel()` from `src/lib/utils/formatting.ts` to derive this label. Do not inline the threshold logic.
+Always use `formatConfidenceLabel()` to derive the label. Do not inline the threshold logic.
 
 ### Glow utilities
 Use these sparingly for emphasis — not decoration:
@@ -54,14 +66,17 @@ Use these sparingly for emphasis — not decoration:
 
 | Role | Font | Tailwind class |
 |---|---|---|
-| Body / UI text | IBM Plex Sans | `font-sans` |
-| Monospace data | JetBrains Mono | `font-mono` |
+| Body / UI text | Space Grotesk | `font-sans` |
+| Data / scientific values | Urbanist | `font-mono` |
+| Landing page body | Urbanist | (set directly on `.nc-landing`) |
 
 **Rules:**
 - Molecular formulas, enzyme EC numbers, kinetic values (k_cat, K_m, pH, temp), catalog numbers → always `font-mono`
 - Section labels / micro-headings → `text-[10px] font-semibold uppercase tracking-widest text-muted-foreground`
 - Page/card titles → `font-bold text-foreground`, size contextual (hero: `text-4xl sm:text-5xl`, panel header: `text-2xl`, modal: `text-xl`)
 - Muted descriptions → `text-sm text-muted-foreground leading-relaxed`
+
+> **Note:** Urbanist is technically a sans-serif, not a monospace. The `font-mono` alias is a project convention for "scientific data styling" — fixed-width alignment is not guaranteed.
 
 ---
 
@@ -72,21 +87,10 @@ Use these sparingly for emphasis — not decoration:
 
 The sidebar collapses to icon-only mode. When collapsed, navigation labels and session history are hidden but icon buttons remain. The collapse state is local to the component (not persisted). Keep this behaviour — don't make it global state.
 
-### PathwayDetailPage — the core screen
-Two-panel `ResizablePanelGroup`:
-- **Left panel** (`PathwayBuilder`) — vertical graph: `MoleculeCard → StepArrow → PathwayStep → StepArrow → MoleculeCard → …`
-- **Right panel** (`ChatPanel`) — AI chat assistant
+### Core screens
+The current app routes are: `LandingPage` → `NewReactionPage` (Ketcher substrate/product editor) → `TestReactionPage` (ranked enzyme candidates). Plus `HistoryPage`, `SettingsPage`, `ProfilePage`, `DemoPage`, `NotFound`.
 
-Both panels scroll independently. The left panel has `overflow-y-auto p-6`. Never put overflow on the outer layout — it must sit on the scroll containers.
-
-### Molecule cards
-Bordered, `rounded-xl border border-border bg-card`. Molecule name: `text-xl font-bold font-mono`. Formula: `text-sm font-semibold font-mono text-muted-foreground`. The `MoleculeViewer` renders an SVG structure centered at 300×190px.
-
-### Step arrows
-`StepArrow` connects molecule cards to reaction sections — a thin `bg-primary/40` vertical line + `ArrowDown` icon in `text-primary/70`. Keep them subtle. Do not remove or replace with horizontal dividers.
-
-### Enzyme card layout (in `PathwayStep`)
-Cards are offset with `ml-[20%]` and left-padded. The label "Possible enzymes:" is italic and `mb-5`. Cards stack vertically with `gap-1.5`. This indent creates visual hierarchy — the reaction name is centered, the enzyme options feel subordinate.
+`MoleculeViewer` (used inside enzyme/results views) renders an SVG structure via `smiles-drawer`. Default canvas centered at 300×190px.
 
 ---
 
@@ -107,31 +111,17 @@ Cards are offset with `ml-[20%]` and left-padded. The label "Possible enzymes:" 
 - Vendor row: logo initials avatar + vendor name + catalog number + price + "Order" button
 - Dialog background: `var(--bg-elevated)` (not Tailwind bg classes) — avoids theme flicker
 
-### ChatPanel
-- Header: model selector (`Select`) + web search toggle + title
-- Messages area: scrollable `ref` div, messages rendered by `ChatMessage`
-- Input: auto-resizing `Textarea` + paperclip attachment icon + send `Button`
-- Typing indicator shown while simulated response is pending
-- Welcome message is generated dynamically from the pathway data — never hardcoded
-
-### BruteForceModal (in PathwayStep)
-- Only appears when `step.hasBruteForce === true` and no enzymes exist for that step
-- Warning color scheme (`--warning-*`), `Zap` icon
-- Contains a feature list (4 items with icons), an estimated-time callout, and a "Contact Research Team" CTA
-- The modal is a dead-end flow for now — "Contact Research Team" just closes the modal
-
-### Header card (PathwayBuilder)
-- Gradient: `bg-gradient-to-br from-primary/10 via-primary/5 to-transparent`
-- Border: `border-primary/20`
-- Contains: pathway name, status badge, step count badge (info/blue), enzyme count badge
-- Status badge font: `text-[10px] font-mono font-semibold` — keep tiny, right-aligned
+### EnzymeTable
+- Used in `TestReactionPage` to render ranked enzyme candidates
+- Column order: rank, enzyme name, EC + organism (mono), confidence chip, action
+- Confidence chip uses `ConfidenceScore` (same colour mapping as `EnzymeCard`)
 
 ---
 
 ## 6. Sidebar
 
 - **Logo**: theme-resolved via `useTheme().resolvedTheme`. Never render both and hide one.
-- **New Reaction button**: `variant="outline"` with `border-dashed`. Navigates to `/pathways/new`.
+- **New Reaction button**: `variant="outline"` with `border-dashed`. Navigates to `/reactions/new`.
 - **Session history**: grouped by Today / Yesterday / Older. Each item truncated with `truncate`.
 - **Active state**: `bg-accent text-accent-foreground font-medium` — driven by `location.pathname`.
 - **Bottom section**: ThemeToggle + Settings + Profile — always visible, even when collapsed (icon-only).
@@ -141,11 +131,12 @@ Cards are offset with `ml-[20%]` and left-padded. The label "Possible enzymes:" 
 
 ## 7. LandingPage
 
-- Full-width, `min-h-screen bg-background`, no sidebar
-- Hero: centered, `py-24`, logo at 300px height (hero treatment), `text-glow` on the headline
-- CTAs: "Get Started" (`glow-green`) + "View Demo" (`variant="outline"`)
-- Features: 3-column grid on `sm:`, single column on mobile. Each card: `bg-secondary border rounded-lg p-6 hover:bg-muted transition-colors`. Icon in `bg-primary/10` rounded container.
-- No footer yet — don't add one without design spec.
+The landing page is the design-handoff layout (sticky nav, hero, 5-step flow, "C–H hydroxylations — Success Cases" grid, deep-dive case modal). Layout-only rules live under `.nc-landing` / `.nc-landing-modal` in `src/styles/landing.css`. **Color/background/border tokens come from the global theme** — `landing.css` no longer scopes its own palette.
+
+- Body font: Urbanist (set directly on `.nc-landing`)
+- Brand greens used for hero copy, CTA, step numbers, card highlights: `--green-bright`, `--green-sage`, `--green-dark`
+- Backgrounds, borders, ink colors: standard global tokens (`--bg-primary`, `--bg-secondary`, `--bg-tertiary`, `--border-default`, `--border-emphasis`, `--text-primary`, `--text-secondary`, `--text-tertiary`)
+- The case-deep-dive modal (`.nc-landing-modal`) currently still uses hardcoded hex values for some accent colors (peach-tone "negative comparison" pane). Those have no global equivalent yet — leave hardcoded until a token mapping is decided.
 
 ---
 
@@ -164,8 +155,6 @@ Cards are offset with `ml-[20%]` and left-padded. The label "Possible enzymes:" 
 - All hover transitions: `transition-all` or `transition-colors` — no custom durations unless sidebar collapse (`duration-300`)
 - No page transition animations currently — don't add without a spec
 - Modal open/close: shadcn/ui default Radix animation — do not override
-- Simulated AI response delay: 1100ms — keep this realistic but snappy. Don't increase it.
-- Auto-scroll to bottom on new chat messages via `scrollRef` — preserve this pattern for any new messaging UI
 
 ---
 
@@ -187,9 +176,9 @@ Cards are offset with `ml-[20%]` and left-padded. The label "Possible enzymes:" 
 - **Don't add Tailwind green shades directly** (e.g. `bg-green-500`) — always go through the design token layer
 - **Don't hardcode logo paths** — always resolve through `useTheme()`
 - **Don't add a footer to the LandingPage** without a design spec
-- **Don't change the confidence threshold values** (0.9 / 0.6) without updating `formatConfidenceLabel()` and this guide
+- **Don't change the confidence threshold values** (0.9 / 0.8 / 0.5) without updating `formatConfidenceLabel()` and this guide
 - **Don't put `overflow` on the outer layout shell** — it belongs on the scroll containers only
-- **Don't use bullet-point lists in UI text** — prose descriptions only, except in the BruteForceModal feature list which is intentional
+- **Don't use bullet-point lists in UI text** — prose descriptions only
 
 ---
 
@@ -198,11 +187,12 @@ Cards are offset with `ml-[20%]` and left-padded. The label "Possible enzymes:" 
 | What you're changing | Files to touch |
 |---|---|
 | Colors / tokens | `src/styles/globals.css`, `src/styles/themes/light.css`, `src/styles/themes/dark.css` |
+| Landing page styles | `src/styles/landing.css` (layout only — tokens come from theme files) |
 | Enzyme card look | `src/components/enzyme/EnzymeCard.tsx`, `src/components/enzyme/ConfidenceScore.tsx` |
 | Enzyme detail modal | `src/components/enzyme/EnzymeModal.tsx` |
-| Pathway graph | `src/components/pathway/PathwayBuilder.tsx`, `src/components/pathway/PathwayStep.tsx` |
-| Chat UI | `src/components/chat/ChatPanel.tsx`, `src/components/chat/ChatMessage.tsx` |
+| Enzyme results table | `src/components/enzyme/EnzymeTable.tsx` |
+| Reaction editor | `src/components/reaction/KetcherEditor.tsx`, `src/components/reaction/YieldCard.tsx` |
+| Molecule rendering | `src/components/molecule/MoleculeViewer.tsx` |
 | Navigation / layout | `src/components/layout/Sidebar.tsx`, `src/components/layout/DashboardLayout.tsx`, `src/components/layout/Header.tsx` |
-| Landing page | `src/pages/LandingPage.tsx` |
+| Landing page | `src/pages/LandingPage.tsx`, `src/data/landing-reactions.ts` |
 | Confidence logic | `src/lib/utils/formatting.ts` |
-| Sample data (for UI preview) | `src/data/pathwayData.ts` |

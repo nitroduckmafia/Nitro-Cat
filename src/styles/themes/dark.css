@@ -52,6 +52,13 @@
   --danger-600: #FCA5A5;
   --danger-700: #FECACA;
 
+  /* Brand accent palette — same hex in both modes (brand colors don't flip) */
+  --green-sage: #538b5e;
+  --green-bright: #6ca033;
+  --green-dark: #25512b;
+  --green-bright-hover: #5a8a28;
+  --amber: #B45309;
+
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(83, 139, 94, 0.2);
   --shadow-md: 0 4px 6px -1px rgba(83, 139, 94, 0.3), 0 2px 4px -1px rgba(83, 139, 94, 0.2);
