@@ -37,10 +37,6 @@ const HOMOFARNESOL   = 'CC(C)=CCC/C(C)=C/CC/C(C)=C/CCO';
 const AMBROX         = 'CC1(C)CCC[C@@]2(C)[C@H]1CC[C@@]3(C)OCC[C@H]23';
 const TAXADIENE      = 'CC1=C2CC[C@@]3(CCC=C([C@H]3C[C@@H](C2(C)C)CC1)C)C';
 const TAXADIENOL     = 'CC1CC[C@@H]2C(C)(C)C=1CC[C@@]1(C)C(C2)C(=C)[C@@H](O)CC1';
-const COMPOUND1 = 'C#C[C@]1(CO)[C@@H](O)C[C@@H](OP(=O)(O)O)O1';
-const COMPOUND2 = 'C#C[C@]1(COP(=O)(O)O)[C@@H](O)C[C@@H](O)O1';
-const PROPANEDIOIC       = 'CC(=O)CCC(C(=O)OC)C(=O)OC.N';
-const AMINOBUTYL_MALONATE = 'C[C@H](CCC(C(=O)OC)C(=O)OC)N';
 
 // ── Example MOL V2000 strings (used by Ketcher editor) ───
 const MOL = {
@@ -127,80 +123,6 @@ M  END
 `,
   TAXADIENE:   'CC1=C2CC[C@@]3(CCC=C([C@H]3C[C@@H](C2(C)C)CC1)C)C',
   TAXADIENOL:  'CC1CC[C@@H]2C(C)(C)C=1CC[C@@]1(C)C(C2)C(=C)[C@@H](O)CC1',
-  PROPANEDIOIC:       'CC(=O)CCC(C(=O)OC)C(=O)OC.N',
-  AMINOBUTYL_MALONATE: 'C[C@H](CCC(C(=O)OC)C(=O)OC)N',
-  COMPOUND1: `
-  -INDIGO-04012621462D
-
- 15 15  0  0  0  0  0  0  0  0999 V2000
-   -1.6180   -1.1756    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-   -0.8090   -0.5878    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-   -0.6691    0.7431    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-   -1.6473    0.5352    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    0.5000   -0.8660    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    0.0933   -1.7796    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    1.4781   -0.6581    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    1.5827    0.3364    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    2.4487    0.8364    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    3.3147    0.3364    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0
-    3.3147   -0.6636    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    4.1808    0.8364    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    4.1808   -0.1636    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    0.6691    0.7431    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-  1  2  3  0  0  0  0
-  2  3  1  0  0  0  0
-  3  4  1  0  0  0  0
-  4  5  1  0  0  0  0
-  3  6  1  0  0  0  0
-  6  7  1  0  0  0  0
-  6  8  1  0  0  0  0
-  8  9  1  0  0  0  0
-  9 10  1  0  0  0  0
- 10 11  1  0  0  0  0
- 11 12  2  0  0  0  0
- 11 13  1  0  0  0  0
- 11 14  1  0  0  0  0
-  9 15  1  0  0  0  0
- 15  3  1  0  0  0  0
-M  END
-`,
-  COMPOUND2: `
-  -INDIGO-04012621462D
-
- 15 15  0  0  0  0  0  0  0  0999 V2000
-   -0.8135   -1.8271    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-   -0.4067   -0.9135    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-   -0.9511    0.3090    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-   -1.6942   -0.3601    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-   -2.6453   -0.0511    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0
-   -2.8532    0.9271    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-   -3.3884   -0.7202    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-   -3.5963    0.2579    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    0.8660   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    0.9706   -1.4945    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    1.6092    0.1691    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    1.2024    1.0827    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    1.7024    1.9487    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    0.2079    0.9781    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-  1  2  3  0  0  0  0
-  2  3  1  0  0  0  0
-  3  4  1  0  0  0  0
-  4  5  1  0  0  0  0
-  5  6  1  0  0  0  0
-  6  7  2  0  0  0  0
-  6  8  1  0  0  0  0
-  6  9  1  0  0  0  0
-  3 10  1  0  0  0  0
- 10 11  1  0  0  0  0
- 10 12  1  0  0  0  0
- 12 13  1  0  0  0  0
- 13 14  1  0  0  0  0
- 13 15  1  0  0  0  0
- 15  3  1  0  0  0  0
-M  END
-`,
 };
 
 const DEFAULT_ENZYME: Enzyme = {
@@ -239,18 +161,6 @@ const EXAMPLE_PAIRS = [
     shortLabel: 'Taxadiene → Taxadienol',
     substrate:  TAXADIENE,     subMol: MOL.TAXADIENE,
     product:    TAXADIENOL,    prodMol: MOL.TAXADIENOL,
-  },
-  {
-    label:      'Compound 1 → Compound 2',
-    shortLabel: 'Compound 1 → 2',
-    substrate:  COMPOUND1, subMol: MOL.COMPOUND1,
-    product:    COMPOUND2, prodMol: MOL.COMPOUND2,
-  },
-  {
-    label:      'Propanedioic acid → Dimethyl 2-[(3R)-3-aminobutyl]propanedioate',
-    shortLabel: 'Propanedioate → Aminobutylmalonate',
-    substrate:  PROPANEDIOIC,        subMol: MOL.PROPANEDIOIC,
-    product:    AMINOBUTYL_MALONATE, prodMol: MOL.AMINOBUTYL_MALONATE,
   },
 ];
 

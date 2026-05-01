@@ -238,3 +238,56 @@
   }
 }
 
+/* Floating action cluster in the dashboard top-right corner.
+   Absolute so it never reserves vertical space — page top controls stay flush
+   instead of being pushed down by a header band. */
+.dashboard-top-actions {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-contact-link {
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border-default);
+  background: transparent;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.dashboard-contact-link:hover {
+  color: var(--primary-500);
+  background-color: var(--bg-tertiary);
+  border-color: var(--primary-500);
+}
+
+.dashboard-waitlist-btn {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #ffffff;
+  background: var(--primary-500);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(68, 115, 81, 0.12);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.dashboard-waitlist-btn:hover {
+  background: var(--primary-600);
+  box-shadow: 0 2px 6px rgba(68, 115, 81, 0.2);
+  transform: translateY(-1px);
+}
+.dashboard-waitlist-btn:active {
+  transform: translateY(0);
+}
+
