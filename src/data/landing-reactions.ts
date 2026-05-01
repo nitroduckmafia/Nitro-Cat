@@ -9,7 +9,9 @@ export type LandingReaction = {
   titleFull: string;
   target: string;
   transform: string;
+  biocatalyst?: string;
   citation: string;
+  citationUrl: string;
   substrate: string;
   product: string;
   intermediate: string | null;
@@ -29,6 +31,7 @@ export const LANDING_REACTIONS: LandingReaction[] = [
     target: "PDE2A inhibitor",
     transform: "+ OH",
     citation: "Stepan et al., ACS Medicinal Chemistry Letters, 2018",
+    citationUrl: "https://pubs.acs.org/doi/10.1021/acsmedchemlett.7b00343",
     substrate: "/images/landing/reaction_1_substrate.png",
     product: "/images/landing/reaction_1_product.png",
     intermediate: null,
@@ -48,14 +51,16 @@ export const LANDING_REACTIONS: LandingReaction[] = [
     titleFull: "Tylactone antibiotic SAR's exploration was blocked → 17 steps re-synthesis needed",
     target: "Tylactone macrolide (juvenimicin)",
     transform: "+ OH",
+    biocatalyst: "TylI-RhFRED",
     citation: "Lowell et al., Journal of the American Chemical Society, 2017",
+    citationUrl: "https://pubs.acs.org/doi/10.1021/jacs.7b02875",
     substrate: "/images/landing/reaction_2_substrate.png",
     product: "/images/landing/reaction_2_product.png",
     intermediate: null,
-    metrics: [],
+    metrics: [{ label: "MIC", single: "60× improvement" }],
     chem: { steps: "17 steps re-synthesis", building: "11 building blocks", time: "6 – 12 weeks" },
     bio: { steps: "1 step biocatalytic LSF", building: "1 biocatalyst (TylI-RhFRED)", time: "<1 week" },
-    highlight: "60× MIC improvement",
+    highlight: null,
   },
   {
     id: 3,
@@ -64,7 +69,9 @@ export const LANDING_REACTIONS: LandingReaction[] = [
     titleFull: "Antiparasitic lead was too lipophilic → desired hydroxylation needed 5-steps resynthesis",
     target: "Antiparasitic lead",
     transform: "+ OH",
+    biocatalyst: "PolyCYP194",
     citation: "Poon et al., Journal of Medicinal Chemistry, 2025",
+    citationUrl: "https://pubs.acs.org/doi/10.1021/acs.jmedchem.5c01467",
     substrate: "/images/landing/reaction_3_substrate.png",
     product: "/images/landing/reaction_3_product.png",
     intermediate: null,
@@ -80,7 +87,9 @@ export const LANDING_REACTIONS: LandingReaction[] = [
     titleFull: "Risperidone was metabolically cleared at C9 → desired fluorination needed 4 steps-resynthesis",
     target: "Risperidone (atypical antipsychotic)",
     transform: "+ OH → + F (chemo-enzymatic)",
+    biocatalyst: "CYP2D6 + DAST",
     citation: "Obach et al., Drug Metabolism and Disposition, 2016",
+    citationUrl: "https://dmd.aspetjournals.org/article/S0090-9556(24)10056-6/abstract",
     substrate: "/images/landing/reaction_4_substrate.png",
     intermediate: "/images/landing/reaction_4_intermediate.png",
     product: "/images/landing/reaction_4_product.png",

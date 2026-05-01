@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSidebar } from '@/lib/context/SidebarContext';
 import {
   ArrowLeft, ShoppingCart, Dna, Wrench,
   ExternalLink, Plus, HelpCircle, Share2,
@@ -617,7 +616,6 @@ const CandidateCard = ({ enzyme, rank, zz, expanded, onToggle, inKit, onToggleKi
 export const TestReactionPage = () => {
   const navigate   = useNavigate();
   const location   = useLocation();
-  const { collapsed: sidebarCollapsed } = useSidebar();
 
   // Derive tier early so useState can use ZZ as its initial value
   const state0     = location.state as { reaction: ReactionNodeData; candidates?: Enzyme[]; groupStats?: GroupStats; comments?: string[] } | null;
@@ -807,7 +805,7 @@ export const TestReactionPage = () => {
         className="w-full border-b px-8 py-4"
         style={{ borderColor: accentBorder, backgroundColor: accentBg }}
       >
-        <div className={cn("flex items-start gap-5 max-w-6xl", sidebarCollapsed ? "ml-0" : "mx-auto")}>
+        <div className="flex items-start gap-5 max-w-6xl ml-0">
           {/* Accent bar */}
           <div
             className="w-1.5 self-stretch rounded-full shrink-0"

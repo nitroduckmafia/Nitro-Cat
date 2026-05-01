@@ -32,8 +32,11 @@ export const Sidebar = () => {
             onClick={() => navigate('/')}
             className="flex items-center gap-2 hover:opacity-80 transition-opacity"
           >
-            <img src="/images/nitroduck-logo.png" className="h-10" alt="Nitroduck" />
-            <span className="text-sm font-semibold text-foreground">NitroCat</span>
+            <img src="/images/nitroduck-logo.png" className="h-9 w-9 object-contain shrink-0" alt="" />
+            <span className="flex flex-col items-start leading-tight">
+              <span className="text-[15px] font-bold tracking-tight text-foreground">NitroCat</span>
+              <span className="text-[11px] font-medium text-muted-foreground">by NitroDuck</span>
+            </span>
           </button>
         )}
         <Button
