@@ -18,7 +18,7 @@ export const SettingsPage = () => {
   };
 
   return (
-    <div className="p-6 h-full overflow-y-auto">
+    <div className="p-4 sm:p-6 pt-14 sm:pt-6 h-full overflow-y-auto">
       <div className="max-w-lg mx-auto space-y-8">
         <div>
           <h1 className="text-xl font-bold text-foreground">Settings</h1>

@@ -173,12 +173,22 @@ function MolViewer({ smiles, drawer, theme, drawerReady }: {
     try {
       drawer.current.draw(
         smiles, null, theme,
-        (svg: SVGElement) => { el.innerHTML = ''; el.appendChild(svg); },
+        (svg: SVGElement) => {
+          el.innerHTML = '';
+          // Make rendered SVG fluid so it scales down on mobile.
+          svg.removeAttribute('width');
+          svg.removeAttribute('height');
+          svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          (svg.style as any).width = '100%';
+          (svg.style as any).height = '100%';
+          (svg.style as any).maxWidth = '100%';
+          el.appendChild(svg);
+        },
         () => { el.innerHTML = ''; },
       );
     } catch { el.innerHTML = ''; }
   }, [smiles, theme, drawerReady, drawer]);
-  return <div ref={ref} style={{ width: 240, height: 150, flexShrink: 0, overflow: 'hidden' }} />;
+  return <div ref={ref} style={{ width: '100%', maxWidth: 240, height: 150, overflow: 'hidden' }} />;
 }
 
 // ── MolPair (shared between card and modal) ───────────────────────────────────
@@ -188,12 +198,12 @@ function MolPair({ rxn, drawer, theme, drawerReady }: {
   const { substrate, product, subLabel, prodLabel } = parseSMILES(rxn.reaction_smiles, rxn.substrate_name, rxn.product_name);
   return (
     <>
-      <div className="flex items-center gap-2">
-        <div className="flex-1 h-[150px] bg-background rounded-lg overflow-hidden flex items-center justify-center">
+      <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="flex-1 min-w-0 h-[120px] sm:h-[150px] bg-background rounded-lg overflow-hidden flex items-center justify-center">
           <MolViewer smiles={substrate} drawer={drawer} theme={theme} drawerReady={drawerReady} />
         </div>
-        <span className="text-2xl shrink-0 text-primary opacity-65">&#x27F6;</span>
-        <div className="flex-1 h-[150px] bg-background rounded-lg overflow-hidden flex items-center justify-center">
+        <span className="text-xl sm:text-2xl shrink-0 text-primary opacity-65">&#x27F6;</span>
+        <div className="flex-1 min-w-0 h-[120px] sm:h-[150px] bg-background rounded-lg overflow-hidden flex items-center justify-center">
           <MolViewer smiles={product} drawer={drawer} theme={theme} drawerReady={drawerReady} />
         </div>
       </div>
@@ -649,14 +659,14 @@ export default function DemoPage() {
 
   return (
     phase === 'intro' ? (
-      <div className="flex flex-col items-center justify-center h-full px-6 py-16 text-center">
-        <div className="max-w-2xl flex flex-col items-center gap-8 w-full">
-          <div className="text-8xl">🧬</div>
+      <div className="flex flex-col items-center justify-center h-full px-4 sm:px-6 pt-16 pb-10 sm:py-16 text-center overflow-y-auto">
+        <div className="max-w-2xl flex flex-col items-center gap-6 sm:gap-8 w-full">
+          <div className="text-6xl sm:text-8xl">🧬</div>
           <div className="flex flex-col gap-2">
-            <h1 className="text-5xl font-bold tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight">
               <span className="text-primary">Reaction Puzzle</span>
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <p className="text-base sm:text-xl text-muted-foreground leading-relaxed">
               You'll see <strong className="text-foreground">3 reactions</strong>. One of them has
               <strong className="text-foreground"> no known enzyme</strong> — NitroCat can't find a match.
             </p>
@@ -687,7 +697,7 @@ export default function DemoPage() {
           <button
             type="button"
             onClick={() => setPhase('guess')}
-            style={{ background: '#538b5e', color: '#fff' }}
+            style={{ background: 'var(--green-bright)', color: '#fff' }}
             className="w-full max-w-sm py-4 rounded-[10px] text-lg font-bold border-none cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
           >
             Start Puzzle →
@@ -697,33 +707,33 @@ export default function DemoPage() {
     ) : (
     <div className="flex flex-col h-full overflow-hidden">
       {/* Instruction bar */}
-      <div className="flex items-center justify-between px-6 py-4 bg-secondary border-b border-border gap-4 shrink-0">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between px-4 sm:px-6 pt-14 pb-4 bg-secondary border-b border-border gap-3 sm:gap-4 shrink-0">
         <div className="flex items-center gap-4 flex-1 min-w-0">
-          <div className="flex flex-col min-w-0">
-            <div className="flex items-center gap-3">
-              <h1 className="text-4xl font-bold tracking-tight">
-                <span className="text-primary bg-primary/10 px-5 py-0.5 rounded-lg">Reaction Puzzle</span>
+          <div className="flex flex-col min-w-0 w-full">
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+              <h1 className="text-2xl sm:text-4xl font-bold tracking-tight">
+                <span className="text-primary bg-primary/10 px-3 sm:px-5 py-0.5 rounded-lg">Reaction Puzzle</span>
               </h1>
               <span className="flex items-center gap-1.5 font-mono text-xs text-muted-foreground border border-border rounded-full px-3 py-1 shrink-0">
                   <Trophy className="w-3 h-3" />
                   <span className="font-bold text-primary">{score.correct}/{MAX_ROUNDS}</span>
                 </span>
             </div>
-            <p className="text-base text-muted-foreground mt-1">
+            <p className="text-sm sm:text-base text-muted-foreground mt-1">
               We have 260k enzymes to catalyze your reactions.{' '}
               <strong className="text-primary font-semibold">Find the one we have NO ENZYMES for.</strong>
               {' '}
             </p>
           </div>
         </div>
-        <div className="shrink-0">
+        <div className="shrink-0 self-stretch sm:self-auto">
           {phase === 'guess' && (
             <button
               type="button"
               onClick={selectedId ? reveal : undefined}
               style={selectedId ? { background: '#538b5e', color: '#fff', borderColor: '#538b5e' } : undefined}
               className={cn(
-                'px-5 py-2 rounded-lg text-sm font-bold border transition-all duration-200',
+                'w-full sm:w-auto px-5 py-2 rounded-lg text-sm font-bold border transition-all duration-200',
                 selectedId
                   ? 'cursor-pointer hover:opacity-90'
                   : 'bg-background text-foreground border-border cursor-default opacity-60',
@@ -733,7 +743,7 @@ export default function DemoPage() {
             </button>
           )}
           {phase === 'revealed' && (
-            <Button size="sm" variant="outline" onClick={startNextRound}>
+            <Button size="sm" variant="outline" onClick={startNextRound} className="w-full sm:w-auto">
               Next Round →
             </Button>
           )}
@@ -741,8 +751,8 @@ export default function DemoPage() {
       </div>
 
       {/* Cards */}
-      <div className="flex-1 min-h-0 overflow-y-auto p-5">
-        <div className="grid grid-cols-2 gap-4">
+      <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {reactions.map(rxn => (
             <ReactionCard
               key={rxn.id}

@@ -1,6 +1,7 @@
 import { Component, lazy, Suspense, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { useIsMobile } from "@/lib/hooks/useIsMobile";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -294,7 +295,7 @@ const FindEnzymesButton = ({ active, loading, onClick }: { active: boolean; load
       {loading ? 'Searching…' : 'Find Biocatalyst'}
     </button>
     {loading && (
-      <p className="text-sm text-muted-foreground text-center whitespace-nowrap">
+      <p className="text-sm text-muted-foreground text-center max-w-md">
         This may take a few minutes - we're searching through over 250 000 biocatalysts to find the best matches for you. ☕
       </p>
     )}
@@ -618,7 +619,13 @@ export const NewReactionPage = () => {
 
   const [view, setView]     = useState<View>('select');
   const [visible, setVisible] = useState(true);
+  const isMobile = useIsMobile();
   const [mode, setMode]     = useState<Mode>('smiles');
+
+  // If we're on mobile and the user somehow ends up in 'draw' mode (e.g. resize from desktop), bounce to SMILES.
+  useEffect(() => {
+    if (isMobile && mode === 'draw') setMode('smiles');
+  }, [isMobile, mode]);
   const [substrateSmiles, setSubstrate] = useState('');
   const [productSmiles, setProduct]     = useState('');
   const [substrateValid, setSubstrateValid] = useState<boolean | null>(null);
@@ -836,12 +843,12 @@ export const NewReactionPage = () => {
           <h1 className="text-2xl font-bold text-foreground">Find Biocatalyst</h1>
           <p className="text-sm text-muted-foreground mt-1">Choose how you'd like to input your reaction</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
-          {([
+        <div className={cn("grid grid-cols-1 gap-4 w-full max-w-2xl", isMobile ? "sm:grid-cols-2" : "sm:grid-cols-3")}>
+          {(([
             { id: 'draw'  as Mode, icon: <PencilLine className="w-6 h-6 text-primary" />, label: 'Draw Structure' },
             { id: 'smiles' as Mode, icon: <FileText className="w-6 h-6 text-primary" />, label: 'SMILES' },
             { id: 'rxn'   as Mode, icon: <Upload    className="w-6 h-6 text-primary" />, label: 'RXN File' },
-          ] as const).map(({ id, icon, label }) => (
+          ] as const).filter(t => !(isMobile && t.id === 'draw'))).map(({ id, icon, label }) => (
             <button
               key={id}
               type="button"
@@ -863,14 +870,14 @@ export const NewReactionPage = () => {
   // ── Input view ───────────────────────────────────────────────────────────────
 
   const modeTabs: { id: Mode; label: string }[] = [
-    { id: 'draw',  label: 'Draw Structure' },
+    ...(isMobile ? [] : [{ id: 'draw' as Mode, label: 'Draw Structure' }]),
     { id: 'smiles', label: 'SMILES' },
     { id: 'rxn',   label: 'RXN File' },
   ];
 
   const InputContent = (
     <div className="flex flex-col min-h-screen bg-background">
-      <div className="p-4 flex items-center gap-4">
+      <div className="p-4 pt-14 sm:pt-4 flex flex-wrap items-center gap-3 sm:gap-4">
         <Button variant="ghost" size="sm" onClick={() => goTo('select')} className="gap-1.5 shrink-0">
           <ArrowLeft className="w-4 h-4" />
           Back
@@ -912,7 +919,7 @@ export const NewReactionPage = () => {
         {mode === 'smiles' && (
           <>
             {/* Heading + examples — centered */}
-            <div className="w-full px-[95px] pt-2 space-y-2">
+            <div className="w-full px-4 sm:px-[95px] pt-2 space-y-2">
               <div className="space-y-1">
                 <h1 className="text-xl font-bold text-foreground">Enter SMILES</h1>
                 <p className="text-sm text-muted-foreground">
@@ -934,7 +941,7 @@ export const NewReactionPage = () => {
             </div>
 
             {/* Columns — full width with symmetric margins for centering */}
-            <div className="w-full px-[95px] py-3">
+            <div className="w-full px-4 sm:px-[95px] py-3">
               <div className="flex flex-col sm:flex-row gap-4 items-stretch">
 
                 {/* Substrate column */}
@@ -956,7 +963,7 @@ export const NewReactionPage = () => {
                     onClick={() => setProduct(substrateSmiles)}
                     disabled={substrateSmiles.trim().length < 2}
                     className="inline-flex flex-col items-center justify-center px-3 py-2 text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed text-center leading-snug"
-                    style={{ color: 'var(--primary-500)', background: 'transparent' }}
+                    style={{ color: 'var(--success-600)', background: 'transparent' }}
                   >
                     <span>click to copy substrate<br />SMILES to product</span>
                     <span className="text-2xl leading-none mt-0.5" style={{ color: 'var(--color-primary, #538b5e)', opacity: 0.75 }}>⟶</span>
@@ -985,7 +992,7 @@ export const NewReactionPage = () => {
                   onClick={() => editInDraw(1)}
                   disabled={substrateSmiles.trim().length < 2}
                   className="flex-1 inline-flex items-center justify-center px-3 py-2 rounded-full text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed border"
-                  style={{ borderColor: 'var(--primary-500)', color: 'var(--primary-500)', background: 'transparent' }}
+                  style={{ borderColor: 'var(--success-600)', color: 'var(--success-600)', background: 'transparent' }}
                 >
                   Edit Substrate in Drawing Tool
                 </button>
@@ -1013,7 +1020,7 @@ export const NewReactionPage = () => {
                   onClick={() => editInDraw(2)}
                   disabled={productSmiles.trim().length < 2}
                   className="flex-1 inline-flex items-center justify-center px-3 py-2 rounded-full text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed border"
-                  style={{ borderColor: 'var(--primary-500)', color: 'var(--primary-500)', background: 'transparent' }}
+                  style={{ borderColor: 'var(--success-600)', color: 'var(--success-600)', background: 'transparent' }}
                 >
                   Edit Product in Drawing Tool
                 </button>
@@ -1021,21 +1028,21 @@ export const NewReactionPage = () => {
 
               {/* Coffee message — shown below all buttons while loading */}
               {apiLoading && (
-                <p className="hidden sm:block text-sm text-muted-foreground text-center mt-2 whitespace-nowrap">
+                <p className="hidden sm:block text-sm text-muted-foreground text-center mt-2">
                   This may take a few minutes - we're searching through over 250 000 biocatalysts to find the best matches for you. ☕
                 </p>
               )}
             </div>
 
             {/* Mobile: copy + find biocatalysts + error */}
-            <div className="px-[95px] pb-4 space-y-3 sm:space-y-0">
+            <div className="px-4 sm:px-[95px] pb-4 space-y-3 sm:space-y-0">
               <div className="flex flex-col gap-3 sm:hidden">
                 <button
                   type="button"
                   onClick={() => setProduct(substrateSmiles)}
                   disabled={substrateSmiles.trim().length < 2}
                   className="w-full inline-flex flex-col items-center justify-center px-3 py-2 text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                  style={{ color: 'var(--primary-500)', background: 'transparent' }}
+                  style={{ color: 'var(--success-600)', background: 'transparent' }}
                 >
                   <span>click to copy substrate SMILES to product</span>
                   <span className="text-2xl leading-none mt-0.5" style={{ color: 'var(--color-primary, #538b5e)', opacity: 0.75 }}>⟶</span>

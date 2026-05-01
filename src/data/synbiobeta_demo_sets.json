@@ -275,16 +275,6 @@
         "is_impossible": false
       },
       {
-        "id": "D29",
-        "ec": "2.7.1.20",
-        "ec_name": "Adenosine kinase",
-        "substrate_name": "adenosine + ATP",
-        "product_name": "AMP + ADP",
-        "reaction_smiles": "Nc1ncnc2c1ncn2[C@@H]1O[C@H](CO)[C@@H](O)[C@H]1O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)O)[C@@H](O)[C@H]1O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O",
-        "story": "Adenosine kinase — regulates extracellular adenosine, a neuroprotective signalling molecule; AK inhibition raises adenosine levels to protect against seizures",
-        "is_impossible": false
-      },
-      {
         "id": "D23",
         "ec": "3.4.21.4",
         "ec_name": "Trypsin",
@@ -292,16 +282,6 @@
         "product_name": "L-Ala + L-Arg",
         "reaction_smiles": "C[C@@H](N)C(=O)N[C@@H](CCCNC(=N)N)C(=O)O.O>>C[C@@H](N)C(=O)O.N[C@@H](CCCNC(=N)N)C(=O)O",
         "story": "Trypsin — serine protease that cleaves C-terminal to Arg/Lys; founding member of the chymotrypsin superfamily; workhorse of proteomics sample preparation",
-        "is_impossible": false
-      },
-      {
-        "id": "D27",
-        "ec": "4.2.1.17",
-        "ec_name": "Enoyl-CoA hydratase (crotonase)",
-        "substrate_name": "crotonyl-CoA + H₂O",
-        "product_name": "(S)-3-hydroxybutanoyl-CoA",
-        "reaction_smiles": "CC=CC(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O.O>>C[C@@H](O)CC(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O",
-        "story": "Crotonase — syn hydration of the 2-enoyl-CoA double bond; core β-oxidation enzyme; the CoA thioester visualises the substrate's origin beautifully",
         "is_impossible": false
       },
       {
@@ -741,16 +721,6 @@
         "is_impossible": false
       },
       {
-        "id": "D27",
-        "ec": "4.2.1.17",
-        "ec_name": "Enoyl-CoA hydratase (crotonase)",
-        "substrate_name": "crotonyl-CoA + H₂O",
-        "product_name": "(S)-3-hydroxybutanoyl-CoA",
-        "reaction_smiles": "CC=CC(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O.O>>C[C@@H](O)CC(=O)SCCNC(=O)CCNC(=O)[C@H](O)C(C)(C)COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O",
-        "story": "Crotonase — syn hydration of the 2-enoyl-CoA double bond; core β-oxidation enzyme; the CoA thioester visualises the substrate's origin beautifully",
-        "is_impossible": false
-      },
-      {
         "id": "D06",
         "ec": "4.3.1.23",
         "ec_name": "Tyrosine ammonia-lyase (TAL)",
@@ -827,16 +797,6 @@
         "product_name": "D-glucose + D-galactose",
         "reaction_smiles": "OC[C@H]1O[C@@H](O[C@H]2[C@@H](O)[C@@H](O)[C@@H](CO)O[C@@H]2O)[C@H](O)[C@@H](O)[C@H]1O.O>>OC[C@H]1O[C@@H](O)[C@H](O)[C@@H](O)[C@H]1O.OC[C@@H]1O[C@@H](O)[C@@H](O)[C@H](O)[C@H]1O",
         "story": "Lactase — the enzyme lactose-intolerant people lack; industrial enzyme added to dairy for lactose-free milk production worldwide",
-        "is_impossible": false
-      },
-      {
-        "id": "D29",
-        "ec": "2.7.1.20",
-        "ec_name": "Adenosine kinase",
-        "substrate_name": "adenosine + ATP",
-        "product_name": "AMP + ADP",
-        "reaction_smiles": "Nc1ncnc2c1ncn2[C@@H]1O[C@H](CO)[C@@H](O)[C@H]1O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O>>Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)O)[C@@H](O)[C@H]1O.Nc1ncnc2c1ncn2[C@@H]1O[C@H](COP(=O)(O)OP(=O)(O)O)[C@@H](O)[C@H]1O",
-        "story": "Adenosine kinase — regulates extracellular adenosine, a neuroprotective signalling molecule; AK inhibition raises adenosine levels to protect against seizures",
         "is_impossible": false
       },
       {
@@ -1004,16 +964,6 @@
         "product_name": "histamine + CO₂",
         "reaction_smiles": "N[C@@H](Cc1c[nH]cn1)C(=O)O>>NCCc1c[nH]cn1.O=C=O",
         "story": "PLP-dependent histidine decarboxylase — makes histamine; the antiallergy drug cimetidine inhibits downstream H2 receptors",
-        "is_impossible": false
-      },
-      {
-        "id": "D38",
-        "ec": "2.3.1.95",
-        "ec_name": "Stilbene synthase / chalcone synthase (Claisen condensation)",
-        "substrate_name": "4-coumaroyl-CoA + malonyl-CoA",
-        "product_name": "coumarate + malonyl release (decarboxylative Claisen)",
-        "reaction_smiles": "OC(=O)/C=C/c1ccc(O)cc1.CC(C)(COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O)[C@@H](O)C(=O)NCCC(=O)NCCSC(=O)CC(=O)O>>Oc1ccc(/C=C/C(=O)O)cc1.O=C=O.CC(C)(COP(=O)(O)OP(=O)(O)OC[C@H]1O[C@@H](n2cnc3c(N)ncnc32)[C@H](O)[C@@H]1OP(=O)(O)O)[C@@H](O)C(=O)NCCC(=O)NCCSC(=O)O",
-        "story": "Type III PKS — decarboxylative Claisen condensation of malonyl-CoA onto coumaroyl-CoA; entry point to the entire flavonoid and stilbene families in plants",
         "is_impossible": false
       },
       {

@@ -31,8 +31,8 @@ export const HistoryPage = () => {
   };
 
   return (
-    <div className="p-6 h-full overflow-y-auto">
-      <div className="mb-6 flex items-center justify-between">
+    <div className="p-4 sm:p-6 pt-14 sm:pt-6 h-full overflow-y-auto">
+      <div className="mb-6 flex items-center justify-between gap-3 flex-wrap">
         <div>
           <h1 className="text-xl font-bold text-foreground">History</h1>
           <p className="text-sm text-muted-foreground mt-0.5">Reactions you've run this session</p>

@@ -250,6 +250,38 @@
   align-items: center;
   gap: 10px;
 }
+@media (max-width: 640px) {
+  .dashboard-top-actions {
+    top: 10px;
+    right: 10px;
+    gap: 6px;
+  }
+}
+
+/* Mobile-only hamburger to open the sidebar drawer. */
+.dashboard-mobile-menu-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--border-default);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.dashboard-mobile-menu-btn:hover {
+  color: var(--primary-600);
+  border-color: var(--primary-500);
+  background: var(--bg-tertiary);
+}
 
 .dashboard-contact-link {
   font-size: 12.5px;
@@ -261,7 +293,17 @@
   border-radius: 999px;
   border: 1px solid var(--border-default);
   background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+@media (max-width: 640px) {
+  .dashboard-contact-link {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+  }
 }
 .dashboard-contact-link:hover {
   color: var(--primary-500);
@@ -274,17 +316,23 @@
   font-weight: 600;
   letter-spacing: 0.01em;
   color: #ffffff;
-  background: var(--primary-500);
+  background: var(--green-bright);
   border: none;
   padding: 8px 16px;
   border-radius: 999px;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(68, 115, 81, 0.12);
+  box-shadow: 0 1px 2px rgba(108, 160, 51, 0.18);
   transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
+@media (max-width: 640px) {
+  .dashboard-waitlist-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
 .dashboard-waitlist-btn:hover {
-  background: var(--primary-600);
-  box-shadow: 0 2px 6px rgba(68, 115, 81, 0.2);
+  background: var(--green-bright-hover);
+  box-shadow: 0 2px 8px rgba(108, 160, 51, 0.28);
   transform: translateY(-1px);
 }
 .dashboard-waitlist-btn:active {

@@ -802,10 +802,10 @@ export const TestReactionPage = () => {
 
       {/* Title section — full width */}
       <div
-        className="w-full border-b px-8 py-4"
+        className="w-full border-b px-4 sm:px-8 pt-14 pb-4 sm:py-4"
         style={{ borderColor: accentBorder, backgroundColor: accentBg }}
       >
-        <div className="flex items-start gap-5 max-w-6xl ml-0">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-4 sm:gap-5 max-w-6xl ml-0">
           {/* Accent bar */}
           <div
             className="w-1.5 self-stretch rounded-full shrink-0"
@@ -841,7 +841,7 @@ export const TestReactionPage = () => {
       </div>
 
       {/* Scrollable body */}
-      <div className="w-full px-8 py-2 space-y-3">
+      <div className="w-full px-4 sm:px-8 py-2 space-y-3">
 
         {/* Back button */}
         <button
@@ -854,7 +854,7 @@ export const TestReactionPage = () => {
         </button>
 
         {/* Two main boxes side by side */}
-        <div className="grid grid-cols-[2fr_1fr] gap-6 items-stretch min-h-[313px]">
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 lg:gap-6 items-stretch lg:min-h-[313px]">
 
           {/* Reaction structural view */}
           <ReactionHeader
