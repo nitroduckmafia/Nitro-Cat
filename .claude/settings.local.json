@@ -46,7 +46,11 @@
       "Bash(git rm *)",
       "mcp__plugin_woz_code__Search",
       "Skill(woz:woz-login)",
-      "Bash(npx vite *)"
+      "Bash(npx vite *)",
+      "Bash(PYTHONIOENCODING=utf-8 python *)",
+      "Bash(rm .git/config.lock)",
+      "Bash(git branch *)",
+      "Bash(bun dev *)"
     ]
   }
 }

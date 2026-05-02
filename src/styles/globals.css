@@ -73,6 +73,45 @@
   --shadow-xl: 0 20px 25px -5px rgba(68, 115, 81, 0.1), 0 10px 10px -5px rgba(68, 115, 81, 0.04);
 
   --glow-primary: 0 0 0 3px rgba(83, 139, 94, 0.1);
+
+  /* shadcn/ui token bridge — these MUST be space-separated HSL channels because
+     tailwind.config.ts wraps them as hsl(var(--token)). Mapped to the custom
+     --bg-, --text-, --border- palette so both systems stay in sync. */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 10%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 10%;
+  --primary: 134 25% 44%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 150 30% 97%;
+  --secondary-foreground: 0 0% 15%;
+  --muted: 150 30% 96%;
+  --muted-foreground: 215 14% 40%;
+  --accent: 150 30% 95%;
+  --accent-foreground: 134 25% 30%;
+  --destructive: 0 75% 55%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 218 25% 91%;
+  --input: 218 25% 91%;
+  --ring: 134 25% 44%;
+  --success: 134 25% 44%;
+  --success-foreground: 0 0% 100%;
+  --info: 217 91% 60%;
+  --info-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 100%;
+  --danger: 0 75% 55%;
+  --danger-foreground: 0 0% 100%;
+  --sidebar-background: 150 30% 98%;
+  --sidebar-foreground: 215 14% 35%;
+  --sidebar-primary: 134 25% 44%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 150 30% 94%;
+  --sidebar-accent-foreground: 134 25% 30%;
+  --sidebar-border: 218 25% 91%;
+  --sidebar-ring: 134 25% 44%;
 }
 
   .dark {
@@ -137,6 +176,43 @@
 
   --glow-primary: 0 0 0 3px rgba(83, 139, 94, 0.15);
   --glow-success: 0 0 12px rgba(63, 185, 80, 0.3);
+
+  /* shadcn/ui token bridge (dark) */
+  --background: 145 20% 5%;
+  --foreground: 152 38% 92%;
+  --card: 150 18% 9%;
+  --card-foreground: 152 38% 92%;
+  --popover: 150 18% 9%;
+  --popover-foreground: 152 38% 92%;
+  --primary: 134 25% 44%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 145 22% 7%;
+  --secondary-foreground: 152 38% 92%;
+  --muted: 145 18% 12%;
+  --muted-foreground: 150 9% 58%;
+  --accent: 145 18% 14%;
+  --accent-foreground: 127 56% 65%;
+  --destructive: 0 70% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 140 12% 19%;
+  --input: 140 12% 19%;
+  --ring: 127 50% 48%;
+  --success: 127 50% 48%;
+  --success-foreground: 0 0% 100%;
+  --info: 187 92% 43%;
+  --info-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 0%;
+  --danger: 0 70% 60%;
+  --danger-foreground: 0 0% 100%;
+  --sidebar-background: 145 22% 7%;
+  --sidebar-foreground: 150 9% 60%;
+  --sidebar-primary: 134 25% 44%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 145 18% 12%;
+  --sidebar-accent-foreground: 152 38% 92%;
+  --sidebar-border: 140 12% 19%;
+  --sidebar-ring: 127 50% 48%;
 }
 }
 
@@ -292,7 +368,8 @@
   padding: 7px 14px;
   border-radius: 999px;
   border: 1px solid var(--border-default);
-  background: transparent;
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;

@@ -831,7 +831,7 @@ export const NewReactionPage = () => {
   // ── Select view ─────────────────────────────────────────────────────────────
 
   const SelectContent = (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col h-full overflow-y-auto bg-background">
       <div className="p-4">
         <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="gap-1.5">
           <ArrowLeft className="w-4 h-4" />
@@ -876,7 +876,7 @@ export const NewReactionPage = () => {
   ];
 
   const InputContent = (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col h-full overflow-y-auto bg-background">
       <div className="p-4 pt-14 sm:pt-4 flex flex-wrap items-center gap-3 sm:gap-4">
         <Button variant="ghost" size="sm" onClick={() => goTo('select')} className="gap-1.5 shrink-0">
           <ArrowLeft className="w-4 h-4" />
@@ -1235,7 +1235,7 @@ export const NewReactionPage = () => {
   // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
-    <div className={cn('transition-opacity duration-150', visible ? 'opacity-100' : 'opacity-0')}>
+    <div className={cn('h-full transition-opacity duration-150', visible ? 'opacity-100' : 'opacity-0')}>
       {view === 'select' && SelectContent}
       {view === 'input'  && InputContent}
       {view === 'result' && (

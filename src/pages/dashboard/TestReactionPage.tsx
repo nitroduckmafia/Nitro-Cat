@@ -422,8 +422,29 @@ const ReactionHeader = ({ substrateSmiles, productSmiles, substrateInfo, product
   };
 
   return (
-    <div className="h-full rounded-xl border border-border bg-muted/20 px-1 py-0 flex flex-col justify-center overflow-hidden">
-      <div className="flex items-center justify-center gap-2">
+    <div className="h-full rounded-xl border border-border bg-muted/20 px-1 py-2 sm:py-0 flex flex-col justify-center overflow-hidden">
+      {/* Mobile: stacked vertical layout */}
+      <div className="flex sm:hidden flex-col items-center gap-1 w-full px-2">
+        <div className="flex flex-col items-center w-full">
+          <div className="w-full flex justify-center">
+            <MoleculeViewer smiles={substrateSmiles} width={280} height={150} />
+          </div>
+          <div className="-mt-1 w-full flex justify-center text-center">{renderLabel('Substrate', substrateInfo)}</div>
+        </div>
+        <div className="flex items-center gap-2 my-1" style={{ color: accentColor ?? '#6CA033' }}>
+          <span className="text-sm font-semibold whitespace-nowrap">{enzymeName ?? 'Enzyme'}</span>
+          <span className="text-2xl leading-none" style={{ color: 'var(--color-primary, #538b5e)', opacity: 0.75 }}>↓</span>
+        </div>
+        <div className="flex flex-col items-center w-full">
+          <div className="w-full flex justify-center">
+            <MoleculeViewer smiles={productSmiles} width={280} height={150} />
+          </div>
+          <div className="-mt-1 w-full flex justify-center text-center">{renderLabel('Product', productInfo)}</div>
+        </div>
+      </div>
+
+      {/* Desktop: original horizontal layout */}
+      <div className="hidden sm:flex items-center justify-center gap-2">
         {/* Substrate */}
         <div className="flex flex-col items-center">
           <MoleculeViewer smiles={substrateSmiles} width={390} height={220} />
@@ -586,7 +607,7 @@ const CandidateCard = ({ enzyme, rank, zz, expanded, onToggle, inKit, onToggleKi
               className="gap-1.5 flex-1 font-semibold"
               style={inKit
                 ? { background: '#C00000', color: '#fff' }
-                : { background: '#538b5e', color: '#fff' }}
+                : { background: '#6ca033', color: '#fff' }}
               onClick={onToggleKit}
             >
               {inKit ? (
@@ -872,7 +893,7 @@ export const TestReactionPage = () => {
           {/* Kit card */}
           {(() => {
             const kitCount = kitIds.size;
-            const kitPrice = shareDiscount ? 4000 : 5000;
+            const kitPrice = shareDiscount ? 3000 : 4000;
             return (
               <div className="flex flex-col rounded-xl border border-border bg-muted/20 px-4 py-3 gap-2">
 
@@ -911,7 +932,7 @@ export const TestReactionPage = () => {
                 <div className="space-y-2">
                   <div className="flex items-baseline gap-2">
                     {shareDiscount && (
-                      <span className="text-sm text-muted-foreground line-through">$5,000</span>
+                      <span className="text-sm text-muted-foreground line-through">$4,000</span>
                     )}
                     <span className="text-2xl font-bold text-foreground">${kitPrice.toLocaleString()}</span>
                     {shareDiscount && (
@@ -1089,8 +1110,8 @@ export const TestReactionPage = () => {
               onClick={() => setShowKitOnly(v => !v)}
               className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-sm font-semibold transition-all cursor-pointer border"
               style={showKitOnly
-                ? { background: '#538b5e', color: '#fff', borderColor: '#538b5e' }
-                : { borderColor: '#538b5e', color: '#538b5e', background: 'transparent' }}
+                ? { background: '#6ca033', color: '#fff', borderColor: '#6ca033' }
+                : { borderColor: '#6ca033', color: '#6ca033', background: 'transparent' }}
             >
               <ShoppingCart className="w-4 h-4" />
               {showKitOnly ? 'Show all biocatalysts' : 'Show only biocatalysts in kit'}
@@ -1237,7 +1258,7 @@ export const TestReactionPage = () => {
         <DialogContent className="max-w-xl max-h-[85vh] overflow-y-auto rounded-xl" style={{ background: 'var(--bg-elevated)' }}>
           {(() => {
             const kitCount   = kitIds.size;
-            const kitPrice   = shareDiscount ? 4000 : 5000;
+            const kitPrice   = shareDiscount ? 3000 : 4000;
             const savings    = 1000;
             const autoSelected  = candidates.filter((c, i) =>  kitIds.has(c.id) && (i + 1) <= zz);
             const manualSelected = candidates.filter((c, i) => kitIds.has(c.id) && (i + 1) >  zz);
@@ -1273,7 +1294,7 @@ export const TestReactionPage = () => {
                   {/* Price summary */}
                   <div className="flex items-baseline gap-2">
                     {shareDiscount && (
-                      <span className="text-sm text-muted-foreground line-through">$5,000</span>
+                      <span className="text-sm text-muted-foreground line-through">$4,000</span>
                     )}
                     <span className="text-2xl font-bold text-foreground">${kitPrice.toLocaleString()}</span>
                     {shareDiscount && (

@@ -366,7 +366,7 @@ function WrongModal({ open, impossibleRxn, onNextRound, drawer, theme, drawerRea
                 <button
                   type="button"
                   onClick={onNextRound}
-                  style={{ background: '#538b5e', color: '#fff' }}
+                  style={{ background: '#6ca033', color: '#fff' }}
                   className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
                 >
                   Next Round →
@@ -396,7 +396,7 @@ function CorrectModal({ open, onNextRound, onClose }: {
           <button
             type="button"
             onClick={onNextRound}
-            style={{ background: '#538b5e', color: '#fff' }}
+            style={{ background: '#6ca033', color: '#fff' }}
             className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
           >
             Next Round →
@@ -428,7 +428,7 @@ function GameOverModal({ open, correct, onNewGame, onJoinList, onClose }: {
             <button
               type="button"
               onClick={onJoinList}
-              style={{ background: '#538b5e', color: '#fff' }}
+              style={{ background: '#6ca033', color: '#fff' }}
               className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
             >
               Join the waiting list 🧬
@@ -485,7 +485,7 @@ function EmailCaptureModal({ open, onClose }: { open: boolean; onClose: () => vo
                 />
                 <button
                   type="submit"
-                  style={{ background: '#538b5e', color: '#fff' }}
+                  style={{ background: '#6ca033', color: '#fff' }}
                   className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
                 >
                   Notify me when live
@@ -731,7 +731,7 @@ export default function DemoPage() {
             <button
               type="button"
               onClick={selectedId ? reveal : undefined}
-              style={selectedId ? { background: '#538b5e', color: '#fff', borderColor: '#538b5e' } : undefined}
+              style={selectedId ? { background: '#6ca033', color: '#fff', borderColor: '#6ca033' } : undefined}
               className={cn(
                 'w-full sm:w-auto px-5 py-2 rounded-lg text-sm font-bold border transition-all duration-200',
                 selectedId
