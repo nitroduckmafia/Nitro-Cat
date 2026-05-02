@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTheme } from 'next-themes';
 import SmilesDrawer from 'smiles-drawer';
+import { MOLECULE_THEMES } from '@/design/tokens';
 
 interface MoleculeViewerProps {
   smiles: string;
@@ -11,40 +12,9 @@ interface MoleculeViewerProps {
   name?: string;
 }
 
-// Custom themes using our palette
 const NITRO_THEMES = {
-  'nitro-light': {
-    FOREGROUND: '#1A1A1A',
-    BACKGROUND: '#FFFFFF',
-    C:  '#1A1A1A',
-    O:  '#DC2626',
-    N:  '#1D4ED8',
-    F:  '#059669',
-    CL: '#059669',
-    BR: '#B45309',
-    I:  '#7C3AED',
-    P:  '#D97706',
-    S:  '#D97706',
-    B:  '#D97706',
-    SI: '#D97706',
-    H:  '#718096',
-  },
-  'nitro-dark': {
-    FOREGROUND: '#E2E8F0',
-    BACKGROUND: '#141C18',
-    C:  '#E2E8F0',
-    O:  '#F87171',
-    N:  '#60A5FA',
-    F:  '#34D399',
-    CL: '#34D399',
-    BR: '#FCD34D',
-    I:  '#A78BFA',
-    P:  '#FBBF24',
-    S:  '#FBBF24',
-    B:  '#FBBF24',
-    SI: '#FBBF24',
-    H:  '#9CA3AF',
-  },
+  'nitro-light': MOLECULE_THEMES.light,
+  'nitro-dark':  MOLECULE_THEMES.dark,
 };
 
 export const MoleculeViewer = ({ smiles, width = 240, height = 160, renderWidth, renderHeight }: MoleculeViewerProps) => {

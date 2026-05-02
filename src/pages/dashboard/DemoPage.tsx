@@ -230,7 +230,7 @@ function ReactionCard({ rxn, selected, phase, onClick, onEnzymeClick, orgs, draw
       className={cn(
         'rounded-xl border bg-secondary p-5 flex flex-col gap-3 transition-all duration-150',
         (!revealed || (revealed && !rxn.is_impossible)) && 'cursor-pointer',
-        !revealed && selected && 'border-2 border-primary bg-[rgba(83,139,94,0.22)] ring-2 ring-primary/40 shadow-[0_0_28px_rgba(83,139,94,0.5)]',
+        !revealed && selected && 'border-2 border-primary bg-accent ring-2 ring-primary/40',
         !revealed && !selected && 'hover:border-primary/60 hover:bg-muted',
         revealed && rxn.is_impossible && 'border-red-500 bg-red-500/5',
         revealed && !rxn.is_impossible && 'border-green-600 dark:border-green-500',
@@ -298,7 +298,7 @@ function EnzymeDetailModal({ rxn, orgs, onClose }: { rxn: DemoReaction | null; o
   const enzymes = getMockEnzymes(rxn, orgs);
   return (
     <Dialog open={!!rxn} onOpenChange={o => { if (!o) onClose(); }}>
-      <DialogContent className="max-w-[500px] w-[90vw] p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[#141C18]">
+      <DialogContent className="max-w-[500px] w-[90vw] p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[var(--bg-elevated)]">
         <div className="p-6 flex flex-col gap-4">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-green-500/10 text-green-500 text-lg shrink-0">🧬</div>
@@ -348,7 +348,7 @@ function WrongModal({ open, impossibleRxn, onNextRound, drawer, theme, drawerRea
   return (
     <Dialog open={open} onOpenChange={o => { if (!o) onClose(); }}>
       <DialogContent
-        className="max-w-[780px] w-[90vw] p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[#141C18]"
+        className="max-w-[780px] w-[90vw] p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[var(--bg-elevated)]"
       >
         {impossibleRxn && (
           <>
@@ -366,7 +366,7 @@ function WrongModal({ open, impossibleRxn, onNextRound, drawer, theme, drawerRea
                 <button
                   type="button"
                   onClick={onNextRound}
-                  style={{ background: '#6ca033', color: '#fff' }}
+                  style={{ background: 'var(--brand-primary)', color: 'var(--bg-primary)' }}
                   className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
                 >
                   Next Round →
@@ -387,7 +387,7 @@ function CorrectModal({ open, onNextRound, onClose }: {
   return (
     <Dialog open={open} onOpenChange={o => { if (!o) onClose(); }}>
       <DialogContent
-        className="max-w-[400px] w-[90vw] p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[#141C18]"
+        className="max-w-[400px] w-[90vw] p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[var(--bg-elevated)]"
       >
         <div className="p-6 flex flex-col gap-4">
           <div className="text-center text-5xl pt-2">🎉</div>
@@ -396,7 +396,7 @@ function CorrectModal({ open, onNextRound, onClose }: {
           <button
             type="button"
             onClick={onNextRound}
-            style={{ background: '#6ca033', color: '#fff' }}
+            style={{ background: 'var(--brand-primary)', color: 'var(--bg-primary)' }}
             className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
           >
             Next Round →
@@ -414,7 +414,7 @@ function GameOverModal({ open, correct, onNewGame, onJoinList, onClose }: {
   const won = correct >= 2;
   return (
     <Dialog open={open} onOpenChange={o => { if (!o) onClose(); }}>
-      <DialogContent className="max-w-[480px] w-[90vw] p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[#141C18]">
+      <DialogContent className="max-w-[480px] w-[90vw] p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[var(--bg-elevated)]">
         <div className="p-6 flex flex-col gap-4">
           <div className="text-center text-5xl pt-2">{won ? '🏆' : '😔'}</div>
           <div className="text-2xl font-bold text-center">
@@ -428,7 +428,7 @@ function GameOverModal({ open, correct, onNewGame, onJoinList, onClose }: {
             <button
               type="button"
               onClick={onJoinList}
-              style={{ background: '#6ca033', color: '#fff' }}
+              style={{ background: 'var(--brand-primary)', color: 'var(--bg-primary)' }}
               className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
             >
               Join the waiting list 🧬
@@ -466,7 +466,7 @@ function EmailCaptureModal({ open, onClose }: { open: boolean; onClose: () => vo
 
   return (
     <Dialog open={open} onOpenChange={o => { if (!o) handleClose(); }}>
-      <DialogContent className="max-w-sm p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[#141C18]">
+      <DialogContent className="max-w-sm p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[var(--bg-elevated)]">
         <div className="p-6 flex flex-col gap-4">
           {!submitted ? (
             <>
@@ -485,7 +485,7 @@ function EmailCaptureModal({ open, onClose }: { open: boolean; onClose: () => vo
                 />
                 <button
                   type="submit"
-                  style={{ background: '#6ca033', color: '#fff' }}
+                  style={{ background: 'var(--brand-primary)', color: 'var(--bg-primary)' }}
                   className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
                 >
                   Notify me when live
@@ -503,7 +503,7 @@ function EmailCaptureModal({ open, onClose }: { open: boolean; onClose: () => vo
               <button
                 type="button"
                 onClick={handleClose}
-                style={{ background: '#538b5e', color: '#fff' }}
+                style={{ background: 'var(--brand-primary)', color: 'var(--bg-primary)' }}
                 className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
               >
                 Back to game
@@ -697,7 +697,7 @@ export default function DemoPage() {
           <button
             type="button"
             onClick={() => setPhase('guess')}
-            style={{ background: 'var(--green-bright)', color: '#fff' }}
+            style={{ background: 'var(--brand-primary)', color: 'var(--bg-primary)' }}
             className="w-full max-w-sm py-4 rounded-[10px] text-lg font-bold border-none cursor-pointer hover:opacity-90 transition-opacity shadow-lg"
           >
             Start Puzzle →
@@ -731,7 +731,7 @@ export default function DemoPage() {
             <button
               type="button"
               onClick={selectedId ? reveal : undefined}
-              style={selectedId ? { background: '#6ca033', color: '#fff', borderColor: '#6ca033' } : undefined}
+              style={selectedId ? { background: 'var(--brand-primary)', color: 'var(--bg-primary)', borderColor: 'var(--brand-primary)' } : undefined}
               className={cn(
                 'w-full sm:w-auto px-5 py-2 rounded-lg text-sm font-bold border transition-all duration-200',
                 selectedId

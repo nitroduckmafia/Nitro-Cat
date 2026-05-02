@@ -1,70 +1,78 @@
 .dark {
-  /* Backgrounds - Dark green-gray (NOT teal!) */
-  --bg-primary: #0A0F0D;
-  --bg-secondary: #0F1612;
-  --bg-tertiary: #1A2420;
-  --bg-elevated: #141C18;
+  /* Backgrounds — warm charcoal (evening reading lamp, not hacker terminal) */
+  --bg-primary:  #262624;
+  --bg-secondary:#2F2E2B;
+  --bg-tertiary: #3A3936;
+  --bg-elevated: #2F2E2B;
 
-  /* Text - Soft white with green tint */
-  --text-primary: #E6F3ED;
-  --text-secondary: #8B9E94;
-  --text-tertiary: #6E7F76;
-  --text-disabled: #4A5751;
+  /* Text — warm off-white */
+  --text-primary:   #EDECE4;
+  --text-secondary: #B8B5AC;
+  --text-tertiary:  #8A8780;
+  --text-disabled:  #5C5A52;
 
-  /* Borders - Green-gray */
-  --border-default: #2D3932;
-  --border-emphasis: #3D4F44;
-  --border-interactive: #3FB950;
+  /* Borders — warm dark gray */
+  --border-default:    #3F3D38;
+  --border-emphasis:   #565249;
+  --border-interactive:#6FAF82;
 
-  /* Primary GREEN */
-  --primary-50: #0D2B1C;
-  --primary-100: #0F4429;
-  --primary-500: #538b5e;
-  --primary-600: #34D399;
-  --primary-700: #6EE7B7;
-  --primary-800: #A7F3D0;
+  /* Brand — lifted forest for contrast on dark */
+  --brand-primary:   #6FAF82;
+  --brand-primary-h: #82C195;
+  --brand-soft:      #2E3F33;
+  --brand-ink:       #A0D4AE;
 
-  /* Success GREEN (high confidence 90%+) */
-  --success-50: #0D2B1C;
-  --success-100: #0F4429;
-  --success-500: #3FB950;
-  --success-600: #56D364;
-  --success-700: #7EE787;
+  /* Radius — same as light */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius: var(--radius-md);
 
-  /* Info CYAN (secondary actions) */
-  --info-50: #0B2B3C;
+  /* Confidence — lifted versions for dark backgrounds */
+  --conf-high:   #6FAF82;  /* lifted forest  — ≥ 0.9 */
+  --conf-good:   #9BBF7E;  /* lifted olive   — ≥ 0.8 */
+  --conf-medium: #D4A35A;  /* lifted ochre   — ≥ 0.5 */
+  --conf-low:    #D4706A;  /* lifted brick   — < 0.5 */
+
+  /* Success GREEN scale (dark) */
+  --success-50:  #1E3324;
+  --success-100: #2A4832;
+  --success-500: #6FAF82;
+  --success-600: #82C195;
+  --success-700: #A0D4AE;
+
+  /* Info CYAN (dark) */
+  --info-50:  #0B2B3C;
   --info-100: #0F3D54;
-  --info-500: #06B6D4;
-  --info-600: #22D3EE;
-  --info-700: #67E8F9;
+  --info-500: #60A5FA;
+  --info-600: #93C5FD;
+  --info-700: #BFDBFE;
 
-  /* Warning AMBER (medium confidence 75-89%) */
-  --warning-50: #2D2000;
-  --warning-100: #4D3600;
-  --warning-500: #F59E0B;
-  --warning-600: #FBBF24;
-  --warning-700: #FCD34D;
+  /* Warning AMBER (dark) */
+  --warning-50:  #2D2010;
+  --warning-100: #4A3418;
+  --warning-500: #D4A35A;
+  --warning-600: #E8BF7E;
+  --warning-700: #F0D4A0;
 
-  /* Danger RED (low confidence <75%) */
-  --danger-50: #2D0B0B;
-  --danger-100: #4D1616;
-  --danger-500: #F87171;
-  --danger-600: #FCA5A5;
-  --danger-700: #FECACA;
+  /* Danger RED (dark) */
+  --danger-50:  #2D1210;
+  --danger-100: #4A1E1A;
+  --danger-500: #D4706A;
+  --danger-600: #E89490;
+  --danger-700: #F0B8B4;
 
-  /* Brand accent palette — same hex in both modes (brand colors don't flip) */
-  --green-sage: #538b5e;
-  --green-bright: #6ca033;
-  --green-dark: #25512b;
-  --green-bright-hover: #5a8a28;
-  --amber: #B45309;
+  /* Legacy primary-* aliases */
+  --primary-50:  #1E3324;
+  --primary-100: #2A4832;
+  --primary-500: var(--brand-primary);
+  --primary-600: var(--brand-primary-h);
+  --primary-700: #A0D4AE;
+  --primary-800: var(--brand-ink);
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(83, 139, 94, 0.2);
-  --shadow-md: 0 4px 6px -1px rgba(83, 139, 94, 0.3), 0 2px 4px -1px rgba(83, 139, 94, 0.2);
-  --shadow-lg: 0 10px 15px -3px rgba(83, 139, 94, 0.3), 0 4px 6px -2px rgba(83, 139, 94, 0.2);
-  --shadow-xl: 0 20px 25px -5px rgba(83, 139, 94, 0.4), 0 10px 10px -5px rgba(83, 139, 94, 0.3);
-
-  --glow-primary: 0 0 0 3px rgba(83, 139, 94, 0.15);
-  --glow-success: 0 0 12px rgba(63, 185, 80, 0.3);
+  /* Shadows — slightly stronger neutral on dark */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.24), 0 1px 2px rgba(0, 0, 0, 0.18);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.28);
+  --shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.36);
 }

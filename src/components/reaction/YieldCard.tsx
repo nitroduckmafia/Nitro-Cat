@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { getConfidenceColor } from '@/lib/utils/formatting';
 import { FlaskConical, Beaker, BookOpen, ExternalLink, Dna, HelpCircle, GitCompareArrows, Loader2, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Enzyme, GroupStats } from '@/types/enzyme';
 import { MoleculeViewer } from '@/components/molecule/MoleculeViewer';
@@ -56,12 +57,7 @@ function primaryOrganic(frags: string[]): string {
   return organic.reduce((a, b) => b.length > a.length ? b : a);
 }
 
-function simiScoreColor(score: number): string {
-  if (score >= 0.9) return '#25512B';
-  if (score >= 0.8) return '#6CA033';
-  if (score >= 0.5) return '#F69B05';
-  return '#C00000';
-}
+const simiScoreColor = getConfidenceColor;
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const SUBSTRATE_MASS_UG = 10;        // µg   — m_S
@@ -645,7 +641,7 @@ export const YieldCard = ({
           type="button"
           onClick={onExploreBiocatalysts}
           className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-sm font-semibold transition-all cursor-pointer"
-          style={{ background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.25)' }}
+          style={{ background: 'var(--primary-500)', color: '#fff', boxShadow: 'none' }}
         >
           <Dna className="w-4 h-4" />
           Explore selected biocatalysts

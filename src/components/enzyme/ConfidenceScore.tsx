@@ -1,19 +1,12 @@
-import { formatScore, formatConfidenceLabel } from "@/lib/utils/formatting";
+import { formatScore, formatConfidenceLabel, CONFIDENCE_COLORS } from "@/lib/utils/formatting";
 
 interface ConfidenceScoreProps {
   score: number;
 }
 
-const colorMap: Record<'high' | 'good' | 'medium' | 'low', string> = {
-  high:   '#25512B',
-  good:   '#6CA033',
-  medium: '#F69B05',
-  low:    '#C00000',
-};
-
 export const ConfidenceScore = ({ score }: ConfidenceScoreProps) => {
   const label = formatConfidenceLabel(score);
-  const color = colorMap[label];
+  const color = CONFIDENCE_COLORS[label];
 
   return (
     <span

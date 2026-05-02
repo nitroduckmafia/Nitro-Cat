@@ -1,3 +1,7 @@
+import { CONFIDENCE_COLORS } from '@/design/tokens';
+
+export { CONFIDENCE_COLORS };
+
 // Transform raw CLIPZyme cosine similarity into an intuitive 0–1 scale.
 // Empirical bounds from testing real reactions against the backend:
 //   ~0.10 = no meaningful match, ~0.55 = best observed match (raised from 0.45
@@ -19,6 +23,10 @@ export function formatConfidenceLabel(score: number): 'high' | 'good' | 'medium'
   if (score >= 0.8)  return 'good'; // 0.8–0.899 (< 0.9 already guaranteed by prior check)
   if (score >= 0.5)  return 'medium';
   return 'low';
+}
+
+export function getConfidenceColor(score: number): string {
+  return CONFIDENCE_COLORS[formatConfidenceLabel(score)];
 }
 
 export function formatPrice(price: string): string {

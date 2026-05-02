@@ -15,7 +15,7 @@ import {
   PencilLine, ScrollText, Beaker, Clock, AlertTriangle, BookOpen, Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { formatScore, formatConfidenceLabel } from "@/lib/utils/formatting";
+import { formatScore, formatConfidenceLabel, CONFIDENCE_COLORS } from "@/lib/utils/formatting";
 import SmilesDrawer from "smiles-drawer";
 import { addHistoryEntry } from "@/lib/history";
 import type { Enzyme, GroupStats } from "@/types/enzyme";
@@ -177,16 +177,10 @@ function validateInput(value: string, onResult: (valid: boolean) => void) {
 
 // ── Confidence badge ──────────────────────────────────────────────────────────
 
-const confidenceColorMap: Record<'high' | 'good' | 'medium' | 'low', string> = {
-  high:   '#25512B',
-  good:   '#6CA033',
-  medium: '#F69B05',
-  low:    '#C00000',
-};
 
 const ConfidenceBadge = ({ score }: { score: number }) => {
   const label = formatConfidenceLabel(score);
-  const color = confidenceColorMap[label];
+  const color = CONFIDENCE_COLORS[label];
   return (
     <span
       className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-sm font-mono font-semibold shrink-0"
@@ -287,7 +281,7 @@ const FindEnzymesButton = ({ active, loading, onClick }: { active: boolean; load
       )}
       style={
         active
-          ? { background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.25)' }
+          ? { background: 'var(--primary-500)', color: '#fff', boxShadow: 'none' }
           : { border: '2px solid var(--border-default)', background: 'var(--bg-secondary)', color: 'var(--text-muted)' }
       }
     >
@@ -966,7 +960,7 @@ export const NewReactionPage = () => {
                     style={{ color: 'var(--success-600)', background: 'transparent' }}
                   >
                     <span>click to copy substrate<br />SMILES to product</span>
-                    <span className="text-2xl leading-none mt-0.5" style={{ color: 'var(--color-primary, #538b5e)', opacity: 0.75 }}>⟶</span>
+                    <span className="text-2xl leading-none mt-0.5" style={{ color: 'var(--primary-500)', opacity: 0.75 }}>⟶</span>
                   </button>
 
                   {/* Spacer fills remaining height */}
@@ -1007,7 +1001,7 @@ export const NewReactionPage = () => {
                   )}
                   style={
                     canSubmit
-                      ? { background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.25)' }
+                      ? { background: 'var(--primary-500)', color: '#fff', boxShadow: 'none' }
                       : { border: '2px solid var(--border-default)', background: 'var(--bg-secondary)', color: 'var(--text-muted)' }
                   }
                 >
@@ -1045,7 +1039,7 @@ export const NewReactionPage = () => {
                   style={{ color: 'var(--success-600)', background: 'transparent' }}
                 >
                   <span>click to copy substrate SMILES to product</span>
-                  <span className="text-2xl leading-none mt-0.5" style={{ color: 'var(--color-primary, #538b5e)', opacity: 0.75 }}>⟶</span>
+                  <span className="text-2xl leading-none mt-0.5" style={{ color: 'var(--primary-500)', opacity: 0.75 }}>⟶</span>
                 </button>
                 <FindEnzymesButton active={canSubmit} loading={apiLoading} onClick={handleFindEnzymes} />
               </div>
@@ -1215,7 +1209,7 @@ export const NewReactionPage = () => {
                     )}
                     style={
                       substrateSmiles.trim()
-                        ? { background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.25)' }
+                        ? { background: 'var(--primary-500)', color: '#fff', boxShadow: 'none' }
                         : { border: '2px solid var(--border-default)', background: 'var(--bg-secondary)', color: 'var(--text-muted)' }
                     }
                   >

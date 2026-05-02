@@ -1,6 +1,6 @@
 /* 1. Font imports FIRST */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
 
 /* 2. Theme imports */
 @import './themes/light.css';
@@ -13,206 +13,236 @@
 
 @layer base {
   :root {
-  /* Backgrounds */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F7FBF9;
-  --bg-tertiary: #EFF6F3;
-  --bg-elevated: #FFFFFF;
+  /* Backgrounds — warm paper whites */
+  --bg-primary:    #FAF9F5;
+  --bg-secondary:  #F5F4EE;
+  --bg-tertiary:   #EDEBE3;
+  --bg-elevated:   #FAF9F5;
 
   /* Text */
-  --text-primary: #1A1A1A;
-  --text-secondary: #4A5568;
-  --text-tertiary: #718096;
-  --text-disabled: #A0AEC0;
+  --text-primary:   #1F1E1B;
+  --text-secondary: #5C5A52;
+  --text-tertiary:  #8A8780;
+  --text-disabled:  #B8B5AC;
 
   /* Borders */
-  --border-default: #E2E8F0;
-  --border-emphasis: #CBD5E0;
-  --border-interactive: #059669;
+  --border-default:    #E1DED4;
+  --border-emphasis:   #C9C5B7;
+  --border-interactive:#2C5F3F;
 
-  /* Primary GREEN (main action color) */
-  --primary-50: #ECFDF5;
-  --primary-100: #D1FAE5;
-  --primary-500: #538b5e;
-  --primary-600: #059669;
-  --primary-700: #047857;
-  --primary-800: #065F46;
+  /* Brand */
+  --brand-primary:   #2C5F3F;
+  --brand-primary-h: #234C32;
+  --brand-soft:      #E8EFE9;
+  --brand-ink:       #1F2D24;
 
-  /* Success GREEN (high confidence 90%+) */
-  --success-50: #ECFDF5;
-  --success-100: #D1FAE5;
-  --success-500: #538b5e;
-  --success-600: #059669;
-  --success-700: #047857;
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius: var(--radius-md);
 
-  /* Info BLUE (secondary actions) */
-  --info-50: #EFF6FF;
+  /* Legacy primary-* aliases */
+  --primary-50:  #EDF4EE;
+  --primary-100: #D1E6D4;
+  --primary-500: var(--brand-primary);
+  --primary-600: var(--brand-primary-h);
+  --primary-700: #1A3A26;
+  --primary-800: var(--brand-ink);
+
+  /* Confidence */
+  --conf-high:   #2C5F3F;
+  --conf-good:   #6B8C5A;
+  --conf-medium: #B07A2E;
+  --conf-low:    #9C3A2E;
+
+  /* Success */
+  --success-50:  #EDF4EE;
+  --success-100: #D1E6D4;
+  --success-500: #2C5F3F;
+  --success-600: #234C32;
+  --success-700: #1A3A26;
+
+  /* Info */
+  --info-50:  #EFF6FF;
   --info-100: #DBEAFE;
   --info-500: #3B82F6;
   --info-600: #2563EB;
   --info-700: #1D4ED8;
 
-  /* Warning AMBER (medium confidence 75-89%) */
-  --warning-50: #FFFBEB;
-  --warning-100: #FEF3C7;
-  --warning-500: #F59E0B;
-  --warning-600: #D97706;
-  --warning-700: #B45309;
+  /* Warning */
+  --warning-50:  #FBF4E8;
+  --warning-100: #F3E2C4;
+  --warning-500: #B07A2E;
+  --warning-600: #8F5F1E;
+  --warning-700: #6E4714;
 
-  /* Danger RED (low confidence <75%) */
-  --danger-50: #FEF2F2;
-  --danger-100: #FEE2E2;
-  --danger-500: #EF4444;
-  --danger-600: #DC2626;
-  --danger-700: #B91C1C;
+  /* Danger */
+  --danger-50:  #F9EDEC;
+  --danger-100: #F0D0CE;
+  --danger-500: #9C3A2E;
+  --danger-600: #7D2D23;
+  --danger-700: #5E2119;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(68, 115, 81, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(68, 115, 81, 0.1), 0 2px 4px -1px rgba(68, 115, 81, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(68, 115, 81, 0.1), 0 4px 6px -2px rgba(68, 115, 81, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(68, 115, 81, 0.1), 0 10px 10px -5px rgba(68, 115, 81, 0.04);
+  /* Shadows — neutral */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.08);
 
-  --glow-primary: 0 0 0 3px rgba(83, 139, 94, 0.1);
-
-  /* shadcn/ui token bridge — these MUST be space-separated HSL channels because
-     tailwind.config.ts wraps them as hsl(var(--token)). Mapped to the custom
-     --bg-, --text-, --border- palette so both systems stay in sync. */
-  --background: 0 0% 100%;
-  --foreground: 0 0% 10%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 10%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 10%;
-  --primary: 134 25% 44%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 150 30% 97%;
-  --secondary-foreground: 0 0% 15%;
-  --muted: 150 30% 96%;
-  --muted-foreground: 215 14% 40%;
-  --accent: 150 30% 95%;
-  --accent-foreground: 134 25% 30%;
-  --destructive: 0 75% 55%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 218 25% 91%;
-  --input: 218 25% 91%;
-  --ring: 134 25% 44%;
-  --success: 134 25% 44%;
-  --success-foreground: 0 0% 100%;
+  /* shadcn/ui token bridge — HSL channels for hsl(var(--token)) pattern.
+     Light mode values derived from the brand palette above. */
+  --background: 48 33% 97%;
+  --foreground: 40 5% 11%;
+  --card: 48 33% 97%;
+  --card-foreground: 40 5% 11%;
+  --popover: 48 33% 97%;
+  --popover-foreground: 40 5% 11%;
+  --primary: 142 37% 27%;
+  --primary-foreground: 48 33% 97%;
+  --secondary: 48 25% 95%;
+  --secondary-foreground: 40 5% 11%;
+  --muted: 48 16% 91%;
+  --muted-foreground: 45 5% 34%;
+  --accent: 125 17% 92%;
+  --accent-foreground: 142 37% 27%;
+  --destructive: 5 54% 40%;
+  --destructive-foreground: 48 33% 97%;
+  --border: 45 10% 85%;
+  --input: 45 10% 85%;
+  --ring: 142 37% 27%;
+  --success: 142 37% 27%;
+  --success-foreground: 48 33% 97%;
   --info: 217 91% 60%;
   --info-foreground: 0 0% 100%;
-  --warning: 38 92% 50%;
-  --warning-foreground: 0 0% 100%;
-  --danger: 0 75% 55%;
-  --danger-foreground: 0 0% 100%;
-  --sidebar-background: 150 30% 98%;
-  --sidebar-foreground: 215 14% 35%;
-  --sidebar-primary: 134 25% 44%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 150 30% 94%;
-  --sidebar-accent-foreground: 134 25% 30%;
-  --sidebar-border: 218 25% 91%;
-  --sidebar-ring: 134 25% 44%;
+  --warning: 35 59% 43%;
+  --warning-foreground: 48 33% 97%;
+  --danger: 5 54% 40%;
+  --danger-foreground: 48 33% 97%;
+  --sidebar-background: 48 25% 95%;
+  --sidebar-foreground: 45 5% 34%;
+  --sidebar-primary: 142 37% 27%;
+  --sidebar-primary-foreground: 48 33% 97%;
+  --sidebar-accent: 125 17% 92%;
+  --sidebar-accent-foreground: 142 37% 27%;
+  --sidebar-border: 45 10% 85%;
+  --sidebar-ring: 142 37% 27%;
 }
 
   .dark {
-  /* Backgrounds - Dark green-gray (NOT teal!) */
-  --bg-primary: #0A0F0D;
-  --bg-secondary: #0F1612;
-  --bg-tertiary: #1A2420;
-  --bg-elevated: #141C18;
+  /* Backgrounds — warm charcoal */
+  --bg-primary:  #262624;
+  --bg-secondary:#2F2E2B;
+  --bg-tertiary: #3A3936;
+  --bg-elevated: #2F2E2B;
 
-  /* Text - Soft white with green tint */
-  --text-primary: #E6F3ED;
-  --text-secondary: #8B9E94;
-  --text-tertiary: #6E7F76;
-  --text-disabled: #4A5751;
+  /* Text */
+  --text-primary:   #EDECE4;
+  --text-secondary: #B8B5AC;
+  --text-tertiary:  #8A8780;
+  --text-disabled:  #5C5A52;
 
-  /* Borders - Green-gray */
-  --border-default: #2D3932;
-  --border-emphasis: #3D4F44;
-  --border-interactive: #3FB950;
+  /* Borders */
+  --border-default:    #3F3D38;
+  --border-emphasis:   #565249;
+  --border-interactive:#6FAF82;
 
-  /* Primary GREEN */
-  --primary-50: #0D2B1C;
-  --primary-100: #0F4429;
-  --primary-500: #538b5e;
-  --primary-600: #34D399;
-  --primary-700: #6EE7B7;
-  --primary-800: #A7F3D0;
+  /* Brand */
+  --brand-primary:   #6FAF82;
+  --brand-primary-h: #82C195;
+  --brand-soft:      #2E3F33;
+  --brand-ink:       #A0D4AE;
 
-  /* Success GREEN (high confidence 90%+) */
-  --success-50: #0D2B1C;
-  --success-100: #0F4429;
-  --success-500: #3FB950;
-  --success-600: #56D364;
-  --success-700: #7EE787;
+  /* Radius — same */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius: var(--radius-md);
 
-  /* Info CYAN (secondary actions) */
-  --info-50: #0B2B3C;
+  /* Legacy primary-* aliases (dark) */
+  --primary-50:  #1E3324;
+  --primary-100: #2A4832;
+  --primary-500: var(--brand-primary);
+  --primary-600: var(--brand-primary-h);
+  --primary-700: #A0D4AE;
+  --primary-800: var(--brand-ink);
+
+  /* Confidence */
+  --conf-high:   #6FAF82;
+  --conf-good:   #9BBF7E;
+  --conf-medium: #D4A35A;
+  --conf-low:    #D4706A;
+
+  /* Success */
+  --success-50:  #1E3324;
+  --success-100: #2A4832;
+  --success-500: #6FAF82;
+  --success-600: #82C195;
+  --success-700: #A0D4AE;
+
+  /* Info */
+  --info-50:  #0B2B3C;
   --info-100: #0F3D54;
-  --info-500: #06B6D4;
-  --info-600: #22D3EE;
-  --info-700: #67E8F9;
+  --info-500: #60A5FA;
+  --info-600: #93C5FD;
+  --info-700: #BFDBFE;
 
-  /* Warning AMBER (medium confidence 75-89%) */
-  --warning-50: #2D2000;
-  --warning-100: #4D3600;
-  --warning-500: #F59E0B;
-  --warning-600: #FBBF24;
-  --warning-700: #FCD34D;
+  /* Warning */
+  --warning-50:  #2D2010;
+  --warning-100: #4A3418;
+  --warning-500: #D4A35A;
+  --warning-600: #E8BF7E;
+  --warning-700: #F0D4A0;
 
-  /* Danger RED (low confidence <75%) */
-  --danger-50: #2D0B0B;
-  --danger-100: #4D1616;
-  --danger-500: #F87171;
-  --danger-600: #FCA5A5;
-  --danger-700: #FECACA;
+  /* Danger */
+  --danger-50:  #2D1210;
+  --danger-100: #4A1E1A;
+  --danger-500: #D4706A;
+  --danger-600: #E89490;
+  --danger-700: #F0B8B4;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(83, 139, 94, 0.2);
-  --shadow-md: 0 4px 6px -1px rgba(83, 139, 94, 0.3), 0 2px 4px -1px rgba(83, 139, 94, 0.2);
-  --shadow-lg: 0 10px 15px -3px rgba(83, 139, 94, 0.3), 0 4px 6px -2px rgba(83, 139, 94, 0.2);
-  --shadow-xl: 0 20px 25px -5px rgba(83, 139, 94, 0.4), 0 10px 10px -5px rgba(83, 139, 94, 0.3);
-
-  --glow-primary: 0 0 0 3px rgba(83, 139, 94, 0.15);
-  --glow-success: 0 0 12px rgba(63, 185, 80, 0.3);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.24), 0 1px 2px rgba(0, 0, 0, 0.18);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.28);
+  --shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.36);
 
   /* shadcn/ui token bridge (dark) */
-  --background: 145 20% 5%;
-  --foreground: 152 38% 92%;
-  --card: 150 18% 9%;
-  --card-foreground: 152 38% 92%;
-  --popover: 150 18% 9%;
-  --popover-foreground: 152 38% 92%;
-  --primary: 134 25% 44%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 145 22% 7%;
-  --secondary-foreground: 152 38% 92%;
-  --muted: 145 18% 12%;
-  --muted-foreground: 150 9% 58%;
-  --accent: 145 18% 14%;
-  --accent-foreground: 127 56% 65%;
-  --destructive: 0 70% 60%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 140 12% 19%;
-  --input: 140 12% 19%;
-  --ring: 127 50% 48%;
-  --success: 127 50% 48%;
-  --success-foreground: 0 0% 100%;
-  --info: 187 92% 43%;
-  --info-foreground: 0 0% 100%;
-  --warning: 38 92% 50%;
-  --warning-foreground: 0 0% 0%;
-  --danger: 0 70% 60%;
-  --danger-foreground: 0 0% 100%;
-  --sidebar-background: 145 22% 7%;
-  --sidebar-foreground: 150 9% 60%;
-  --sidebar-primary: 134 25% 44%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 145 18% 12%;
-  --sidebar-accent-foreground: 152 38% 92%;
-  --sidebar-border: 140 12% 19%;
-  --sidebar-ring: 127 50% 48%;
+  --background: 60 3% 15%;
+  --foreground: 50 17% 91%;
+  --card: 40 4% 18%;
+  --card-foreground: 50 17% 91%;
+  --popover: 40 4% 18%;
+  --popover-foreground: 50 17% 91%;
+  --primary: 138 30% 56%;
+  --primary-foreground: 60 3% 15%;
+  --secondary: 40 4% 18%;
+  --secondary-foreground: 50 17% 91%;
+  --muted: 30 3% 22%;
+  --muted-foreground: 45 4% 70%;
+  --accent: 142 17% 21%;
+  --accent-foreground: 138 30% 56%;
+  --destructive: 5 50% 54%;
+  --destructive-foreground: 50 17% 91%;
+  --border: 40 5% 23%;
+  --input: 40 5% 23%;
+  --ring: 138 30% 56%;
+  --success: 138 30% 56%;
+  --success-foreground: 60 3% 15%;
+  --info: 213 97% 68%;
+  --info-foreground: 60 3% 15%;
+  --warning: 35 55% 58%;
+  --warning-foreground: 60 3% 15%;
+  --danger: 5 50% 54%;
+  --danger-foreground: 50 17% 91%;
+  --sidebar-background: 40 4% 18%;
+  --sidebar-foreground: 45 4% 70%;
+  --sidebar-primary: 138 30% 56%;
+  --sidebar-primary-foreground: 60 3% 15%;
+  --sidebar-accent: 142 17% 21%;
+  --sidebar-accent-foreground: 138 30% 56%;
+  --sidebar-border: 40 5% 23%;
+  --sidebar-ring: 138 30% 56%;
 }
 }
 
@@ -228,18 +258,17 @@
 
 /* ── React Flow Controls theming ───────────────────────────────────────────── */
 
-/* Light mode — soften the default white panel */
 .react-flow__controls {
-  background: #ffffff;
+  background: var(--bg-elevated);
   border: 1px solid var(--border-default);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
   padding: 0;
 }
 
 .react-flow__controls-button {
-  background: #ffffff;
+  background: var(--bg-elevated);
   border-bottom: 1px solid var(--border-default);
   color: var(--text-secondary);
   width: 28px;
@@ -254,7 +283,7 @@
 
 .react-flow__controls-button:hover {
   background: var(--bg-tertiary);
-  color: var(--primary-600);
+  color: var(--brand-primary);
 }
 
 .react-flow__controls-button svg {
@@ -263,60 +292,44 @@
   fill: currentColor;
 }
 
-/* Dark mode overrides */
 .dark .react-flow__controls {
-  background: #141C18;
-  border-color: #2D3932;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  background: var(--bg-elevated);
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-md);
 }
 
 .dark .react-flow__controls-button {
-  background: #141C18;
-  border-bottom-color: #2D3932;
-  color: #8B9E94;
+  background: var(--bg-elevated);
+  border-bottom-color: var(--border-default);
+  color: var(--text-secondary);
 }
 
 .dark .react-flow__controls-button:hover {
-  background: #1A2420;
-  color: #538b5e;
+  background: var(--bg-tertiary);
+  color: var(--brand-primary);
 }
 
-/* Active / pressed state (lock button when interaction is disabled) */
 .dark .react-flow__controls-button.active,
 .dark .react-flow__controls-button[aria-pressed="true"] {
-  background: #0F4429;
-  color: #34D399;
+  background: var(--brand-soft);
+  color: var(--brand-primary);
 }
 
 .react-flow__controls-button.active,
 .react-flow__controls-button[aria-pressed="true"] {
-  background: #D1FAE5;
-  color: #059669;
+  background: var(--success-100);
+  color: var(--brand-primary);
 }
 
 @layer utilities {
-  /* Green glow utilities */
-  .glow-green {
-    box-shadow: 0 0 15px rgba(83, 139, 94, 0.3), 0 0 30px rgba(83, 139, 94, 0.1);
-  }
-  .glow-green-sm {
-    box-shadow: 0 0 8px rgba(83, 139, 94, 0.2);
-  }
-  .text-glow {
-    text-shadow: 0 0 10px rgba(83, 139, 94, 0.5);
-  }
-  /* Success glow — used on enzyme cards hover and high-confidence elements */
-  .glow-success {
-    box-shadow: 0 0 12px rgba(83, 139, 94, 0.25);
-  }
-  .dark .glow-success {
-    box-shadow: 0 0 12px rgba(63, 185, 80, 0.3);
-  }
+  /* Kept for backward compat but no longer emit colored glows */
+  .glow-green     { box-shadow: var(--shadow-md); }
+  .glow-green-sm  { box-shadow: var(--shadow-sm); }
+  .text-glow      { }
+  .glow-success   { box-shadow: var(--shadow-sm); }
 }
 
-/* Floating action cluster in the dashboard top-right corner.
-   Absolute so it never reserves vertical space — page top controls stay flush
-   instead of being pushed down by a header band. */
+/* Floating action cluster in the dashboard top-right corner. */
 .dashboard-top-actions {
   position: absolute;
   top: 12px;
@@ -345,7 +358,7 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  border-radius: 999px;
+  border-radius: 50%;
   border: 1px solid var(--border-default);
   background: var(--bg-elevated);
   color: var(--text-secondary);
@@ -354,8 +367,8 @@
   transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
 }
 .dashboard-mobile-menu-btn:hover {
-  color: var(--primary-600);
-  border-color: var(--primary-500);
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
   background: var(--bg-tertiary);
 }
 
@@ -366,7 +379,7 @@
   color: var(--text-secondary);
   text-decoration: none;
   padding: 7px 14px;
-  border-radius: 999px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border-default);
   background: var(--bg-elevated);
   box-shadow: var(--shadow-sm);
@@ -383,23 +396,22 @@
   }
 }
 .dashboard-contact-link:hover {
-  color: var(--primary-500);
+  color: var(--brand-primary);
   background-color: var(--bg-tertiary);
-  border-color: var(--primary-500);
+  border-color: var(--brand-primary);
 }
 
 .dashboard-waitlist-btn {
   font-size: 12.5px;
   font-weight: 600;
   letter-spacing: 0.01em;
-  color: #ffffff;
-  background: var(--green-bright);
+  color: var(--bg-primary);
+  background: var(--brand-primary);
   border: none;
   padding: 8px 16px;
-  border-radius: 999px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(108, 160, 51, 0.18);
-  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  transition: background-color 0.12s ease;
 }
 @media (max-width: 640px) {
   .dashboard-waitlist-btn {
@@ -408,11 +420,5 @@
   }
 }
 .dashboard-waitlist-btn:hover {
-  background: var(--green-bright-hover);
-  box-shadow: 0 2px 8px rgba(108, 160, 51, 0.28);
-  transform: translateY(-1px);
+  background: var(--brand-primary-h);
 }
-.dashboard-waitlist-btn:active {
-  transform: translateY(0);
-}
-

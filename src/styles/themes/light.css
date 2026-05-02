@@ -1,69 +1,78 @@
 :root {
-  /* Backgrounds */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F7FBF9;
-  --bg-tertiary: #EFF6F3;
-  --bg-elevated: #FFFFFF;
+  /* Backgrounds — warm paper whites (Claude-style) */
+  --bg-primary:    #FAF9F5;
+  --bg-secondary:  #F5F4EE;
+  --bg-tertiary:   #EDEBE3;
+  --bg-elevated:   #FAF9F5;
 
-  /* Text */
-  --text-primary: #1A1A1A;
-  --text-secondary: #4A5568;
-  --text-tertiary: #718096;
-  --text-disabled: #A0AEC0;
+  /* Text — near-black, slightly warm */
+  --text-primary:   #1F1E1B;
+  --text-secondary: #5C5A52;
+  --text-tertiary:  #8A8780;
+  --text-disabled:  #B8B5AC;
 
-  /* Borders */
-  --border-default: #E2E8F0;
-  --border-emphasis: #CBD5E0;
-  --border-interactive: #059669;
+  /* Borders — warm gray */
+  --border-default:    #E1DED4;
+  --border-emphasis:   #C9C5B7;
+  --border-interactive:#2C5F3F;
 
-  /* Primary GREEN (main action color) */
-  --primary-50: #ECFDF5;
-  --primary-100: #D1FAE5;
-  --primary-500: #538b5e;
-  --primary-600: #059669;
-  --primary-700: #047857;
-  --primary-800: #065F46;
+  /* Brand — one muted forest green, used sparingly */
+  --brand-primary:   #2C5F3F;  /* deep muted forest — primary CTA, links, active nav */
+  --brand-primary-h: #234C32;  /* hover */
+  --brand-soft:      #E8EFE9;  /* tint for selected / hover backgrounds */
+  --brand-ink:       #1F2D24;  /* darkest — headings on light, high-confidence text */
 
-  /* Success GREEN (high confidence 90%+) */
-  --success-50: #ECFDF5;
-  --success-100: #D1FAE5;
-  --success-500: #538b5e;
-  --success-600: #059669;
-  --success-700: #047857;
+  /* Radius */
+  --radius-sm: 6px;   /* inputs, chips, badges */
+  --radius-md: 8px;   /* buttons, cards */
+  --radius-lg: 12px;  /* large panels, modals */
+  --radius: var(--radius-md);
+
+  /* Confidence — muted earthy tones, same low-saturation register */
+  --conf-high:   #2C5F3F;  /* deep forest  — ≥ 0.9 */
+  --conf-good:   #6B8C5A;  /* muted olive  — ≥ 0.8 */
+  --conf-medium: #B07A2E;  /* muted ochre  — ≥ 0.5 */
+  --conf-low:    #9C3A2E;  /* brick red    — < 0.5 */
+
+  /* Success GREEN scale (used by semantic tokens, comparison panes) */
+  --success-50:  #EDF4EE;
+  --success-100: #D1E6D4;
+  --success-500: #2C5F3F;
+  --success-600: #234C32;
+  --success-700: #1A3A26;
 
   /* Info BLUE (secondary actions) */
-  --info-50: #EFF6FF;
+  --info-50:  #EFF6FF;
   --info-100: #DBEAFE;
   --info-500: #3B82F6;
   --info-600: #2563EB;
   --info-700: #1D4ED8;
 
-  /* Warning AMBER (medium confidence 75-89%) */
-  --warning-50: #FFFBEB;
-  --warning-100: #FEF3C7;
-  --warning-500: #F59E0B;
-  --warning-600: #D97706;
-  --warning-700: #B45309;
+  /* Warning AMBER — muted ochre register */
+  --warning-50:  #FBF4E8;
+  --warning-100: #F3E2C4;
+  --warning-500: #B07A2E;
+  --warning-600: #8F5F1E;
+  --warning-700: #6E4714;
 
-  /* Danger RED (low confidence <75%) */
-  --danger-50: #FEF2F2;
-  --danger-100: #FEE2E2;
-  --danger-500: #EF4444;
-  --danger-600: #DC2626;
-  --danger-700: #B91C1C;
+  /* Danger RED — brick red register */
+  --danger-50:  #F9EDEC;
+  --danger-100: #F0D0CE;
+  --danger-500: #9C3A2E;
+  --danger-600: #7D2D23;
+  --danger-700: #5E2119;
 
-  /* Brand accent palette (promoted from landing.css) */
-  --green-sage: #538b5e;
-  --green-bright: #6ca033;
-  --green-dark: #25512b;
-  --green-bright-hover: #5a8a28;
-  --amber: #B45309;
+  /* Legacy primary-* aliases — kept so existing components don't break */
+  --primary-50:  #EDF4EE;
+  --primary-100: #D1E6D4;
+  --primary-500: var(--brand-primary);
+  --primary-600: var(--brand-primary-h);
+  --primary-700: #1A3A26;
+  --primary-800: var(--brand-ink);
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(68, 115, 81, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(68, 115, 81, 0.1), 0 2px 4px -1px rgba(68, 115, 81, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(68, 115, 81, 0.1), 0 4px 6px -2px rgba(68, 115, 81, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(68, 115, 81, 0.1), 0 10px 10px -5px rgba(68, 115, 81, 0.04);
-
-  --glow-primary: 0 0 0 3px rgba(83, 139, 94, 0.1);
+  /* Shadows — neutral, no color tint */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.08);
 }

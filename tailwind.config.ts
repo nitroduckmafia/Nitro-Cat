@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Space Grotesk", "sans-serif"],
-        mono: ["Urbanist", "sans-serif"],
+        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+        mono: ["JetBrains Mono", "SF Mono", "Consolas", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -99,9 +99,10 @@ export default {
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        sm: "var(--radius-sm)",  /* 6px — inputs, chips, badges */
+        md: "var(--radius-md)",  /* 8px — buttons, cards */
+        lg: "var(--radius-lg)",  /* 12px — panels, modals */
+        DEFAULT: "var(--radius-md)",
       },
       keyframes: {
         "accordion-down": {

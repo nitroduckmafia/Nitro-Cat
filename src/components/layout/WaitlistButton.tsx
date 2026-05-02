@@ -29,7 +29,7 @@ export const WaitlistButton = ({ className, children = "Join the waitlist" }: Pr
       </button>
 
       <Dialog open={open} onOpenChange={(o) => { if (!o) setOpen(false); }}>
-        <DialogContent className="max-w-sm p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[#141C18]">
+        <DialogContent className="max-w-sm p-0 gap-0 border-border rounded-2xl bg-white dark:bg-[var(--bg-elevated)]">
           <div className="p-6 flex flex-col gap-4">
             {!submitted ? (
               <>
@@ -50,7 +50,7 @@ export const WaitlistButton = ({ className, children = "Join the waitlist" }: Pr
                   />
                   <button
                     type="submit"
-                    style={{ background: "var(--green-bright)", color: "#fff" }}
+                    style={{ background: "var(--brand-primary)", color: "#fff" }}
                     className="w-full py-[11px] rounded-[9px] text-[13.5px] font-semibold border-none cursor-pointer hover:opacity-90 transition-opacity"
                   >
                     Notify me
@@ -67,7 +67,7 @@ export const WaitlistButton = ({ className, children = "Join the waitlist" }: Pr
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  style={{ background: "var(--green-bright)", color: "#fff" }}
+                  style={{ background: "var(--brand-primary)", color: "#fff" }}
                   className="w-full py-[11px] rounded-[9px] text-[13.5px] font-semibold border-none cursor-pointer hover:opacity-90 transition-opacity"
                 >
                   Done
