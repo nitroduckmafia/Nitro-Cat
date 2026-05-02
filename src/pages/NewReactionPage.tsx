@@ -1,6 +1,7 @@
 import { Component, lazy, Suspense, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { useIsMobile } from "@/lib/hooks/useIsMobile";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -9,12 +10,12 @@ import {
 } from "@/components/ui/dialog";
 import { MoleculeViewer } from "@/components/molecule/MoleculeViewer";
 import {
-  ArrowLeft, Upload, Download, CheckCircle2, FlaskConical, FileText,
+  ArrowLeft, Download, CheckCircle2, FlaskConical, FileText,
   Dna, Check, X, TrendingUp, ShoppingCart, Droplets, Thermometer, Activity, Target,
   PencilLine, ScrollText, Beaker, Clock, AlertTriangle, BookOpen, Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { formatScore, formatConfidenceLabel } from "@/lib/utils/formatting";
+import { formatScore, formatConfidenceLabel, CONFIDENCE_COLORS } from "@/lib/utils/formatting";
 import SmilesDrawer from "smiles-drawer";
 import { addHistoryEntry } from "@/lib/history";
 import type { Enzyme, GroupStats } from "@/types/enzyme";
@@ -37,10 +38,6 @@ const HOMOFARNESOL   = 'CC(C)=CCC/C(C)=C/CC/C(C)=C/CCO';
 const AMBROX         = 'CC1(C)CCC[C@@]2(C)[C@H]1CC[C@@]3(C)OCC[C@H]23';
 const TAXADIENE      = 'CC1=C2CC[C@@]3(CCC=C([C@H]3C[C@@H](C2(C)C)CC1)C)C';
 const TAXADIENOL     = 'CC1CC[C@@H]2C(C)(C)C=1CC[C@@]1(C)C(C2)C(=C)[C@@H](O)CC1';
-const COMPOUND1 = 'C#C[C@]1(CO)[C@@H](O)C[C@@H](OP(=O)(O)O)O1';
-const COMPOUND2 = 'C#C[C@]1(COP(=O)(O)O)[C@@H](O)C[C@@H](O)O1';
-const PROPANEDIOIC       = 'CC(=O)CCC(C(=O)OC)C(=O)OC.N';
-const AMINOBUTYL_MALONATE = 'C[C@H](CCC(C(=O)OC)C(=O)OC)N';
 
 // ── Example MOL V2000 strings (used by Ketcher editor) ───
 const MOL = {
@@ -127,80 +124,6 @@ M  END
 `,
   TAXADIENE:   'CC1=C2CC[C@@]3(CCC=C([C@H]3C[C@@H](C2(C)C)CC1)C)C',
   TAXADIENOL:  'CC1CC[C@@H]2C(C)(C)C=1CC[C@@]1(C)C(C2)C(=C)[C@@H](O)CC1',
-  PROPANEDIOIC:       'CC(=O)CCC(C(=O)OC)C(=O)OC.N',
-  AMINOBUTYL_MALONATE: 'C[C@H](CCC(C(=O)OC)C(=O)OC)N',
-  COMPOUND1: `
-  -INDIGO-04012621462D
-
- 15 15  0  0  0  0  0  0  0  0999 V2000
-   -1.6180   -1.1756    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-   -0.8090   -0.5878    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-   -0.6691    0.7431    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-   -1.6473    0.5352    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    0.5000   -0.8660    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    0.0933   -1.7796    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    1.4781   -0.6581    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    1.5827    0.3364    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    2.4487    0.8364    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    3.3147    0.3364    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0
-    3.3147   -0.6636    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    4.1808    0.8364    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    4.1808   -0.1636    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    0.6691    0.7431    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-  1  2  3  0  0  0  0
-  2  3  1  0  0  0  0
-  3  4  1  0  0  0  0
-  4  5  1  0  0  0  0
-  3  6  1  0  0  0  0
-  6  7  1  0  0  0  0
-  6  8  1  0  0  0  0
-  8  9  1  0  0  0  0
-  9 10  1  0  0  0  0
- 10 11  1  0  0  0  0
- 11 12  2  0  0  0  0
- 11 13  1  0  0  0  0
- 11 14  1  0  0  0  0
-  9 15  1  0  0  0  0
- 15  3  1  0  0  0  0
-M  END
-`,
-  COMPOUND2: `
-  -INDIGO-04012621462D
-
- 15 15  0  0  0  0  0  0  0  0999 V2000
-   -0.8135   -1.8271    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-   -0.4067   -0.9135    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    0.0000    0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-   -0.9511    0.3090    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-   -1.6942   -0.3601    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-   -2.6453   -0.0511    0.0000 P   0  0  0  0  0  0  0  0  0  0  0  0
-   -2.8532    0.9271    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-   -3.3884   -0.7202    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-   -3.5963    0.2579    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    0.8660   -0.5000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    0.9706   -1.4945    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    1.6092    0.1691    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    1.2024    1.0827    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
-    1.7024    1.9487    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-    0.2079    0.9781    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-  1  2  3  0  0  0  0
-  2  3  1  0  0  0  0
-  3  4  1  0  0  0  0
-  4  5  1  0  0  0  0
-  5  6  1  0  0  0  0
-  6  7  2  0  0  0  0
-  6  8  1  0  0  0  0
-  6  9  1  0  0  0  0
-  3 10  1  0  0  0  0
- 10 11  1  0  0  0  0
- 10 12  1  0  0  0  0
- 12 13  1  0  0  0  0
- 13 14  1  0  0  0  0
- 13 15  1  0  0  0  0
- 15  3  1  0  0  0  0
-M  END
-`,
 };
 
 const DEFAULT_ENZYME: Enzyme = {
@@ -240,18 +163,6 @@ const EXAMPLE_PAIRS = [
     substrate:  TAXADIENE,     subMol: MOL.TAXADIENE,
     product:    TAXADIENOL,    prodMol: MOL.TAXADIENOL,
   },
-  {
-    label:      'Compound 1 → Compound 2',
-    shortLabel: 'Compound 1 → 2',
-    substrate:  COMPOUND1, subMol: MOL.COMPOUND1,
-    product:    COMPOUND2, prodMol: MOL.COMPOUND2,
-  },
-  {
-    label:      'Propanedioic acid → Dimethyl 2-[(3R)-3-aminobutyl]propanedioate',
-    shortLabel: 'Propanedioate → Aminobutylmalonate',
-    substrate:  PROPANEDIOIC,        subMol: MOL.PROPANEDIOIC,
-    product:    AMINOBUTYL_MALONATE, prodMol: MOL.AMINOBUTYL_MALONATE,
-  },
 ];
 
 const REACTION_EXAMPLES = EXAMPLE_PAIRS.map(({ label, substrate, product }) => ({ label, substrate, product }));
@@ -266,16 +177,10 @@ function validateInput(value: string, onResult: (valid: boolean) => void) {
 
 // ── Confidence badge ──────────────────────────────────────────────────────────
 
-const confidenceColorMap: Record<'high' | 'good' | 'medium' | 'low', string> = {
-  high:   '#25512B',
-  good:   '#6CA033',
-  medium: '#F69B05',
-  low:    '#C00000',
-};
 
 const ConfidenceBadge = ({ score }: { score: number }) => {
   const label = formatConfidenceLabel(score);
-  const color = confidenceColorMap[label];
+  const color = CONFIDENCE_COLORS[label];
   return (
     <span
       className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-sm font-mono font-semibold shrink-0"
@@ -376,7 +281,7 @@ const FindEnzymesButton = ({ active, loading, onClick }: { active: boolean; load
       )}
       style={
         active
-          ? { background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.25)' }
+          ? { background: 'var(--primary-500)', color: '#fff', boxShadow: 'none' }
           : { border: '2px solid var(--border-default)', background: 'var(--bg-secondary)', color: 'var(--text-muted)' }
       }
     >
@@ -384,7 +289,7 @@ const FindEnzymesButton = ({ active, loading, onClick }: { active: boolean; load
       {loading ? 'Searching…' : 'Find Biocatalyst'}
     </button>
     {loading && (
-      <p className="text-sm text-muted-foreground text-center whitespace-nowrap">
+      <p className="text-sm text-muted-foreground text-center max-w-md">
         This may take a few minutes - we're searching through over 250 000 biocatalysts to find the best matches for you. ☕
       </p>
     )}
@@ -700,20 +605,24 @@ const ResultView = ({
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 type View = 'select' | 'input' | 'result';
-type Mode = 'smiles' | 'rxn' | 'draw';
+type Mode = 'smiles' | 'draw';
 
 export const NewReactionPage = () => {
   const navigate     = useNavigate();
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [view, setView]     = useState<View>('select');
   const [visible, setVisible] = useState(true);
+  const isMobile = useIsMobile();
   const [mode, setMode]     = useState<Mode>('smiles');
+
+  // If we're on mobile and the user somehow ends up in 'draw' mode (e.g. resize from desktop), bounce to SMILES.
+  useEffect(() => {
+    if (isMobile && mode === 'draw') setMode('smiles');
+  }, [isMobile, mode]);
   const [substrateSmiles, setSubstrate] = useState('');
   const [productSmiles, setProduct]     = useState('');
   const [substrateValid, setSubstrateValid] = useState<boolean | null>(null);
   const [productValid, setProductValid]     = useState<boolean | null>(null);
-  const [rxnFile, setRxnFile] = useState<File | null>(null);
   const [subLoadTrigger,  setSubLoadTrigger]  = useState<{ molfile: string; key: number } | undefined>(undefined);
   const [prodLoadTrigger, setProdLoadTrigger] = useState<{ molfile: string; key: number } | undefined>(undefined);
   const [drawStep, setDrawStep] = useState<1 | 2>(1);
@@ -772,10 +681,7 @@ export const NewReactionPage = () => {
   }, [productSmiles]);
 
   const canSubmit = substrateSmiles.trim().length >= 2 && productSmiles.trim().length >= 2;
-  const isActive =
-    mode === 'smiles' ? canSubmit :
-    mode === 'rxn'    ? rxnFile !== null :
-    /* draw */          canSubmit;
+  const isActive = canSubmit;
 
   const goTo = (next: View) => setView(next);
 
@@ -914,7 +820,7 @@ export const NewReactionPage = () => {
   // ── Select view ─────────────────────────────────────────────────────────────
 
   const SelectContent = (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col h-full overflow-y-auto bg-background">
       <div className="p-4">
         <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="gap-1.5">
           <ArrowLeft className="w-4 h-4" />
@@ -926,12 +832,11 @@ export const NewReactionPage = () => {
           <h1 className="text-2xl font-bold text-foreground">Find Biocatalyst</h1>
           <p className="text-sm text-muted-foreground mt-1">Choose how you'd like to input your reaction</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
-          {([
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
+          {(([
             { id: 'draw'  as Mode, icon: <PencilLine className="w-6 h-6 text-primary" />, label: 'Draw Structure' },
             { id: 'smiles' as Mode, icon: <FileText className="w-6 h-6 text-primary" />, label: 'SMILES' },
-            { id: 'rxn'   as Mode, icon: <Upload    className="w-6 h-6 text-primary" />, label: 'RXN File' },
-          ] as const).map(({ id, icon, label }) => (
+          ] as const).filter(t => !(isMobile && t.id === 'draw'))).map(({ id, icon, label }) => (
             <button
               key={id}
               type="button"
@@ -953,14 +858,13 @@ export const NewReactionPage = () => {
   // ── Input view ───────────────────────────────────────────────────────────────
 
   const modeTabs: { id: Mode; label: string }[] = [
-    { id: 'draw',  label: 'Draw Structure' },
+    ...(isMobile ? [] : [{ id: 'draw' as Mode, label: 'Draw Structure' }]),
     { id: 'smiles', label: 'SMILES' },
-    { id: 'rxn',   label: 'RXN File' },
   ];
 
   const InputContent = (
-    <div className="flex flex-col min-h-screen bg-background">
-      <div className="p-4 flex items-center gap-4">
+    <div className="flex flex-col h-full overflow-y-auto bg-background">
+      <div className="p-4 pt-14 sm:pt-4 flex flex-wrap items-center gap-3 sm:gap-4">
         <Button variant="ghost" size="sm" onClick={() => goTo('select')} className="gap-1.5 shrink-0">
           <ArrowLeft className="w-4 h-4" />
           Back
@@ -1002,7 +906,7 @@ export const NewReactionPage = () => {
         {mode === 'smiles' && (
           <>
             {/* Heading + examples — centered */}
-            <div className="w-full px-[95px] pt-2 space-y-2">
+            <div className="w-full px-4 sm:px-[95px] pt-2 space-y-2">
               <div className="space-y-1">
                 <h1 className="text-xl font-bold text-foreground">Enter SMILES</h1>
                 <p className="text-sm text-muted-foreground">
@@ -1024,7 +928,7 @@ export const NewReactionPage = () => {
             </div>
 
             {/* Columns — full width with symmetric margins for centering */}
-            <div className="w-full px-[95px] py-3">
+            <div className="w-full px-4 sm:px-[95px] py-3">
               <div className="flex flex-col sm:flex-row gap-4 items-stretch">
 
                 {/* Substrate column */}
@@ -1046,10 +950,10 @@ export const NewReactionPage = () => {
                     onClick={() => setProduct(substrateSmiles)}
                     disabled={substrateSmiles.trim().length < 2}
                     className="inline-flex flex-col items-center justify-center px-3 py-2 text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed text-center leading-snug"
-                    style={{ color: 'var(--primary-500)', background: 'transparent' }}
+                    style={{ color: 'var(--success-600)', background: 'transparent' }}
                   >
                     <span>click to copy substrate<br />SMILES to product</span>
-                    <span className="text-2xl leading-none mt-0.5" style={{ color: 'var(--color-primary, #538b5e)', opacity: 0.75 }}>⟶</span>
+                    <span className="text-2xl leading-none mt-0.5" style={{ color: 'var(--primary-500)', opacity: 0.75 }}>⟶</span>
                   </button>
 
                   {/* Spacer fills remaining height */}
@@ -1075,7 +979,7 @@ export const NewReactionPage = () => {
                   onClick={() => editInDraw(1)}
                   disabled={substrateSmiles.trim().length < 2}
                   className="flex-1 inline-flex items-center justify-center px-3 py-2 rounded-full text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed border"
-                  style={{ borderColor: 'var(--primary-500)', color: 'var(--primary-500)', background: 'transparent' }}
+                  style={{ borderColor: 'var(--success-600)', color: 'var(--success-600)', background: 'transparent' }}
                 >
                   Edit Substrate in Drawing Tool
                 </button>
@@ -1090,7 +994,7 @@ export const NewReactionPage = () => {
                   )}
                   style={
                     canSubmit
-                      ? { background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.25)' }
+                      ? { background: 'var(--primary-500)', color: '#fff', boxShadow: 'none' }
                       : { border: '2px solid var(--border-default)', background: 'var(--bg-secondary)', color: 'var(--text-muted)' }
                   }
                 >
@@ -1103,7 +1007,7 @@ export const NewReactionPage = () => {
                   onClick={() => editInDraw(2)}
                   disabled={productSmiles.trim().length < 2}
                   className="flex-1 inline-flex items-center justify-center px-3 py-2 rounded-full text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed border"
-                  style={{ borderColor: 'var(--primary-500)', color: 'var(--primary-500)', background: 'transparent' }}
+                  style={{ borderColor: 'var(--success-600)', color: 'var(--success-600)', background: 'transparent' }}
                 >
                   Edit Product in Drawing Tool
                 </button>
@@ -1111,24 +1015,24 @@ export const NewReactionPage = () => {
 
               {/* Coffee message — shown below all buttons while loading */}
               {apiLoading && (
-                <p className="hidden sm:block text-sm text-muted-foreground text-center mt-2 whitespace-nowrap">
+                <p className="hidden sm:block text-sm text-muted-foreground text-center mt-2">
                   This may take a few minutes - we're searching through over 250 000 biocatalysts to find the best matches for you. ☕
                 </p>
               )}
             </div>
 
             {/* Mobile: copy + find biocatalysts + error */}
-            <div className="px-[95px] pb-4 space-y-3 sm:space-y-0">
+            <div className="px-4 sm:px-[95px] pb-4 space-y-3 sm:space-y-0">
               <div className="flex flex-col gap-3 sm:hidden">
                 <button
                   type="button"
                   onClick={() => setProduct(substrateSmiles)}
                   disabled={substrateSmiles.trim().length < 2}
                   className="w-full inline-flex flex-col items-center justify-center px-3 py-2 text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                  style={{ color: 'var(--primary-500)', background: 'transparent' }}
+                  style={{ color: 'var(--success-600)', background: 'transparent' }}
                 >
                   <span>click to copy substrate SMILES to product</span>
-                  <span className="text-2xl leading-none mt-0.5" style={{ color: 'var(--color-primary, #538b5e)', opacity: 0.75 }}>⟶</span>
+                  <span className="text-2xl leading-none mt-0.5" style={{ color: 'var(--primary-500)', opacity: 0.75 }}>⟶</span>
                 </button>
                 <FindEnzymesButton active={canSubmit} loading={apiLoading} onClick={handleFindEnzymes} />
               </div>
@@ -1140,40 +1044,6 @@ export const NewReactionPage = () => {
               )}
             </div>
           </>
-        )}
-
-        {mode === 'rxn' && (
-          <div className="max-w-3xl mx-auto w-full px-6 pt-6 pb-12 space-y-6">
-            <h1 className="text-xl font-bold text-foreground">Upload RXN File</h1>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".rxn,.rdf,.mol"
-              className="hidden"
-              onChange={(e) => setRxnFile(e.target.files?.[0] ?? null)}
-            />
-            <div
-              role="button"
-              tabIndex={0}
-              className="rounded-xl border-2 border-dashed border-border hover:border-[var(--border-interactive)] transition-colors cursor-pointer p-12 flex flex-col items-center gap-4 text-center"
-              onClick={() => fileInputRef.current?.click()}
-              onKeyDown={(e) => e.key === 'Enter' && fileInputRef.current?.click()}
-            >
-              <Upload className="w-10 h-10 text-muted-foreground" />
-              {rxnFile ? (
-                <>
-                  <p className="font-semibold text-foreground">{rxnFile.name}</p>
-                  <p className="text-xs text-muted-foreground">{(rxnFile.size / 1024).toFixed(1)} KB · click to replace</p>
-                </>
-              ) : (
-                <>
-                  <p className="text-sm text-muted-foreground">Click to upload or drag &amp; drop</p>
-                  <p className="text-xs text-muted-foreground font-mono">.rxn · .rdf · .mol</p>
-                </>
-              )}
-            </div>
-            <FindEnzymesButton active={rxnFile !== null} loading={apiLoading} onClick={handleFindEnzymes} />
-          </div>
         )}
 
         {mode === 'draw' && (
@@ -1298,7 +1168,7 @@ export const NewReactionPage = () => {
                     )}
                     style={
                       substrateSmiles.trim()
-                        ? { background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.25)' }
+                        ? { background: 'var(--primary-500)', color: '#fff', boxShadow: 'none' }
                         : { border: '2px solid var(--border-default)', background: 'var(--bg-secondary)', color: 'var(--text-muted)' }
                     }
                   >
@@ -1318,7 +1188,7 @@ export const NewReactionPage = () => {
   // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
-    <div className={cn('transition-opacity duration-150', visible ? 'opacity-100' : 'opacity-0')}>
+    <div className={cn('h-full transition-opacity duration-150', visible ? 'opacity-100' : 'opacity-0')}>
       {view === 'select' && SelectContent}
       {view === 'input'  && InputContent}
       {view === 'result' && (

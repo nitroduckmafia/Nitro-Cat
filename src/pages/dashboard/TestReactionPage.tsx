@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSidebar } from '@/lib/context/SidebarContext';
 import {
   ArrowLeft, ShoppingCart, Dna, Wrench,
   ExternalLink, Plus, HelpCircle, Share2,
@@ -10,7 +9,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import { formatScore } from '@/lib/utils/formatting';
+import { formatScore, CONFIDENCE_COLORS } from '@/lib/utils/formatting';
+import { CONFIDENCE_TINTS } from '@/design/tokens';
 import { MoleculeViewer } from '@/components/molecule/MoleculeViewer';
 import type { ReactionNodeData } from '@/types/reaction';
 import type { Enzyme, GroupStats } from '@/types/enzyme';
@@ -128,11 +128,13 @@ const buildCandidates = (top1: Enzyme): Enzyme[] =>
 
 // ── Score colour ──────────────────────────────────────────────────────────────
 
+// Uses wider thresholds (0.7/0.3) than the badge system (0.8/0.5) — intentional
+// for this page's score coloring display.
 const getScoreColor = (score: number): string => {
-  if (score >= 0.9) return '#25512B';
-  if (score >= 0.7) return '#6CA033';
-  if (score >= 0.3) return '#F69B05';
-  return '#C00000';
+  if (score >= 0.9) return CONFIDENCE_COLORS.high;
+  if (score >= 0.7) return CONFIDENCE_COLORS.good;
+  if (score >= 0.3) return CONFIDENCE_COLORS.medium;
+  return CONFIDENCE_COLORS.low;
 };
 
 // ── Seeded price helper ───────────────────────────────────────────────────────
@@ -423,8 +425,29 @@ const ReactionHeader = ({ substrateSmiles, productSmiles, substrateInfo, product
   };
 
   return (
-    <div className="h-full rounded-xl border border-border bg-muted/20 px-1 py-0 flex flex-col justify-center overflow-hidden">
-      <div className="flex items-center justify-center gap-2">
+    <div className="h-full rounded-xl border border-border bg-muted/20 px-1 py-2 sm:py-0 flex flex-col justify-center overflow-hidden">
+      {/* Mobile: stacked vertical layout */}
+      <div className="flex sm:hidden flex-col items-center gap-1 w-full px-2">
+        <div className="flex flex-col items-center w-full">
+          <div className="w-full flex justify-center">
+            <MoleculeViewer smiles={substrateSmiles} width={280} height={150} />
+          </div>
+          <div className="-mt-1 w-full flex justify-center text-center">{renderLabel('Substrate', substrateInfo)}</div>
+        </div>
+        <div className="flex items-center gap-2 my-1" style={{ color: accentColor }}>
+          <span className="text-sm font-semibold whitespace-nowrap">{enzymeName ?? 'Enzyme'}</span>
+          <span className="text-2xl leading-none" style={{ color: 'var(--primary-500)', opacity: 0.75 }}>↓</span>
+        </div>
+        <div className="flex flex-col items-center w-full">
+          <div className="w-full flex justify-center">
+            <MoleculeViewer smiles={productSmiles} width={280} height={150} />
+          </div>
+          <div className="-mt-1 w-full flex justify-center text-center">{renderLabel('Product', productInfo)}</div>
+        </div>
+      </div>
+
+      {/* Desktop: original horizontal layout */}
+      <div className="hidden sm:flex items-center justify-center gap-2">
         {/* Substrate */}
         <div className="flex flex-col items-center">
           <MoleculeViewer smiles={substrateSmiles} width={390} height={220} />
@@ -433,14 +456,14 @@ const ReactionHeader = ({ substrateSmiles, productSmiles, substrateInfo, product
 
         {/* Enzyme name + arrow — one word per line, column sizes to longest word */}
         <div className="flex flex-col items-center gap-1 shrink-0 w-fit">
-          <div className="flex flex-col items-center leading-snug" style={{ color: accentColor ?? '#6CA033' }}>
+          <div className="flex flex-col items-center leading-snug" style={{ color: accentColor }}>
             {(enzymeName ?? 'Enzyme').split(' ').map((word, i) => (
               <span key={i} className="text-base font-semibold text-center whitespace-nowrap">
                 {word}
               </span>
             ))}
           </div>
-          <span className="text-4xl leading-none shrink-0" style={{ color: 'var(--color-primary, #538b5e)', opacity: 0.75 }}>
+          <span className="text-4xl leading-none shrink-0" style={{ color: 'var(--primary-500)', opacity: 0.75 }}>
             ⟶
           </span>
         </div>
@@ -498,13 +521,13 @@ const CandidateCard = ({ enzyme, rank, zz, expanded, onToggle, inKit, onToggleKi
       style={inKit
         ? { borderColor: 'var(--primary-500)' }
         : shouldDim
-          ? { borderColor: '#C00000', borderWidth: '2px' }
+          ? { borderColor: CONFIDENCE_COLORS.low, borderWidth: '2px' }
           : undefined}
     >
       {/* "Manually removed" banner */}
       {shouldDim && (
         <div className="px-4 pt-2 pb-0">
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest" style={{ color: '#C00000' }}>
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest" style={{ color: CONFIDENCE_COLORS.low }}>
             Manually removed from the kit
           </span>
         </div>
@@ -512,7 +535,7 @@ const CandidateCard = ({ enzyme, rank, zz, expanded, onToggle, inKit, onToggleKi
       {/* "Manually added" banner */}
       {wasManuallyAdded && (
         <div className="px-4 pt-2 pb-0">
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest" style={{ color: '#538b5e' }}>
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest" style={{ color: CONFIDENCE_COLORS.high }}>
             Manually added to the kit
           </span>
         </div>
@@ -586,8 +609,8 @@ const CandidateCard = ({ enzyme, rank, zz, expanded, onToggle, inKit, onToggleKi
               size="sm"
               className="gap-1.5 flex-1 font-semibold"
               style={inKit
-                ? { background: '#C00000', color: '#fff' }
-                : { background: '#538b5e', color: '#fff' }}
+                ? { background: CONFIDENCE_COLORS.low, color: '#fff' }
+                : { background: CONFIDENCE_COLORS.good, color: '#fff' }}
               onClick={onToggleKit}
             >
               {inKit ? (
@@ -617,7 +640,6 @@ const CandidateCard = ({ enzyme, rank, zz, expanded, onToggle, inKit, onToggleKi
 export const TestReactionPage = () => {
   const navigate   = useNavigate();
   const location   = useLocation();
-  const { collapsed: sidebarCollapsed } = useSidebar();
 
   // Derive tier early so useState can use ZZ as its initial value
   const state0     = location.state as { reaction: ReactionNodeData; candidates?: Enzyme[]; groupStats?: GroupStats; comments?: string[] } | null;
@@ -760,42 +782,42 @@ export const TestReactionPage = () => {
       phrase:      'is a perfect match',
       showEnzyme:  true,
       zz:          30,
-      accentColor: '#25512B',
-      accentBg:    'rgba(37,81,43,0.04)',
-      accentBorder:'rgba(37,81,43,0.2)',
-      accentPanel: 'rgba(37,81,43,0.06)',
+      accentColor: CONFIDENCE_COLORS.high,
+      accentBg:    CONFIDENCE_TINTS.high.bg,
+      accentBorder: CONFIDENCE_TINTS.high.border,
+      accentPanel: CONFIDENCE_TINTS.high.panel,
     },
     medium: {
       header1:     'We found your biocatalysts!',
       phrase:      'is a very promising option',
       showEnzyme:  true,
       zz:          60,
-      accentColor: '#6CA033',
-      accentBg:    'rgba(108,160,51,0.04)',
-      accentBorder:'rgba(108,160,51,0.2)',
-      accentPanel: 'rgba(108,160,51,0.06)',
+      accentColor: CONFIDENCE_COLORS.good,
+      accentBg:    CONFIDENCE_TINTS.good.bg,
+      accentBorder: CONFIDENCE_TINTS.good.border,
+      accentPanel: CONFIDENCE_TINTS.good.panel,
     },
     low: {
       header1:     'We found your biocatalysts!',
       phrase:      'is an option worth exploring',
       showEnzyme:  true,
       zz:          90,
-      accentColor: '#F69B05',
-      accentBg:    'rgba(246,155,5,0.04)',
-      accentBorder:'rgba(246,155,5,0.2)',
-      accentPanel: 'rgba(246,155,5,0.06)',
+      accentColor: CONFIDENCE_COLORS.medium,
+      accentBg:    CONFIDENCE_TINTS.medium.bg,
+      accentBorder: CONFIDENCE_TINTS.medium.border,
+      accentPanel: CONFIDENCE_TINTS.medium.panel,
     },
     none: {
       header1:     'Biocatalysts detected with very low confidence!',
       phrase:      'testing the ≥90 biocatalysts may still yield your product',
       showEnzyme:  false,
       zz:          90,
-      accentColor: '#C00000',
-      accentBg:    'rgba(192,0,0,0.04)',
-      accentBorder:'rgba(192,0,0,0.2)',
-      accentPanel: 'rgba(192,0,0,0.06)',
+      accentColor: CONFIDENCE_COLORS.low,
+      accentBg:    CONFIDENCE_TINTS.low.bg,
+      accentBorder: CONFIDENCE_TINTS.low.border,
+      accentPanel: CONFIDENCE_TINTS.low.panel,
     },
-  } as const;
+  };
 
   const { header1, phrase, showEnzyme, zz, accentColor, accentBg, accentBorder, accentPanel } = TIER_CFG[tier];
 
@@ -804,10 +826,10 @@ export const TestReactionPage = () => {
 
       {/* Title section — full width */}
       <div
-        className="w-full border-b px-8 py-4"
+        className="w-full border-b px-4 sm:px-8 pt-14 pb-4 sm:py-4"
         style={{ borderColor: accentBorder, backgroundColor: accentBg }}
       >
-        <div className={cn("flex items-start gap-5 max-w-6xl", sidebarCollapsed ? "ml-0" : "mx-auto")}>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-4 sm:gap-5 max-w-6xl ml-0">
           {/* Accent bar */}
           <div
             className="w-1.5 self-stretch rounded-full shrink-0"
@@ -843,7 +865,7 @@ export const TestReactionPage = () => {
       </div>
 
       {/* Scrollable body */}
-      <div className="w-full px-8 py-2 space-y-3">
+      <div className="w-full px-4 sm:px-8 py-2 space-y-3">
 
         {/* Back button */}
         <button
@@ -856,7 +878,7 @@ export const TestReactionPage = () => {
         </button>
 
         {/* Two main boxes side by side */}
-        <div className="grid grid-cols-[2fr_1fr] gap-6 items-stretch min-h-[313px]">
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 lg:gap-6 items-stretch lg:min-h-[313px]">
 
           {/* Reaction structural view */}
           <ReactionHeader
@@ -874,7 +896,7 @@ export const TestReactionPage = () => {
           {/* Kit card */}
           {(() => {
             const kitCount = kitIds.size;
-            const kitPrice = shareDiscount ? 4000 : 5000;
+            const kitPrice = shareDiscount ? 3000 : 4000;
             return (
               <div className="flex flex-col rounded-xl border border-border bg-muted/20 px-4 py-3 gap-2">
 
@@ -883,7 +905,7 @@ export const TestReactionPage = () => {
                   type="button"
                   onClick={() => setBulkOpen(true)}
                   className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer"
-                  style={{ background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.25)' }}
+                  style={{ background: 'var(--primary-500)', color: '#fff', boxShadow: 'none' }}
                 >
                   <ShoppingCart className="w-4 h-4" />
                   GET CUSTOM KIT
@@ -913,7 +935,7 @@ export const TestReactionPage = () => {
                 <div className="space-y-2">
                   <div className="flex items-baseline gap-2">
                     {shareDiscount && (
-                      <span className="text-sm text-muted-foreground line-through">$5,000</span>
+                      <span className="text-sm text-muted-foreground line-through">$4,000</span>
                     )}
                     <span className="text-2xl font-bold text-foreground">${kitPrice.toLocaleString()}</span>
                     {shareDiscount && (
@@ -1018,7 +1040,7 @@ export const TestReactionPage = () => {
           type="button"
           onClick={() => yieldCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
           className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-sm font-semibold transition-all cursor-pointer"
-          style={{ background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.25)' }}
+          style={{ background: 'var(--primary-500)', color: '#fff', boxShadow: 'none' }}
         >
           <FlaskConical className="w-4 h-4" />
           Explore reaction details
@@ -1091,8 +1113,8 @@ export const TestReactionPage = () => {
               onClick={() => setShowKitOnly(v => !v)}
               className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-sm font-semibold transition-all cursor-pointer border"
               style={showKitOnly
-                ? { background: '#538b5e', color: '#fff', borderColor: '#538b5e' }
-                : { borderColor: '#538b5e', color: '#538b5e', background: 'transparent' }}
+                ? { background: CONFIDENCE_COLORS.good, color: '#fff', borderColor: CONFIDENCE_COLORS.good }
+                : { borderColor: CONFIDENCE_COLORS.good, color: CONFIDENCE_COLORS.good, background: 'transparent' }}
             >
               <ShoppingCart className="w-4 h-4" />
               {showKitOnly ? 'Show all biocatalysts' : 'Show only biocatalysts in kit'}
@@ -1108,7 +1130,7 @@ export const TestReactionPage = () => {
           type="button"
           onClick={() => scrollContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })}
           className="fixed bottom-6 right-6 z-50 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110 active:scale-95"
-          style={{ background: 'var(--primary-500)', color: '#fff', boxShadow: '0 4px 16px 0 rgba(16,185,129,0.35)' }}
+          style={{ background: 'var(--primary-500)', color: '#fff', boxShadow: 'none' }}
           aria-label="Scroll to top"
         >
           <ChevronUp className="w-5 h-5" />
@@ -1239,7 +1261,7 @@ export const TestReactionPage = () => {
         <DialogContent className="max-w-xl max-h-[85vh] overflow-y-auto rounded-xl" style={{ background: 'var(--bg-elevated)' }}>
           {(() => {
             const kitCount   = kitIds.size;
-            const kitPrice   = shareDiscount ? 4000 : 5000;
+            const kitPrice   = shareDiscount ? 3000 : 4000;
             const savings    = 1000;
             const autoSelected  = candidates.filter((c, i) =>  kitIds.has(c.id) && (i + 1) <= zz);
             const manualSelected = candidates.filter((c, i) => kitIds.has(c.id) && (i + 1) >  zz);
@@ -1275,7 +1297,7 @@ export const TestReactionPage = () => {
                   {/* Price summary */}
                   <div className="flex items-baseline gap-2">
                     {shareDiscount && (
-                      <span className="text-sm text-muted-foreground line-through">$5,000</span>
+                      <span className="text-sm text-muted-foreground line-through">$4,000</span>
                     )}
                     <span className="text-2xl font-bold text-foreground">${kitPrice.toLocaleString()}</span>
                     {shareDiscount && (
@@ -1390,7 +1412,7 @@ export const TestReactionPage = () => {
                             type="button"
                             onClick={() => { setBulkOpen(false); setOrderOpen(true); }}
                             className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer"
-                            style={{ background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.30)' }}
+                            style={{ background: 'var(--primary-500)', color: '#fff', boxShadow: 'none' }}
                           >
                             <ShoppingCart className="w-4 h-4" />
                             Order now
@@ -1478,7 +1500,7 @@ export const TestReactionPage = () => {
                 <button
                   type="button"
                   className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all cursor-pointer"
-                  style={{ background: 'var(--primary-500)', color: '#fff', boxShadow: '0 2px 12px 0 rgba(16,185,129,0.25)' }}
+                  style={{ background: 'var(--primary-500)', color: '#fff', boxShadow: 'none' }}
                 >
                   <ShoppingCart className="w-4 h-4" />
                   Pay by Stripe

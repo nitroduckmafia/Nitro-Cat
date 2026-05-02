@@ -201,7 +201,7 @@
         "ec_name": "Coumarin 7-hydroxylase (CYP2A6)",
         "substrate_name": "coumarin + NADPH + O₂",
         "product_name": "7-hydroxycoumarin (umbelliferone) + NADP⁺ + H₂O",
-        "reaction_smiles": "O=c1ccc2ccccc2o1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>O=c1ccc2cc(O)ccc2o1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
+        "reaction_smiles": "O=c1ccc2ccccc2o1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>O=c1ccc2ccc(O)cc2o1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
         "story": "CYP2A6 — human hepatic CYP; converts coumarin to the fluorescent umbelliferone; the standard probe reaction for CYP2A6 phenotyping in clinical pharmacogenomics",
         "is_impossible": false
       },
@@ -290,7 +290,7 @@
         "ec_name": "Trypsin",
         "substrate_name": "Ala-Arg dipeptide + H₂O",
         "product_name": "L-Ala + L-Arg",
-        "reaction_smiles": "C[C@@H](N)C(=O)N[C@@H](CCCNC(=N)N)C(=O)O.O>>C[C@@H](N)C(=O)O.N[C@@H](CCCNC(=N)N)C(=O)O",
+        "reaction_smiles": "C[C@H](N)C(=O)N[C@@H](CCCNC(=N)N)C(=O)O.O>>C[C@H](N)C(=O)O.N[C@@H](CCCNC(=N)N)C(=O)O",
         "story": "Trypsin — serine protease that cleaves C-terminal to Arg/Lys; founding member of the chymotrypsin superfamily; workhorse of proteomics sample preparation",
         "is_impossible": false
       },
@@ -528,7 +528,7 @@
         "ec_name": "Coumarin 7-hydroxylase (CYP2A6)",
         "substrate_name": "coumarin + NADPH + O₂",
         "product_name": "7-hydroxycoumarin (umbelliferone) + NADP⁺ + H₂O",
-        "reaction_smiles": "O=c1ccc2ccccc2o1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>O=c1ccc2cc(O)ccc2o1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
+        "reaction_smiles": "O=c1ccc2ccccc2o1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>O=c1ccc2ccc(O)cc2o1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
         "story": "CYP2A6 — human hepatic CYP; converts coumarin to the fluorescent umbelliferone; the standard probe reaction for CYP2A6 phenotyping in clinical pharmacogenomics",
         "is_impossible": false
       },
@@ -617,7 +617,7 @@
         "ec_name": "Laccase (catechol → quinone)",
         "substrate_name": "catechol + ½O₂",
         "product_name": "o-benzoquinone + H₂O",
-        "reaction_smiles": "Oc1ccccc1O.O=O>>O=C1C=CC(=O)C=C1.O",
+        "reaction_smiles": "Oc1ccccc1O.O=O>>O=C1C=CC=CC1=O.O",
         "story": "Laccase — multicopper oxidase that converts catechols to quinones; responsible for enzymatic browning of cut fruit and oxidative delignification in white-rot fungi",
         "is_impossible": false
       },
@@ -637,7 +637,7 @@
         "ec_name": "Flavanone 3-hydroxylase (FHT/F3H)",
         "substrate_name": "(2S)-naringenin + 2-oxoglutarate + O₂",
         "product_name": "(2R,3R)-dihydrokaempferol + succinate + CO₂",
-        "reaction_smiles": "O=C1C[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21.OC(=O)CCC(=O)O.O=O>>O=C1[C@@H](O)[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21.OC(=O)CCC(=O)O.O=C=O",
+        "reaction_smiles": "O=C1C[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21.OC(=O)CCC(=O)C(=O)O.O=O>>O=C1[C@@H](O)[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21.OC(=O)CCC(=O)O.O=C=O",
         "story": "FHT — 2-oxoglutarate-dependent dioxygenase; installs 3-OH on naringenin to branch the flavonoid pathway toward kaempferol, quercetin, and anthocyanins",
         "is_impossible": false
       },
@@ -696,7 +696,7 @@
         "ec_name": "Trypsin",
         "substrate_name": "Ala-Arg dipeptide + H₂O",
         "product_name": "L-Ala + L-Arg",
-        "reaction_smiles": "C[C@@H](N)C(=O)N[C@@H](CCCNC(=N)N)C(=O)O.O>>C[C@@H](N)C(=O)O.N[C@@H](CCCNC(=N)N)C(=O)O",
+        "reaction_smiles": "C[C@H](N)C(=O)N[C@@H](CCCNC(=N)N)C(=O)O.O>>C[C@H](N)C(=O)O.N[C@@H](CCCNC(=N)N)C(=O)O",
         "story": "Trypsin — serine protease that cleaves C-terminal to Arg/Lys; founding member of the chymotrypsin superfamily; workhorse of proteomics sample preparation",
         "is_impossible": false
       },
@@ -883,7 +883,7 @@
         "ec_name": "Coumarin 7-hydroxylase (CYP2A6)",
         "substrate_name": "coumarin + NADPH + O₂",
         "product_name": "7-hydroxycoumarin (umbelliferone) + NADP⁺ + H₂O",
-        "reaction_smiles": "O=c1ccc2ccccc2o1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>O=c1ccc2cc(O)ccc2o1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
+        "reaction_smiles": "O=c1ccc2ccccc2o1.NC(=O)C1=CN([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)C=CC1.O=O.[H+]>>O=c1ccc2ccc(O)cc2o1.NC(=O)c1ccc[n+]([C@@H]2O[C@H](COP(=O)(O)OP(=O)(O)OC[C@H]3O[C@@H](n4cnc5c(N)ncnc54)[C@H](OP(=O)(O)O)[C@@H]3O)[C@@H](O)[C@H]2O)c1.O",
         "story": "CYP2A6 — human hepatic CYP; converts coumarin to the fluorescent umbelliferone; the standard probe reaction for CYP2A6 phenotyping in clinical pharmacogenomics",
         "is_impossible": false
       },
@@ -1073,7 +1073,7 @@
         "ec_name": "Flavanone 3-hydroxylase (FHT/F3H)",
         "substrate_name": "(2S)-naringenin + 2-oxoglutarate + O₂",
         "product_name": "(2R,3R)-dihydrokaempferol + succinate + CO₂",
-        "reaction_smiles": "O=C1C[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21.OC(=O)CCC(=O)O.O=O>>O=C1[C@@H](O)[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21.OC(=O)CCC(=O)O.O=C=O",
+        "reaction_smiles": "O=C1C[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21.OC(=O)CCC(=O)C(=O)O.O=O>>O=C1[C@@H](O)[C@@H](c2ccc(O)cc2)Oc2cc(O)cc(O)c21.OC(=O)CCC(=O)O.O=C=O",
         "story": "FHT — 2-oxoglutarate-dependent dioxygenase; installs 3-OH on naringenin to branch the flavonoid pathway toward kaempferol, quercetin, and anthocyanins",
         "is_impossible": false
       },

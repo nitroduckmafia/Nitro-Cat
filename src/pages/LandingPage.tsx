@@ -45,23 +45,11 @@ const ArrowRightIcon = () => (
 );
 
 const STEPS: Array<{ text: ReactNode }> = [
-  { text: "Draw the reaction you want" },
-  {
-    text: (
-      <>
-        Our <span className="em">ML-powered model</span> scans 250,000+ biocatalysts to find the best matches
-      </>
-    ),
-  },
-  {
-    text: (
-      <>
-        Order a <span className="em">custom biocatalytic kit</span> for YOUR reaction
-      </>
-    ),
-  },
-  { text: "Add your substrate and incubate" },
-  { text: "Analyse your results" },
+  { text: "Draw your reaction" },
+  { text: "NitroCat finds biocatalysts" },
+  { text: "Order custom kit" },
+  { text: "Add substrate" },
+  { text: "Analyze results" },
 ];
 
 const CaseModal = ({ reaction, onClose }: { reaction: LandingReaction; onClose: () => void }) => {
@@ -77,8 +65,6 @@ const CaseModal = ({ reaction, onClose }: { reaction: LandingReaction; onClose: 
       document.removeEventListener("keydown", onKey);
     };
   }, [onClose]);
-
-  const hasInt = !!reaction.intermediate;
 
   return (
     <div
@@ -111,64 +97,44 @@ const CaseModal = ({ reaction, onClose }: { reaction: LandingReaction; onClose: 
             Case 0{reaction.id} · {reaction.target}
           </span>
           <h2 className="modal-title" id={`case-${reaction.id}-title`}>
-            {reaction.titleFull}
+            {(() => {
+              const idx = reaction.titleFull.indexOf("→");
+              if (idx === -1) return reaction.titleFull;
+              return (
+                <>
+                  {reaction.titleFull.slice(0, idx)}
+                  <span className="modal-title-after">{reaction.titleFull.slice(idx)}</span>
+                </>
+              );
+            })()}
           </h2>
-          <p className="modal-cite">{reaction.citation}</p>
+          <p className="modal-cite">
+            <a href={reaction.citationUrl} target="_blank" rel="noopener noreferrer">
+              {reaction.citation}
+            </a>
+          </p>
         </header>
 
         <div className="modal-body">
-          {hasInt ? (
-            <div className="rxn has-int">
-              <div className="rxn-col">
-                <div className="rxn-mol">
-                  <img src={reaction.substrate} alt="Substrate" />
-                </div>
-                <div className="rxn-mol-lbl">Substrate</div>
+          <div className="rxn">
+            <div className="rxn-col">
+              <div className="rxn-mol">
+                <img src={reaction.substrate} alt="Substrate" />
               </div>
-              <div className="rxn-arrow">
-                <span className="arrow-lbl">CYP2D6</span>
-                <div className="arrow-line" />
-                <span className="arrow-cat">+ OH</span>
-              </div>
-              <div className="rxn-col">
-                <div className="rxn-mol">
-                  <img src={reaction.intermediate ?? ""} alt="Intermediate" />
-                </div>
-                <div className="rxn-mol-lbl">Intermediate</div>
-              </div>
-              <div className="rxn-arrow">
-                <span className="arrow-lbl">DAST</span>
-                <div className="arrow-line" />
-                <span className="arrow-cat">+ F</span>
-              </div>
-              <div className="rxn-col">
-                <div className="rxn-mol">
-                  <img src={reaction.product} alt="Product" />
-                </div>
-                <div className="rxn-mol-lbl">Product</div>
-              </div>
+              <div className="rxn-mol-lbl">Substrate</div>
             </div>
-          ) : (
-            <div className="rxn">
-              <div className="rxn-col">
-                <div className="rxn-mol">
-                  <img src={reaction.substrate} alt="Substrate" />
-                </div>
-                <div className="rxn-mol-lbl">Substrate</div>
-              </div>
-              <div className="rxn-arrow">
-                <span className="arrow-lbl">Biocatalyst</span>
-                <div className="arrow-line" />
-                <span className="arrow-cat">{reaction.transform}</span>
-              </div>
-              <div className="rxn-col">
-                <div className="rxn-mol">
-                  <img src={reaction.product} alt="Product" />
-                </div>
-                <div className="rxn-mol-lbl">Product</div>
-              </div>
+            <div className="rxn-arrow">
+              <span className="arrow-lbl">{reaction.biocatalyst ?? "Biocatalyst"}</span>
+              <div className="arrow-line" />
+              <span className="arrow-cat">{reaction.transform}</span>
             </div>
-          )}
+            <div className="rxn-col">
+              <div className="rxn-mol">
+                <img src={reaction.product} alt="Product" />
+              </div>
+              <div className="rxn-mol-lbl">Product</div>
+            </div>
+          </div>
 
           <div className="compare">
             <div className="pane bad">
@@ -275,6 +241,7 @@ const CaseModal = ({ reaction, onClose }: { reaction: LandingReaction; onClose: 
 export const LandingPage = () => {
   const navigate = useNavigate();
   const [activeCaseId, setActiveCaseId] = useState<number | null>(null);
+  const [showcaseOpen, setShowcaseOpen] = useState(false);
   const activeReaction = activeCaseId !== null ? LANDING_REACTIONS.find((r) => r.id === activeCaseId) ?? null : null;
 
   const handleStart = () => navigate("/reactions/new");
@@ -284,29 +251,25 @@ export const LandingPage = () => {
       <nav className="nav">
         <div className="nav-inner">
           <div className="brand">
-            <span className="brand-mark">N</span>
-            <span>NitroCat</span>
+            <img className="brand-logo" src="/images/nitroduck-logo.png" alt="" />
+            <div className="brand-text">
+              <span className="brand-name">NitroCat</span>
+              <span className="brand-sub">by NitroDuck</span>
+            </div>
           </div>
-          <button type="button" className="nav-cta" onClick={handleStart}>
-            Try NitroCat <ArrowRightIcon />
-          </button>
+          <a className="nav-contact" href="mailto:mafia@nitroduck.tech">
+            Contact us
+          </a>
         </div>
       </nav>
 
       <section className="hero">
-        <h1 className="h1">NitroCat</h1>
-        <p className="h1-sub">by NitroDuck</p>
-
         <p className="subhead">
-          <span style={{ color: "var(--ink)" }}>
-            Turn your <span className="accent">ADMET design into reality</span>
-          </span>{" "}
-          — in just <span className="hi">1 reaction</span> and <span className="hi">1 week</span>.
+          Turn your <span className="accent">ADMET design into reality</span>
+          {" "}— in just <span className="hi">1 reaction</span>.
         </p>
 
         <div className="hero-grid">
-          <p className="body-lead">Biocatalytic late-stage functionalisation — made simple!</p>
-
           <ol className="steps">
             {STEPS.map((s, i) => (
               <li className="step fade-up" key={i}>
@@ -315,6 +278,8 @@ export const LandingPage = () => {
               </li>
             ))}
           </ol>
+
+          <p className="body-lead">Biocatalytic late-stage functionalisation — made simple!</p>
 
           <div className="cta-row" id="cta">
             <button type="button" className="cta" onClick={handleStart}>
@@ -341,13 +306,34 @@ export const LandingPage = () => {
 
       <section className="showcase">
         <div className="showcase-inner">
-          <div className="showcase-head">
+          <button
+            type="button"
+            className="showcase-head"
+            aria-expanded={showcaseOpen}
+            aria-controls="showcase-cards"
+            onClick={() => setShowcaseOpen((v) => !v)}
+          >
             <h2 className="showcase-h2">
               C–H hydroxylations <span className="lite">— Success Cases</span>
             </h2>
-          </div>
+            <svg
+              className="showcase-chevron"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              width="22"
+              height="22"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.4}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
 
-          <div className="cards">
+          {showcaseOpen && (
+          <div className="cards" id="showcase-cards">
             {LANDING_REACTIONS.map((r, i) => (
               <button
                 type="button"
@@ -361,8 +347,6 @@ export const LandingPage = () => {
                 </div>
                 <div className="card-mol">
                   <img src={r.substrate} alt={`Substrate ${i + 1}`} />
-                  <span className="plus">→</span>
-                  <img src={r.product} alt={`Product ${i + 1}`} />
                 </div>
                 <h3 className="card-title">{r.titleShort}</h3>
                 <div className="card-meta">
@@ -385,6 +369,7 @@ export const LandingPage = () => {
               </button>
             ))}
           </div>
+          )}
         </div>
       </section>
 

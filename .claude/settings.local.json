@@ -45,7 +45,19 @@
       "Bash(git stash *)",
       "Bash(git rm *)",
       "mcp__plugin_woz_code__Search",
-      "Skill(woz:woz-login)"
+      "Skill(woz:woz-login)",
+      "Bash(npx vite *)",
+      "Bash(PYTHONIOENCODING=utf-8 python *)",
+      "Bash(rm .git/config.lock)",
+      "Bash(git branch *)",
+      "Bash(bun dev *)",
+      "Bash(grep -r \"#[0-9a-fA-F]\\\\{3,8\\\\}\" /home/pravoslav/Documents/projects/Nitroduck/app/nitro-cat/src --include=\"*.tsx\" --include=\"*.ts\")",
+      "Bash(xargs cat *)",
+      "Bash(bun run *)",
+      "Bash(~/.bun/bin/bun run *)",
+      "Bash(sed -i \"s/boxShadow: '0 2px 12px 0 rgba\\(16,185,129,0.25\\)'/boxShadow: 'none'/g\" /home/pravoslav/Documents/projects/Nitroduck/app/nitro-cat/src/pages/NewReactionPage.tsx /home/pravoslav/Documents/projects/Nitroduck/app/nitro-cat/src/pages/dashboard/TestReactionPage.tsx /home/pravoslav/Documents/projects/Nitroduck/app/nitro-cat/src/components/reaction/YieldCard.tsx)",
+      "Bash(sed -i \"s/boxShadow: '0 4px 16px 0 rgba\\(16,185,129,0.35\\)'/boxShadow: 'none'/g\" /home/pravoslav/Documents/projects/Nitroduck/app/nitro-cat/src/pages/dashboard/TestReactionPage.tsx)",
+      "Bash(sed -i \"s/boxShadow: '0 2px 12px 0 rgba\\(16,185,129,0.30\\)'/boxShadow: 'none'/g\" /home/pravoslav/Documents/projects/Nitroduck/app/nitro-cat/src/pages/dashboard/TestReactionPage.tsx)"
     ]
   }
 }
