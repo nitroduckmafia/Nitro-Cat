@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { MoleculeViewer } from "@/components/molecule/MoleculeViewer";
 import {
-  ArrowLeft, Upload, Download, CheckCircle2, FlaskConical, FileText,
+  ArrowLeft, Download, CheckCircle2, FlaskConical, FileText,
   Dna, Check, X, TrendingUp, ShoppingCart, Droplets, Thermometer, Activity, Target,
   PencilLine, ScrollText, Beaker, Clock, AlertTriangle, BookOpen, Loader2,
 } from "lucide-react";
@@ -605,11 +605,10 @@ const ResultView = ({
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 type View = 'select' | 'input' | 'result';
-type Mode = 'smiles' | 'rxn' | 'draw';
+type Mode = 'smiles' | 'draw';
 
 export const NewReactionPage = () => {
   const navigate     = useNavigate();
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [view, setView]     = useState<View>('select');
   const [visible, setVisible] = useState(true);
@@ -624,7 +623,6 @@ export const NewReactionPage = () => {
   const [productSmiles, setProduct]     = useState('');
   const [substrateValid, setSubstrateValid] = useState<boolean | null>(null);
   const [productValid, setProductValid]     = useState<boolean | null>(null);
-  const [rxnFile, setRxnFile] = useState<File | null>(null);
   const [subLoadTrigger,  setSubLoadTrigger]  = useState<{ molfile: string; key: number } | undefined>(undefined);
   const [prodLoadTrigger, setProdLoadTrigger] = useState<{ molfile: string; key: number } | undefined>(undefined);
   const [drawStep, setDrawStep] = useState<1 | 2>(1);
@@ -683,10 +681,7 @@ export const NewReactionPage = () => {
   }, [productSmiles]);
 
   const canSubmit = substrateSmiles.trim().length >= 2 && productSmiles.trim().length >= 2;
-  const isActive =
-    mode === 'smiles' ? canSubmit :
-    mode === 'rxn'    ? rxnFile !== null :
-    /* draw */          canSubmit;
+  const isActive = canSubmit;
 
   const goTo = (next: View) => setView(next);
 
@@ -837,11 +832,10 @@ export const NewReactionPage = () => {
           <h1 className="text-2xl font-bold text-foreground">Find Biocatalyst</h1>
           <p className="text-sm text-muted-foreground mt-1">Choose how you'd like to input your reaction</p>
         </div>
-        <div className={cn("grid grid-cols-1 gap-4 w-full max-w-2xl", isMobile ? "sm:grid-cols-2" : "sm:grid-cols-3")}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
           {(([
             { id: 'draw'  as Mode, icon: <PencilLine className="w-6 h-6 text-primary" />, label: 'Draw Structure' },
             { id: 'smiles' as Mode, icon: <FileText className="w-6 h-6 text-primary" />, label: 'SMILES' },
-            { id: 'rxn'   as Mode, icon: <Upload    className="w-6 h-6 text-primary" />, label: 'RXN File' },
           ] as const).filter(t => !(isMobile && t.id === 'draw'))).map(({ id, icon, label }) => (
             <button
               key={id}
@@ -866,7 +860,6 @@ export const NewReactionPage = () => {
   const modeTabs: { id: Mode; label: string }[] = [
     ...(isMobile ? [] : [{ id: 'draw' as Mode, label: 'Draw Structure' }]),
     { id: 'smiles', label: 'SMILES' },
-    { id: 'rxn',   label: 'RXN File' },
   ];
 
   const InputContent = (
@@ -1051,40 +1044,6 @@ export const NewReactionPage = () => {
               )}
             </div>
           </>
-        )}
-
-        {mode === 'rxn' && (
-          <div className="max-w-3xl mx-auto w-full px-6 pt-6 pb-12 space-y-6">
-            <h1 className="text-xl font-bold text-foreground">Upload RXN File</h1>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".rxn,.rdf,.mol"
-              className="hidden"
-              onChange={(e) => setRxnFile(e.target.files?.[0] ?? null)}
-            />
-            <div
-              role="button"
-              tabIndex={0}
-              className="rounded-xl border-2 border-dashed border-border hover:border-[var(--border-interactive)] transition-colors cursor-pointer p-12 flex flex-col items-center gap-4 text-center"
-              onClick={() => fileInputRef.current?.click()}
-              onKeyDown={(e) => e.key === 'Enter' && fileInputRef.current?.click()}
-            >
-              <Upload className="w-10 h-10 text-muted-foreground" />
-              {rxnFile ? (
-                <>
-                  <p className="font-semibold text-foreground">{rxnFile.name}</p>
-                  <p className="text-xs text-muted-foreground">{(rxnFile.size / 1024).toFixed(1)} KB · click to replace</p>
-                </>
-              ) : (
-                <>
-                  <p className="text-sm text-muted-foreground">Click to upload or drag &amp; drop</p>
-                  <p className="text-xs text-muted-foreground font-mono">.rxn · .rdf · .mol</p>
-                </>
-              )}
-            </div>
-            <FindEnzymesButton active={rxnFile !== null} loading={apiLoading} onClick={handleFindEnzymes} />
-          </div>
         )}
 
         {mode === 'draw' && (

@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { joinWaitlist } from "@/lib/api/supabase";
 
 type Props = {
   className?: string;
@@ -10,16 +11,29 @@ export const WaitlistButton = ({ className, children = "Join the waitlist" }: Pr
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const openDialog = () => {
     setSubmitted(false);
     setEmail("");
+    setError(null);
     setOpen(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) setSubmitted(true);
+    if (!email) return;
+    setLoading(true);
+    setError(null);
+    try {
+      await joinWaitlist(email);
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,14 +60,19 @@ export const WaitlistButton = ({ className, children = "Join the waitlist" }: Pr
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="your@email.com"
                     required
-                    className="w-full px-3 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm outline-none focus:border-primary transition-colors"
+                    disabled={loading}
+                    className="w-full px-3 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm outline-none focus:border-primary transition-colors disabled:opacity-50"
                   />
+                  {error && (
+                    <p className="text-xs text-destructive">{error}</p>
+                  )}
                   <button
                     type="submit"
+                    disabled={loading}
                     style={{ background: "var(--brand-primary)", color: "#fff" }}
-                    className="w-full py-[11px] rounded-[9px] text-[13.5px] font-semibold border-none cursor-pointer hover:opacity-90 transition-opacity"
+                    className="w-full py-[11px] rounded-[9px] text-[13.5px] font-semibold border-none cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    Notify me
+                    {loading ? "Saving…" : "Notify me"}
                   </button>
                 </form>
               </>

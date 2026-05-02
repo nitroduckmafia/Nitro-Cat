@@ -8,6 +8,7 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import demoSets from '@/data/synbiobeta_demo_sets.json';
 import type { DemoReaction } from '@/types/demo';
 import { cn } from '@/lib/utils';
+import { joinWaitlist } from '@/lib/api/supabase';
 
 type Phase = 'intro' | 'guess' | 'revealed';
 
@@ -431,7 +432,7 @@ function GameOverModal({ open, correct, onNewGame, onJoinList, onClose }: {
               style={{ background: 'var(--brand-primary)', color: 'var(--bg-primary)' }}
               className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
             >
-              Join the waiting list 🧬
+              Join the waitlist
             </button>
             <button
               type="button"
@@ -451,16 +452,28 @@ function GameOverModal({ open, correct, onNewGame, onJoinList, onClose }: {
 function EmailCaptureModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email) return;
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+    try {
+      await joinWaitlist(email);
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   function handleClose() {
     setSubmitted(false);
     setEmail('');
+    setError(null);
     onClose();
   }
 
@@ -481,21 +494,22 @@ function EmailCaptureModal({ open, onClose }: { open: boolean; onClose: () => vo
                   onChange={e => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   required
-                  className="w-full px-3 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm outline-none focus:border-primary transition-colors"
+                  disabled={loading}
+                  className="w-full px-3 py-2.5 rounded-lg border border-border bg-background text-foreground text-sm outline-none focus:border-primary transition-colors disabled:opacity-50"
                 />
+                {error && <p className="text-xs text-destructive">{error}</p>}
                 <button
                   type="submit"
+                  disabled={loading}
                   style={{ background: 'var(--brand-primary)', color: 'var(--bg-primary)' }}
-                  className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
+                  className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Notify me when live
+                  {loading ? "Saving…" : "Notify me when live"}
                 </button>
               </form>
-
             </>
           ) : (
             <>
-              <div className="text-center text-4xl pt-1">✅</div>
               <div className="text-xl font-bold text-center">You're on the list!</div>
               <p className="text-sm text-muted-foreground text-center">
                 We'll let you know at <span className="text-foreground font-medium">{email}</span> when NitroCat launches.
@@ -513,6 +527,26 @@ function EmailCaptureModal({ open, onClose }: { open: boolean; onClose: () => vo
         </div>
       </DialogContent>
     </Dialog>
+  );
+}
+
+// ── WaitlistCTA ───────────────────────────────────────────────────────────────
+function WaitlistCTA({ onOpen }: { onOpen: () => void }) {
+  return (
+    <div className="mt-6 rounded-xl border border-border bg-card px-5 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="flex flex-col gap-1 text-center sm:text-left">
+        <div className="text-sm font-semibold text-foreground">Get early access to NitroCat</div>
+        <div className="text-xs text-muted-foreground">Be the first to order enzymes when we launch.</div>
+      </div>
+      <button
+        type="button"
+        onClick={onOpen}
+        style={{ background: 'var(--brand-primary)', color: 'var(--bg-primary)' }}
+        className="shrink-0 px-5 py-2.5 rounded-lg text-[13px] font-semibold border-none cursor-pointer hover:opacity-90 transition-opacity whitespace-nowrap"
+      >
+        Join the waitlist
+      </button>
+    </div>
   );
 }
 
@@ -768,6 +802,9 @@ export default function DemoPage() {
             />
           ))}
         </div>
+
+        {/* Waitlist CTA */}
+        <WaitlistCTA onOpen={() => setEmailOpen(true)} />
       </div>
 
       <WrongModal
