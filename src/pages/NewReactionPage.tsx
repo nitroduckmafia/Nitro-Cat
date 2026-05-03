@@ -832,7 +832,7 @@ export const NewReactionPage = () => {
           <h1 className="text-2xl font-bold text-foreground">Find Biocatalyst</h1>
           <p className="text-sm text-muted-foreground mt-1">Choose how you'd like to input your reaction</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
+        <div className={cn("grid grid-cols-1 gap-4 w-full max-w-2xl", isMobile ? "sm:grid-cols-1" : "sm:grid-cols-2")}>
           {(([
             { id: 'draw'  as Mode, icon: <PencilLine className="w-6 h-6 text-primary" />, label: 'Draw Structure' },
             { id: 'smiles' as Mode, icon: <FileText className="w-6 h-6 text-primary" />, label: 'SMILES' },
@@ -841,10 +841,10 @@ export const NewReactionPage = () => {
               key={id}
               type="button"
               onClick={() => selectMode(id)}
-              className="flex flex-col items-center gap-3 p-6 rounded-xl border border-border bg-card hover:bg-accent transition-all group"
+              className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-border bg-card hover:bg-accent transition-all group"
               style={{ cursor: 'pointer' }}
             >
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 {icon}
               </div>
               <p className="font-semibold text-foreground">{label}</p>
@@ -877,15 +877,31 @@ export const NewReactionPage = () => {
               type="button"
               onClick={() => {
                 if (id === 'draw') {
-                  drawOriginRef.current = 'tab';
-                  setDrawStep(1);
-                  // Tab switch: empty drawing board
-                  setSubLoadTrigger(undefined);
-                  setProdLoadTrigger(undefined);
-                  subKetRef.current = '';
-                  prodKetRef.current = '';
-                  subMolfileRef.current = '';
-                  prodMolfileRef.current = '';
+                  const hasSub = substrateSmiles.trim().length > 0;
+                  const hasProd = productSmiles.trim().length > 0;
+                  if (hasSub || hasProd) {
+                    // Preserve existing data — sync from SMILES (or KET for lossless round-trip)
+                    drawOriginRef.current = 'editSub';
+                    setDrawStep(1);
+                    if (hasSub) {
+                      const subData = subKetRef.current || substrateSmiles.trim();
+                      setSubLoadTrigger(t => ({ molfile: subData, key: (t?.key ?? 0) + 1 }));
+                    }
+                    if (hasProd) {
+                      const prodData = prodKetRef.current || productSmiles.trim();
+                      setProdLoadTrigger(t => ({ molfile: prodData, key: (t?.key ?? 0) + 1 }));
+                    }
+                  } else {
+                    // Empty board — first entry
+                    drawOriginRef.current = 'tab';
+                    setDrawStep(1);
+                    setSubLoadTrigger(undefined);
+                    setProdLoadTrigger(undefined);
+                    subKetRef.current = '';
+                    prodKetRef.current = '';
+                    subMolfileRef.current = '';
+                    prodMolfileRef.current = '';
+                  }
                 }
                 setMode(id);
               }}

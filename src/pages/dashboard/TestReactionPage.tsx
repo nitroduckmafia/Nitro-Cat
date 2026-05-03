@@ -607,7 +607,7 @@ const CandidateCard = ({ enzyme, rank, zz, expanded, onToggle, inKit, onToggleKi
           <div className="flex gap-2">
             <Button
               size="sm"
-              className="gap-1.5 flex-1 font-semibold"
+              className="gap-1.5 flex-1 font-semibold whitespace-normal text-center leading-tight min-h-9 h-auto py-2"
               style={inKit
                 ? { background: CONFIDENCE_COLORS.low, color: '#fff' }
                 : { background: CONFIDENCE_COLORS.good, color: '#fff' }}
@@ -616,12 +616,12 @@ const CandidateCard = ({ enzyme, rank, zz, expanded, onToggle, inKit, onToggleKi
               {inKit ? (
                 <>
                   <ShoppingCart className="w-3.5 h-3.5" />
-                  Remove this biocatalyst from kit
+                  Remove from kit
                 </>
               ) : (
                 <>
                   <Plus className="w-3.5 h-3.5" />
-                  Add this biocatalyst to kit
+                  Add to kit
                 </>
               )}
             </Button>
@@ -896,7 +896,7 @@ export const TestReactionPage = () => {
           {/* Kit card */}
           {(() => {
             const kitCount = kitIds.size;
-            const kitPrice = shareDiscount ? 3000 : 4000;
+            const kitPrice = shareDiscount ? 3200 : 4000;
             return (
               <div className="flex flex-col rounded-xl border border-border bg-muted/20 px-4 py-3 gap-2">
 
@@ -1104,8 +1104,8 @@ export const TestReactionPage = () => {
                 className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full text-sm font-semibold transition-all cursor-pointer border"
                 style={{ borderColor: accentColor, color: accentColor, background: 'transparent' }}
               >
-                <Dna className="w-4 h-4" />
-                Load more biocatalysts ({Math.min(candidates.length, 96) - visibleCount} remaining)
+                <Dna className="w-4 h-4 shrink-0" />
+                <span className="truncate">Load more ({Math.min(candidates.length, 96) - visibleCount} remaining)</span>
               </button>
             )}
             <button
@@ -1116,8 +1116,8 @@ export const TestReactionPage = () => {
                 ? { background: CONFIDENCE_COLORS.good, color: '#fff', borderColor: CONFIDENCE_COLORS.good }
                 : { borderColor: CONFIDENCE_COLORS.good, color: CONFIDENCE_COLORS.good, background: 'transparent' }}
             >
-              <ShoppingCart className="w-4 h-4" />
-              {showKitOnly ? 'Show all biocatalysts' : 'Show only biocatalysts in kit'}
+              <ShoppingCart className="w-4 h-4 shrink-0" />
+              <span className="truncate">{showKitOnly ? 'Show all' : 'Show kit only'}</span>
             </button>
           </div>
         </div>
@@ -1261,8 +1261,8 @@ export const TestReactionPage = () => {
         <DialogContent className="max-w-xl max-h-[85vh] overflow-y-auto rounded-xl" style={{ background: 'var(--bg-elevated)' }}>
           {(() => {
             const kitCount   = kitIds.size;
-            const kitPrice   = shareDiscount ? 3000 : 4000;
-            const savings    = 1000;
+            const kitPrice   = shareDiscount ? 3200 : 4000;
+            const savings    = 800;
             const autoSelected  = candidates.filter((c, i) =>  kitIds.has(c.id) && (i + 1) <= zz);
             const manualSelected = candidates.filter((c, i) => kitIds.has(c.id) && (i + 1) >  zz);
             // auto = green (primary), manual = amber

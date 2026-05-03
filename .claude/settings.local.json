@@ -55,9 +55,16 @@
       "Bash(xargs cat *)",
       "Bash(bun run *)",
       "Bash(~/.bun/bin/bun run *)",
-      "Bash(sed -i \"s/boxShadow: '0 2px 12px 0 rgba\\(16,185,129,0.25\\)'/boxShadow: 'none'/g\" /home/pravoslav/Documents/projects/Nitroduck/app/nitro-cat/src/pages/NewReactionPage.tsx /home/pravoslav/Documents/projects/Nitroduck/app/nitro-cat/src/pages/dashboard/TestReactionPage.tsx /home/pravoslav/Documents/projects/Nitroduck/app/nitro-cat/src/components/reaction/YieldCard.tsx)",
-      "Bash(sed -i \"s/boxShadow: '0 4px 16px 0 rgba\\(16,185,129,0.35\\)'/boxShadow: 'none'/g\" /home/pravoslav/Documents/projects/Nitroduck/app/nitro-cat/src/pages/dashboard/TestReactionPage.tsx)",
-      "Bash(sed -i \"s/boxShadow: '0 2px 12px 0 rgba\\(16,185,129,0.30\\)'/boxShadow: 'none'/g\" /home/pravoslav/Documents/projects/Nitroduck/app/nitro-cat/src/pages/dashboard/TestReactionPage.tsx)"
+      "Bash(git pull *)",
+      "Bash(bun --version)",
+      "PowerShell(bun *)",
+      "PowerShell(npm install *)",
+      "PowerShell(npm run *)",
+      "PowerShell(Get-NetTCPConnection *)",
+      "PowerShell(npx tsc --noEmit 2>&1 | Select-Object -First 60)",
+      "PowerShell(try { \\(Invoke-WebRequest -Uri \"http://localhost:8080/\" -UseBasicParsing -TimeoutSec 5\\).StatusCode } catch { \"ERR\\(localhost\\): $_\" }; try { \\(Invoke-WebRequest -Uri \"http://127.0.0.1:8080/\" -UseBasicParsing -TimeoutSec 5\\).StatusCode } catch { \"ERR\\(127.0.0.1\\): $_\" }; try { \\(Invoke-WebRequest -Uri \"http://[::1]:8080/\" -UseBasicParsing -TimeoutSec 5\\).StatusCode } catch { \"ERR\\(::1\\): $_\" })",
+      "PowerShell(\\(Invoke-WebRequest -Uri \"http://localhost:8080/\" -UseBasicParsing\\).Content)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:8080/src/main.tsx\" -UseBasicParsing; \"main.tsx OK len=$\\($r.Content.Length\\)\" } catch { \"main.tsx ERROR: $_\" })"
     ]
   }
 }
