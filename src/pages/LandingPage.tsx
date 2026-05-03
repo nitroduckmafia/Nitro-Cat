@@ -266,7 +266,7 @@ export const LandingPage = () => {
       <section className="hero">
         <p className="subhead">
           Turn your <span className="accent">ADMET design into reality</span>
-          {" "}— in just <span className="hi">1 reaction</span>
+          {" "} in one <span className="hi"> reaction</span>
         </p>
 
         <div className="hero-grid">
