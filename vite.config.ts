@@ -1,11 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import os from "os";
 
 export default defineConfig(() => ({
-  cacheDir: '/tmp/vite-cache',
+  cacheDir: path.join(os.tmpdir(), "vite-cache"),
   server: {
-    host: "::",
+    host: true,
     port: 8080,
     hmr: { overlay: false },
     headers: {},

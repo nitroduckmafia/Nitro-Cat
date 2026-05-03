@@ -432,7 +432,7 @@ function GameOverModal({ open, correct, onNewGame, onJoinList, onClose }: {
               style={{ background: 'var(--brand-primary)', color: 'var(--bg-primary)' }}
               className="w-full py-[11px] rounded-[9px] text-[13.5px] font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
             >
-              Join the waitlist
+              Join the waiting list
             </button>
             <button
               type="button"
