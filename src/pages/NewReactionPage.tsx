@@ -633,6 +633,9 @@ export const NewReactionPage = () => {
   const prodKetRef = useRef<string>('');
   const subFromEditorRef = useRef(false);
   const prodFromEditorRef = useRef(false);
+  /** Imperative flushers — force the editor to emit pending debounced changes before time-sensitive reads. */
+  const subFlushRef = useRef<(() => Promise<string | null>) | null>(null);
+  const prodFlushRef = useRef<(() => Promise<string | null>) | null>(null);
   const firstMount = useRef(true);
   /** Tracks how draw mode was entered: 'tab' = empty board, 'editSub'/'editProd' = synced from SMILES */
   const drawOriginRef = useRef<'tab' | 'editSub' | 'editProd'>('tab');
@@ -721,6 +724,26 @@ export const NewReactionPage = () => {
     if (!isActive || apiLoading) return;
     setApiError(null);
 
+    // Flush whichever editor is currently mounted so pending debounced edits
+    // (within the 600 ms window) are captured before the identical-SMILES check.
+    let sub = substrateSmiles.trim();
+    let prod = productSmiles.trim();
+    if (mode === 'draw') {
+      try {
+        if (drawStep === 1 && subFlushRef.current) {
+          const flushed = await subFlushRef.current();
+          if (flushed) sub = flushed.trim();
+        } else if (drawStep === 2 && prodFlushRef.current) {
+          const flushed = await prodFlushRef.current();
+          if (flushed) prod = flushed.trim();
+        }
+      } catch { /* fall through to state values */ }
+    }
+    if (sub && prod && sub === prod) {
+      setApiError('Substrate and product are identical. Edit the product so it differs from the substrate.');
+      return;
+    }
+
     let enzyme     = DEFAULT_ENZYME;
     let candidates: Enzyme[] = [];
     let groupStats: GroupStats | null = null;
@@ -745,15 +768,15 @@ export const NewReactionPage = () => {
       vendor: '', vendorLogo: '', price: 'Unavailable', catalogNumber: 'Unavailable',
     });
 
-    if (substrateSmiles.trim() && productSmiles.trim()) {
+    if (sub && prod) {
       setApiLoading(true);
       try {
         const response = await fetch('https://nitrocat-backend-production.up.railway.app/screen', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            substrate_smiles: substrateSmiles.trim(),
-            product_smiles:   productSmiles.trim(),
+            substrate_smiles: sub,
+            product_smiles:   prod,
             top_k: 96,
             enrich: true,
           }),
@@ -794,15 +817,15 @@ export const NewReactionPage = () => {
     }
 
     setResultEnzyme(enzyme);
-    const substrateName = MW_TABLE[substrateSmiles.trim()]?.name ?? substrateSmiles.slice(0, 24);
-    const productName   = MW_TABLE[productSmiles.trim()]?.name  ?? productSmiles.slice(0, 24);
+    const substrateName = MW_TABLE[sub]?.name ?? sub.slice(0, 24);
+    const productName   = MW_TABLE[prod]?.name ?? prod.slice(0, 24);
     const confidence    = formatConfidenceLabel(enzyme.score);
     const reactionState: import('@/types/reaction').ReactionNodeData = {
       label:         (confidence === 'high' || confidence === 'good') ? 'Biocatalyst found' : 'Test biocatalysis',
       confidence,
       enzyme,
-      substrateSmiles: substrateSmiles.trim(),
-      productSmiles:   productSmiles.trim(),
+      substrateSmiles: sub,
+      productSmiles:   prod,
       substrateName,
       productName,
       pathwayId:   'import',
@@ -1108,6 +1131,7 @@ export const NewReactionPage = () => {
                     onKet={(k) => { subKetRef.current = k; }}
                     height={400}
                     loadTrigger={subLoadTrigger}
+                    flushRef={subFlushRef}
                   />
                 </Suspense>
               ) : (
@@ -1118,6 +1142,7 @@ export const NewReactionPage = () => {
                     onKet={(k) => { prodKetRef.current = k; }}
                     height={400}
                     loadTrigger={prodLoadTrigger}
+                    flushRef={prodFlushRef}
                   />
                 </Suspense>
               )}
@@ -1134,7 +1159,11 @@ export const NewReactionPage = () => {
             <div className="relative flex items-center justify-center w-full">
               {drawStep === 2 && !apiLoading && (
                 <Button variant="ghost" size="sm" onClick={() => {
-                  const restore = subKetRef.current || substrateSmiles.trim();
+                  // Clear stale editor-emit flags so the load actually paints the canvas.
+                  subFromEditorRef.current = false;
+                  prodFromEditorRef.current = false;
+                  // Prefer V2000 molfile (most reliable) → KET → SMILES textarea.
+                  const restore = subMolfileRef.current || subKetRef.current || substrateSmiles.trim();
                   if (restore) setSubLoadTrigger(t => ({ molfile: restore, key: (t?.key ?? 0) + 1 }));
                   setDrawStep(1);
                 }} className="absolute left-0 gap-1.5">
