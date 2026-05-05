@@ -7,6 +7,7 @@
  * External molecules can be loaded by passing a new `loadTrigger` object.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import type { MutableRefObject } from 'react';
 import { Loader2 } from 'lucide-react';
 import { Editor } from 'ketcher-react';
 import { StandaloneStructServiceProvider } from 'ketcher-standalone';
@@ -28,11 +29,18 @@ export interface KetcherEditorProps {
    * Increment `key` to re-trigger even if the same struct is passed.
    */
   loadTrigger?: { molfile: string; key: number };
+  /**
+   * Imperative flush handle. The editor assigns a function to `flushRef.current`
+   * that cancels any pending debounced emit, reads the current SMILES/molfile/KET
+   * synchronously, fires the on* callbacks, and resolves with the latest SMILES.
+   * Use before time-sensitive reads (e.g. clicking "Find Biocatalyst").
+   */
+  flushRef?: MutableRefObject<(() => Promise<string | null>) | null>;
 }
 
 const structServiceProvider = new StandaloneStructServiceProvider();
 
-export default function KetcherEditor({ onSmiles, onMolfile, onKet, height = 320, label, loadTrigger }: KetcherEditorProps) {
+export default function KetcherEditor({ onSmiles, onMolfile, onKet, height = 320, label, loadTrigger, flushRef }: KetcherEditorProps) {
   const ketcherRef = useRef<Ketcher | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onSmilesRef = useRef(onSmiles);
@@ -93,6 +101,32 @@ export default function KetcherEditor({ onSmiles, onMolfile, onKet, height = 320
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
   }, []);
+
+  // Expose imperative flush — cancels pending debounce, emits synchronously.
+  useEffect(() => {
+    if (!flushRef) return;
+    flushRef.current = async () => {
+      if (debounceRef.current) { clearTimeout(debounceRef.current); debounceRef.current = null; }
+      const ketcher = ketcherRef.current;
+      if (!ketcher) return null;
+      try {
+        const smiles = await ketcher.getSmiles();
+        if (smiles) onSmilesRef.current(smiles);
+        if (onMolfileRef.current) {
+          const molfile = await ketcher.getMolfile();
+          if (molfile) onMolfileRef.current(molfile);
+        }
+        if (onKetRef.current) {
+          const ket = await ketcher.getKet();
+          if (ket) onKetRef.current(ket);
+        }
+        return smiles || null;
+      } catch {
+        return null;
+      }
+    };
+    return () => { if (flushRef) flushRef.current = null; };
+  }, [flushRef]);
 
   return (
     <div className="rounded-xl border border-border overflow-hidden relative">
