@@ -349,22 +349,25 @@ export const YieldCard = ({
                   : 'not needed';
                 return { label: 'co-factors', value, placeholder: cofs.length === 0 };
               })(),
-            ] as { label: string; value: React.ReactNode; placeholder: boolean }[]).map(({ label, value, placeholder }) => (
-              <div
-                key={label}
-                className="flex items-center justify-between px-3 py-2.5 rounded-lg bg-muted/40 border border-border/40"
-              >
-                <dt className="text-sm text-muted-foreground">{label}</dt>
-                <dd>
-                  <span
-                    className="text-sm font-mono font-semibold"
-                    style={{ color: placeholder ? undefined : accentColor }}
-                  >
-                    {value}
-                  </span>
-                </dd>
-              </div>
-            ))}
+            ] as { label: string; value: React.ReactNode; placeholder: boolean }[]).map(({ label, value, placeholder }) => {
+              const stacked = label === 'co-factors' && !placeholder;
+              return (
+                <div
+                  key={label}
+                  className={`px-3 py-2.5 rounded-lg bg-muted/40 border border-border/40 ${stacked ? 'flex flex-col gap-1' : 'flex items-start justify-between gap-3'}`}
+                >
+                  <dt className="text-sm text-muted-foreground shrink-0">{label}</dt>
+                  <dd className={stacked ? 'w-full' : 'min-w-0 flex-1 text-right'}>
+                    <span
+                      className="text-sm font-mono font-semibold"
+                      style={{ color: placeholder ? undefined : accentColor }}
+                    >
+                      {value}
+                    </span>
+                  </dd>
+                </div>
+              );
+            })}
           </dl>
         </section>
 
