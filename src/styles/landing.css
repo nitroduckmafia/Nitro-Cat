@@ -918,6 +918,253 @@
   border-top: 1px solid var(--border-default);
 }
 
+/* ======= INFO / ARCHIVE PAGE ======= */
+.nc-landing.nc-info {
+  display: block;
+}
+
+.nc-landing .info-hero {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 72px 32px 40px;
+  text-align: center;
+}
+@media (max-width: 640px) {
+  .nc-landing .info-hero { padding: 44px 18px 28px; }
+}
+
+.nc-landing .info-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-default);
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 22px;
+}
+
+.nc-landing .info-title {
+  font-size: clamp(30px, 5vw, 52px);
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  margin: 0 0 22px;
+  text-wrap: balance;
+}
+.nc-landing .info-title .accent { color: var(--brand-primary); }
+
+.nc-landing .info-lead {
+  font-size: clamp(16px, 1.7vw, 19px);
+  line-height: 1.65;
+  color: var(--text-secondary);
+  margin: 0 auto;
+  max-width: 720px;
+}
+
+.nc-landing .info-facts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 44px;
+}
+@media (max-width: 640px) {
+  .nc-landing .info-facts { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+}
+.nc-landing .info-fact {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: 14px;
+  padding: 16px 14px;
+}
+.nc-landing .info-fact-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 7px;
+}
+.nc-landing .info-fact-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.nc-landing .info-section {
+  padding: 48px 32px;
+}
+.nc-landing .info-section.alt {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+}
+@media (max-width: 640px) {
+  .nc-landing .info-section { padding: 36px 18px; }
+}
+.nc-landing .info-section-inner {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.nc-landing .info-h2 {
+  font-size: clamp(22px, 2.6vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0 0 18px;
+}
+.nc-landing .info-section-sub {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin: -8px 0 26px;
+}
+
+.nc-landing .info-prose p {
+  font-size: clamp(15px, 1.5vw, 17px);
+  line-height: 1.72;
+  color: var(--text-secondary);
+  margin: 0 0 18px;
+}
+.nc-landing .info-prose p:last-child { margin-bottom: 0; }
+.nc-landing .info-prose strong { color: var(--text-primary); font-weight: 700; }
+.nc-landing .info-prose a,
+.nc-landing .info-pivot a {
+  color: var(--brand-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--brand-primary) 45%, transparent);
+  text-underline-offset: 2px;
+  transition: text-decoration-color 0.15s;
+}
+.nc-landing .info-prose a:hover,
+.nc-landing .info-pivot a:hover {
+  text-decoration-color: var(--brand-primary);
+}
+
+/* repo cards */
+.nc-landing .info-repos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+@media (max-width: 720px) {
+  .nc-landing .info-repos { grid-template-columns: 1fr; }
+}
+.nc-landing .info-repo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: 16px;
+  padding: 20px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+}
+.nc-landing .info-repo:hover {
+  border-color: var(--brand-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.nc-landing .info-repo-top {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.nc-landing .info-repo-gh {
+  display: grid;
+  place-items: center;
+  color: var(--text-primary);
+}
+.nc-landing .info-repo-role {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+}
+.nc-landing .info-repo-name {
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'Urbanist', 'Inter', monospace;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.nc-landing .info-repo-blurb {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+  flex: 1;
+}
+.nc-landing .info-repo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin-top: 4px;
+}
+
+/* pivot block */
+.nc-landing .info-pivot {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-left: 3px solid var(--brand-primary);
+  border-radius: 16px;
+  padding: 28px;
+}
+.nc-landing .info-pivot p {
+  font-size: clamp(15px, 1.5vw, 17px);
+  line-height: 1.72;
+  color: var(--text-secondary);
+  margin: 0 0 14px;
+}
+.nc-landing .info-pivot strong { color: var(--text-primary); font-weight: 700; }
+.nc-landing .info-pivot-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  background: var(--brand-primary);
+  color: var(--bg-primary) !important;
+  padding: 11px 18px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background 0.12s;
+}
+.nc-landing .info-pivot-cta:hover { background: var(--brand-primary-h); }
+
+/* info footer */
+.nc-landing .info-footer {
+  border-top: 1px solid var(--border-default);
+  padding: 28px 32px 36px;
+  text-align: center;
+}
+.nc-landing .info-credits {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 8px;
+  line-height: 1.6;
+}
+.nc-landing .info-credits strong { color: var(--text-primary); font-weight: 700; }
+.nc-landing .info-rights {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
 /* ======= ANIMS ======= */
 @keyframes nc-fadeUp {
   from { opacity: 0; transform: translateY(8px); }
